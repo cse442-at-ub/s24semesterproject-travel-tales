@@ -1,32 +1,79 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import './App.css';
-import React, { useEffect, useState } from 'react';
 
-function App() {
+const libraries = ['places'];
+const mapContainerStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100vh',
+};
 
-  const [backendMessage, setBackendMessage] = useState('');
-    useEffect(() => {
-        // Fetch data from your PHP backend
-        //fetch('index.php')
-        //console.log(process.env.REACT_APP_API_BASE_URL);
-        fetch(`${ process.env.REACT_APP_API_BASE_URL }`)
-            .then(response => response.text())
-            .then(data => {
-                setBackendMessage(data); // Set the response data to state
-            })
-            .catch(error => console.error('There was an error!', error));
-    }, []);
+const center = {
+  lat: 43.0018,
+  lng: -78.7895,
+};
+
+const mapOptions = {
+  disableDefaultUI: true, 
+};
+
+const App = () => {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_API_KEY,
+    libraries,
+  });
+
+  const [markers, setMarkers] = useState([]);
+
+  const handleMapClick = (event) => {
+    const newMarker = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+      id: markers.length + 1,
+    };
+
+    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+  };
+
+  const handleMarkerClick = (markerId) => {
+    setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
+  };
+
+  const handleRemoveAllMarkers = () => {
+    setMarkers([]);
+  };
+
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading maps</div>;
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-      <p>Message from backend: {backendMessage}</p>
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+    <div style={mapContainerStyle}>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={center}
+        zoom={10}
+        onClick={handleMapClick}
+        options={mapOptions}
+      >
+        {markers.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={{ lat: marker.lat, lng: marker.lng }}
+            onClick={() => handleMarkerClick(marker.id)}
+          />
+        ))}
+      </GoogleMap>
+      <div className="overlay-text">
+        <button onClick={handleRemoveAllMarkers}>Remove All Markers</button>
+      </div>
     </div>
   );
-}
-
-
+};
 
 export default App;

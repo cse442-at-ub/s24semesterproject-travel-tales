@@ -13,6 +13,7 @@
   }
 }
 
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -22,6 +23,16 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 20px; 
+  left: 20px; 
+  background-color: black; 
+  padding: 10px;
+  border-radius: 5px;
+  color: white
 }
 
 .App-link {
