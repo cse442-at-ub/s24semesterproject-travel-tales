@@ -3,17 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-google-maps/api": "^2.19.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "use-places-autocomplete": "^4.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "homepage": "https://www-student.cse.buffalo.edu/CSE442-542/2024-Spring/cse-442aj/"
   },
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
