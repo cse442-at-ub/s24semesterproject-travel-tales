@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import './App.css';
 import plusButtonImage from './assets/plus-button.png';
+import modalImage from './assets/modal-background.png';
+import arrow from './assets/leave-arrow.png';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -26,6 +28,7 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const handleMapClick = (event) => {
     // Add your logic for handling map clicks
@@ -56,6 +59,16 @@ const App = () => {
     );
   };
 
+  const handlePlusButtonClick = () => {
+    // Open the modal
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    // Close the modal
+    setShowModal(false);
+  };
+
   if (loadError) {
     return <div>Error loading maps</div>;
   }
@@ -84,10 +97,20 @@ const App = () => {
         ))}
       </GoogleMap>
       <div className="plus-icon">
-        <button onClick={handleRemoveAllMarkers}>
+        <button onClick={handlePlusButtonClick}>
           <img src={plusButtonImage} alt="Plus Button" />
         </button>
       </div>
+      <div className="plus-icon">
+        <button onClick={handlePlusButtonClick}>
+          <img src={plusButtonImage} alt="Plus Button" />
+        </button>
+      </div>
+      {showModal && (
+        <div className="modal-background">
+          <img src={modalImage} alt="Modal" />
+        </div>
+      )}
     </div>
   );
 };
