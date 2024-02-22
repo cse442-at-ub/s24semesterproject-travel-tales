@@ -9,53 +9,19 @@
 }
 
 .plus-icon button {
-  background: none; /* Remove button background */
-  border: none; /* Remove button border */
-  padding: 0; /* Remove button padding */
+  background: none; 
+  border: none; 
+  padding: 0;
 }
 
 .plus-icon img {
-  display: block; /* Remove image spacing */
+  display: block; 
   width: 100%;
   height: 100%;
-  border-radius: 50%; /* Ensure the image is circular */
+  border-radius: 50%; 
 }
 
 
-.overlay-text {
-  position: absolute;
-  bottom: 20px; 
-  right: 20px; 
-  background-color: black;
-  padding: 10px;
-  border-radius: 5px;
-  color: white
-}
-
-.modal-background {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px; 
-  box-sizing: border-box; 
-}
-
-.modal-style {
-  border-radius: 10px;
-  border: 1px solid #000;
-  background: #fff;
-}
-
-.arrow {
-  width: 69px;
-  height: 69px;
-  bottom: 20px; 
-  right: 20px; 
-  flex-shrink: 0;
-  padding: 10px;
-  background: transparent;
-}
 
 
 
