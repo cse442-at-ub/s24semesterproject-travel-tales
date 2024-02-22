@@ -30,6 +30,7 @@ const App = () => {
   const handleMapClick = (event) => {
   };
 
+  /*
   const handleMarkerClick = (markerId) => {
     setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
   };
@@ -41,9 +42,11 @@ const App = () => {
       id: markers.length + 1,
       draggable: true, // Make the marker draggable
     };
+    
 
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
+  */
 
   const handleMarkerDrag = (markerId, newPosition) => {
     setMarkers((prevMarkers) =>
@@ -70,7 +73,7 @@ const App = () => {
         zoom={10}
         onClick={handleMapClick} // this does nothing 
         options={mapOptions}
-        onDblClick={placeNewMarker}
+        //onDblClick={placeNewMarker}
       >
         <>
           <Modal/>
@@ -79,7 +82,7 @@ const App = () => {
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker.id)}
+            //onClick={() => handleMarkerClick(marker.id)}
             draggable={marker.draggable}
             onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />

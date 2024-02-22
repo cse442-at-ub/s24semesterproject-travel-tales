@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Modal.css";
 import "../../App.css"
 import plusButtonImage from '../../assets/plus-button.png';
-import leaveArrowButton from '../../assets/leave-arrow.png';
 import "../../App";
 
 export default function Modal() {
@@ -23,11 +22,7 @@ export default function Modal() {
         <div className="modal">
           <div className="overlay"></div>
           <div className="modal-content">
-            <div className="leave-arrow">
-                <button onClick={toggleModal}>
-                    <img src={leaveArrowButton} alt="leave" />
-                </button>
-            </div>
+            <button className="leave-arrow" onClick={toggleModal}></button>
             <div className="modal-title-box"></div>
             <div className="modal-description-box"></div>
             <div className="add-pin-box">
