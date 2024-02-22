@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import './App.css';
+import plusButtonImage from './assets/plus-button.png';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -15,7 +16,7 @@ const center = {
 };
 
 const mapOptions = {
-  disableDefaultUI: true, 
+  disableDefaultUI: true,
 };
 
 const App = () => {
@@ -27,13 +28,7 @@ const App = () => {
   const [markers, setMarkers] = useState([]);
 
   const handleMapClick = (event) => {
-    const newMarker = {
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-      id: markers.length + 1,
-    };
-
-    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+    // Add your logic for handling map clicks
   };
 
   const handleMarkerClick = (markerId) => {
@@ -41,7 +36,24 @@ const App = () => {
   };
 
   const handleRemoveAllMarkers = () => {
-    setMarkers([]);
+    // Add a new marker at the center of the screen
+    const newMarker = {
+      lat: center.lat,
+      lng: center.lng,
+      id: markers.length + 1,
+      draggable: true, // Make the marker draggable
+    };
+
+    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+  };
+
+  const handleMarkerDrag = (markerId, newPosition) => {
+    // Update the position of the dragged marker
+    setMarkers((prevMarkers) =>
+      prevMarkers.map((marker) =>
+        marker.id === markerId ? { ...marker, lat: newPosition.lat, lng: newPosition.lng } : marker
+      )
+    );
   };
 
   if (loadError) {
@@ -66,11 +78,15 @@ const App = () => {
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => handleMarkerClick(marker.id)}
+            draggable={marker.draggable}
+            onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />
         ))}
       </GoogleMap>
-      <div className="overlay-text">
-        <button onClick={handleRemoveAllMarkers}>Remove All Markers</button>
+      <div className="plus-icon">
+        <button onClick={handleRemoveAllMarkers}>
+          <img src={plusButtonImage} alt="Plus Button" />
+        </button>
       </div>
     </div>
   );
