@@ -22,8 +22,7 @@ export default function Modal() {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    setFormValues([])
+    //event.preventDefault();
     // Handle form submission logic here
   };
 
@@ -54,7 +53,7 @@ export default function Modal() {
                 value={formValues.description} 
                 onChange={handleChange} 
                 placeholder="Description"/>
-              <button className="add-pin-box" onClick={handleSubmit}></button>              
+              <button className="add-pin-box" onClick={(toggleModal)}></button>              
             </form>
           </div>
         </div>
