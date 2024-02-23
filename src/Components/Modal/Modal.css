@@ -31,27 +31,7 @@
     height: 691px;
 }
 
-.modal-title-box {
-    position: fixed;
-    top: 112px;
-    left: 108px;
-    bottom: 530px;
-    right: 111px;
-    background: url(../../assets/title-box.png);
-    width: 641px;
-    height: 49px;
-}
 
-.modal-description-box {
-    position: fixed;
-    top: 230px;
-    left: 108px;
-    bottom: 185px;
-    right: 111px;
-    background: url(../../assets/description-box.png);
-    width: 641px;
-    height: 276px;
-}
 
 .add-pin-box {
     position: fixed;
@@ -62,6 +42,7 @@
     background: url(../../assets/add-pin-box.png);
     width: 641px;
     height: 55px;
+    border: none;
 }
 
 .title {
@@ -76,6 +57,7 @@
     height: 20px;
 }
 
+
 .description {
     position: fixed;
     top: 196px;
@@ -85,17 +67,6 @@
     background: url(../../assets/description.png);
     width: 168px;
     height: 25px;
-}
-
-.add-pin {
-    position: fixed;
-    top: 593px;
-    left: 372px;
-    bottom: 73px;
-    right: 375px;
-    background: url(../../assets/add-pin-text.png);
-    width: 113px;
-    height: 20px;
 }
 
 .leave-arrow {
@@ -109,3 +80,34 @@
     height: 69px;
     border: none;
 }
+
+
+.title-box {
+    position: fixed;
+    top: 112px;
+    left: 108px;
+    bottom: 530px;
+    right: 111px;
+    display: flex;
+    width: 600px;
+    height: 10px;
+    margin: 0.25rem 0;
+    padding: 1rem;
+}
+
+.description-box {
+    position: fixed;
+    display: flex;
+    top: 230px;
+    left: 108px;
+    bottom: 185px;
+    right: 111px;
+    width: 641px;
+    height: 276px;
+    margin: 0.25rem 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+

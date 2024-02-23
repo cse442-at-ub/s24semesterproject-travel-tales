@@ -11,6 +11,22 @@ export default function Modal() {
     setModal(!modal);
   };
 
+  const [formValues, setFormValues] = useState({
+    title: '',
+    description: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setFormValues([])
+    // Handle form submission logic here
+  };
+
   return (
     <>
       <div className="plus-icon">
@@ -23,13 +39,23 @@ export default function Modal() {
           <div className="overlay"></div>
           <div className="modal-content">
             <button className="leave-arrow" onClick={toggleModal}></button>
-            <div className="modal-title-box"></div>
-            <div className="modal-description-box"></div>
-            <div className="add-pin-box">
-                <div className="add-pin"></div>
-            </div>
             <div className="description"></div>
             <div className="title"></div>
+            <form onSubmit={handleSubmit}>
+              <input 
+                className="title-box" 
+                name="title" 
+                value={formValues.title} 
+                onChange={handleChange} 
+                placeholder="Title"/>
+              <input
+                className="description-box" 
+                name="description" 
+                value={formValues.description} 
+                onChange={handleChange} 
+                placeholder="Description"/>
+              <button className="add-pin-box" onClick={handleSubmit}></button>              
+            </form>
           </div>
         </div>
       )}
