@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ForgotPassword.css";
+import BannerImage from "../Assets/Login/Background.png"
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
@@ -12,18 +13,20 @@ export const ForgotPassword = (props) => {
 
     return (
         <div className="Forgot-Password">
-
-        <h1>Enter the email associated with your account and we will send you a code to reset your password</h1>
-
-            <form className="register-form" onSubmit={handleSubmit}>
-               
+            
+            <form className="email-form" onSubmit={handleSubmit}>
+                <h1 className ="text">Enter the email associated with your account and we will send you a code to reset your password</h1>
                 <label htmlFor="email"></label>
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />
 
-                <button className="create-new-acc">Continue</button>
-
+                <button className="confirm">Continue</button>
+                <Link className="link" to="/Login" >Go Back?</Link>
             </form>
-            <Link className="link" to="/Login" >Go Back?</Link>
+      
+
+            <div className="bannerimage">
+                <img src={BannerImage} alt="banner" />
+            </div>
         </div>
 
     )

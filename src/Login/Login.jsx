@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
 import BannerImage from "../Assets/Login/Background.png"
+import Travel_Tales from "../Assets/Login/Title Section.png"
 
 
 export const Login = (props) => {
@@ -18,6 +19,10 @@ export const Login = (props) => {
         <div className='Login'>
             <div>
                 <form className="login-form" onSubmit={handleSubmit}>
+
+                    <div className="Travel_Tales">
+                        <img src={Travel_Tales} alt="Travel_Tales" />
+                    </div>
 
                 <label htmlFor="email"></label>
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />

@@ -4,10 +4,11 @@
     "\\src",
     "\\src\\Assets",
     "\\src\\Assets\\Login",
+    "\\src\\Assets\\Signup",
     "\\src\\ForgotPassword",
     "\\src\\Login",
     "\\src\\Register"
   ],
-  "SelectedNode": "\\src\\Assets\\Login\\Background.png",
+  "SelectedNode": "\\src\\Register\\Register.css",
   "PreviewInSolutionExplorer": false
 }
