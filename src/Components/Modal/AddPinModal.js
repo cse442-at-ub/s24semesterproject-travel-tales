@@ -8,6 +8,10 @@ export default function Modal() {
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
+    setFormValues({
+      title: '',
+      description: '',
+    });
     setModal(!modal);
   };
 
@@ -25,6 +29,7 @@ export default function Modal() {
     //event.preventDefault();
     // Handle form submission logic here
   };
+
 
   return (
     <>
