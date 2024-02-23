@@ -81,7 +81,6 @@ function App() {
                 <h2 id="modal-modal-title">Welcome to Travel Tales!</h2>
                 <p id="modal-modal-description">
                   This is an example of a MUI Modal
-
                 </p>
                 <Button onClick={handleClose}>Close</Button>
               </Box>
