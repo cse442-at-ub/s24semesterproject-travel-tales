@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Modal.css";
+import "./AddPinModal.css";
 import "../../App.css"
 import plusButtonImage from '../../assets/plus-button.png';
 import "../../App";

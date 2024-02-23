@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import './App.css';
-import Modal from './Components/Modal/Modal'
+import Modal from './Components/Modal/AddPinModal'
 
 const libraries = ['places'];
 const mapContainerStyle = {
