@@ -1,26 +1,30 @@
-.App {
-    text-align: center;
+* {
+    margin: 0;
+    /*padding: 0;*/
+}
+
+.Login {
+  text-align: center;
     display: flex;
     min-height: 100vh;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     background-color: rgba(13, 73, 30, 0.68);
+    flex-direction:row;
+    
 }
 
-.auth-form-container, .login-form, .register-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.bannerimage {
+    justify-content: space-around;
+    overflow: hidden;
 }
 
 label {
-    display: flex;
     text-align: left;
     padding: 0.25rem 0;
 }
 
 input {
-    display: flex;
     width: 250px;
     height: 20px;
     margin: 0.25rem 0;
@@ -29,9 +33,6 @@ input {
 }
 
 .login-button, .create-new-acc {
-    align-items: center;
-    justify-content: center;
-    display: flex;
     width: 282px;
     height: 52px;
     border: none;
@@ -47,7 +48,60 @@ input {
     background: none;
     border: none;
     cursor: pointer;
-    margin: 0.20rem 0;
+    margin: 0.15rem 0;
     color: black;
     text-decoration: none;
+}
+
+
+
+@media only screen and (max-width: 600px){
+
+    .Login {
+        text-align: center;
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-color: palevioletred;
+    }
+
+    .login-form {
+      
+    }
+
+    label {
+        text-align: left;
+        padding: 0.25rem 0;
+    }
+
+    input {
+        width: 250px;
+        height: 20px;
+        margin: 0.25rem 0;
+        padding: 1rem;
+        border: none;
+    }
+
+    .login-button{
+        width: 282px;
+        height: 52px;
+        border: none;
+        margin: 0.5rem 0;
+        padding: 1rem;
+        background-color: #354545;
+        color: white;
+        cursor: pointer;
+    }
+
+    .link {
+        padding: 0.25rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin: 0.20rem 0;
+        color: black;
+        text-decoration: none;
+    }
 }

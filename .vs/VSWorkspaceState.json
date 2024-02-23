@@ -2,10 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\src",
+    "\\src\\Assets",
+    "\\src\\Assets\\Login",
     "\\src\\ForgotPassword",
-    "\\src\\login",
+    "\\src\\Login",
     "\\src\\Register"
   ],
-  "SelectedNode": "\\src\\setupTests.js",
+  "SelectedNode": "\\src\\Assets\\Login\\Background.png",
   "PreviewInSolutionExplorer": false
 }

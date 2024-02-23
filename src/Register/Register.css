@@ -1,20 +1,18 @@
-.App {
+.Register {
     text-align: center;
     display: flex;
     min-height: 100vh;
     align-items: center;
     justify-content: center;
     background-color: rgba(13, 73, 30, 0.68);
+    flex-direction: column;
 }
 
 .auth-form-container, .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
 }
 
 label {
-    display: flex;
     text-align: left;
     padding: 0.25rem 0;
 }
@@ -29,9 +27,6 @@ input {
 }
 
 .login-button {
-    align-items: center;
-    justify-content: center;
-    display: flex;
     width: 282px;
     height: 52px;
     border: none;

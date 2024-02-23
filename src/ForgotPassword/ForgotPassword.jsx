@@ -11,7 +11,7 @@ export const ForgotPassword = (props) => {
     }
 
     return (
-        <div className="auth-form-container">
+        <div className="Forgot-Password">
 
         <h1>Enter the email associated with your account and we will send you a code to reset your password</h1>
 
