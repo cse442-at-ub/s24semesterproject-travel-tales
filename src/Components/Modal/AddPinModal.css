@@ -1,0 +1,106 @@
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.overlay {
+    background: rgba(49,49,49,0.8);
+}
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    background: url(../../assets/modal-background.png);
+    flex-shrink: 0;
+    border-radius: 3px;
+    width: 860px;
+    height: 691px;
+}
+
+
+
+.add-pin-box {
+    position: fixed;
+    top: 576px;
+    left: 108px;
+    bottom: 60px;
+    right: 111px;
+    background: url(../../assets/add-pin-box.png);
+    width: 641px;
+    height: 55px;
+    border: none;
+}
+
+.title {
+    position: fixed;
+    top: 73px;
+    left: 108px;
+    bottom: 589px;
+    right: 684px;
+    background: url(../../assets/title.png);
+    flex-shrink: 0;
+    width: 68px;
+    height: 20px;
+}
+
+
+.description {
+    position: fixed;
+    top: 196px;
+    left: 108px;
+    bottom: 466px;
+    right: 581px;
+    background: url(../../assets/description.png);
+    width: 168px;
+    height: 25px;
+}
+
+.leave-arrow {
+    position: fixed;
+    top: 27px;
+    left: 26px;
+    bottom: 595;
+    right: 765px;
+    background: url(../../assets/leave-arrow.png);
+    width: 69px;
+    height: 69px;
+    border: none;
+}
+
+
+.title-box {
+    position: fixed;
+    top: 112px;
+    left: 108px;
+    bottom: 530px;
+    right: 111px;
+    display: flex;
+    width: 600px;
+    height: 10px;
+    margin: 0.25rem 0;
+    padding: 1rem;
+}
+
+.description-box {
+    position: fixed;
+    display: flex;
+    top: 230px;
+    left: 108px;
+    bottom: 185px;
+    right: 111px;
+    width: 600px;
+    height: 276px;
+    margin: 0.25rem 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
