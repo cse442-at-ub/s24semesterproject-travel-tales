@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from '../../s24semesterproject-travel-tales/src/App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.render(
@@ -10,11 +9,7 @@ const root = ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+
 
 
 // If you want to start measuring performance in your app, pass a function
