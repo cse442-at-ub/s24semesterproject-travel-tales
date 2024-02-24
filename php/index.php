@@ -1,4 +1,5 @@
 <?php
-//For PROD
-header('Access-Control-Allow-Origin: https://www-student.cse.buffalo.edu/CSE442-542/2024-Spring/cse-442aj');
-echo "Welcome to the Travel Tales site!";
+// header('Access-Control-Allow-Origin: http://localhost:3000');
+// header('Access-Control-Allow-Methods: GET');
+// header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+echo "Hello from PHP!";
