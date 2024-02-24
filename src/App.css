@@ -21,6 +21,15 @@
   border-radius: 50%; 
 }
 
+@media (max-width: 767px) {
+  .plus-icon {
+    height: 15vmin;
+    width: 15vmin;
+    bottom: 10vmin;
+    right: 10vmin;
+  }
+}
+
 .App {
   text-align: center;
 }
