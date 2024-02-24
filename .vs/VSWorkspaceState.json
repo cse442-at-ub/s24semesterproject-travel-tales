@@ -2,9 +2,6 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\Assets",
-    "\\src\\Assets\\Login",
-    "\\src\\Assets\\Signup",
     "\\src\\ForgotPassword",
     "\\src\\Login",
     "\\src\\Register"

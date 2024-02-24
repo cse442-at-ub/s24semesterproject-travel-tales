@@ -11,7 +11,8 @@
     justify-content: space-between;
     background-color: rgba(13, 73, 30, 0.68);
     flex-direction:row;
-    
+    font-size: 15px;
+    font-family: Arial;
 }
 .login-form {
     justify-content: flex-start;
@@ -68,6 +69,8 @@ input {
     background-color: #354545;
     color: white;
     cursor: pointer;
+    font-size: 20px;
+    font-family: Arial;
 }
 
 .link {

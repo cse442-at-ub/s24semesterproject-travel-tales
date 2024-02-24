@@ -3,28 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Register\\Register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Login\\Login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Register\\Register.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Login\\Login.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,80 +38,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Register.jsx",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx",
-              "RelativeDocumentMoniker": "src\\Register\\Register.jsx",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx",
-              "RelativeToolTip": "src\\Register\\Register.jsx",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAACoAAAATAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-02-23T21:56:27.927Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ForgotPassword.css",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
-              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.css",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
-              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.css",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAEIAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-23T21:26:42.966Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ForgotPassword.jsx",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
-              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.jsx",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
-              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.jsx",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-02-23T19:59:20.691Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Register.css",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css",
               "RelativeDocumentMoniker": "src\\Register\\Register.css",
               "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css",
               "RelativeToolTip": "src\\Register\\Register.css",
-              "ViewState": "AQIAAFEAAAAAAAAAAAAAAAoAAAAQAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADEAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-23T19:48:49.416Z",
+              "WhenOpened": "2024-02-24T02:09:36.75Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Login.jsx",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.jsx",
-              "RelativeDocumentMoniker": "src\\Login\\Login.jsx",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.jsx",
-              "RelativeToolTip": "src\\Login\\Login.jsx",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAowBMAAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-02-23T18:18:39.244Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Login.css",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.css",
               "RelativeDocumentMoniker": "src\\Login\\Login.css",
               "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Login\\Login.css",
               "RelativeToolTip": "src\\Login\\Login.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAEAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAEEAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-23T18:18:35.973Z",
+              "WhenOpened": "2024-02-24T02:08:08.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ForgotPassword.jsx",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
+              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.jsx",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
+              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.jsx",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2024-02-24T02:08:00.953Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ForgotPassword.css",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
+              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.css",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
+              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.css",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAADEAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-02-24T02:07:45.812Z",
               "EditorCaption": ""
             }
           ]
