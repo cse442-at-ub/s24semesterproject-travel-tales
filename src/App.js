@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import LoginPage from './Login/login';
-import SignUp from './SignUp/signUp';
+import LoginPage from "./Login/Login.jsx";
+import { ForgotPassword } from "./ForgotPassword/ForgotPassword";
+import SignUp from "./Register/Register";
 import Home from './Home/home';
 import logo from './logo.svg';
 import './App.css';
 import { Modal, Button, Box } from '@mui/material';
 import { AddCircleRounded } from '@mui/icons-material';
+
 
 
 // temporary styles - this will need to be moved
