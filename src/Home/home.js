@@ -152,9 +152,9 @@ const App = () => {
                 <ArrowBackIosNewIcon/>
               </button>
               <button className="switch" onClick={handleToggleClick}>
-                {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
+                {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large'/>}
               </button>
-              <Button className="add-pin-box" variant="contained" onClick={(handleSubmit)} style={{ borderRadius: 10 }}>Add Pin</Button>           
+              <Button sx={{ bgcolor: "#354545", color: "#FFFFFF", fontSize: "large" }} className="add-pin-box" variant="contained" onClick={(handleSubmit)} style={{ borderRadius: 10 }}>Add Pin</Button>           
             </Box>
           </Modal>
         </header>  
