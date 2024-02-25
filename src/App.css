@@ -8,7 +8,14 @@
   color: white;
 }
 
+.plus-icon button:hover {
+  border-radius: 50%; /* Maintain circular shape on hover */
+  background-color: rgba(0, 0, 0, 0); /* Set the background color to fully transparent */
+}
+
 .plus-icon button {
+  border-radius: 50%; /* Make the button circular */
+  transition: border-radius 0.3s ease, background-color 0.3s ease; /* Add a smooth transition effect */
   background: none; 
   border: none; 
   padding: 0;
