@@ -111,10 +111,10 @@ export const Register = (props) => {
                 <input
                     value={formData.firstName}
                     onChange={handleChange}
-                    type="firstName"
-                    placeholder="First name"
                     id="firstName"
+                    type="firstName"
                     name="firstName"
+                    placeholder="First Name"
                     required
                 />
                 {/* <label className="errorLabel">{firstNameError}</label> */}
@@ -123,10 +123,10 @@ export const Register = (props) => {
                 <input
                     value={formData.lastName}
                     onChange={handleChange}
-                    type="lastName"
-                    placeholder="Last Name"
                     id="lastName"
+                    type="lastName"
                     name="lastName"
+                    placeholder="Last Name"
                     required
                 />
                 {/* <label className="errorLabel">{lastNameError}</label> */}
@@ -135,10 +135,10 @@ export const Register = (props) => {
                 <input
                     value={formData.email}
                     onChange={handleChange}
-                    type="email"
-                    placeholder="Email"
                     id="email"
+                    type="email"
                     name="email"
+                    placeholder="Email"
                     required
                 />
                 {/* <label className="errorLabel">{emailError}</label> */}
@@ -147,10 +147,10 @@ export const Register = (props) => {
                 <input
                     value={formData.pass}
                     onChange={handleChange}
-                    type="password"
-                    name="password"
-                    placeholder="Password"
                     id="password"
+                    type="password"
+                    name="pass"
+                    placeholder="Password"
                     required
                 />
                 {/* <label className="errorLabel">{passwordError}</label> */}
@@ -158,10 +158,11 @@ export const Register = (props) => {
                 <label htmlFor="confirmPassword"></label>
                 <input
                     value={formData.confirmPass}
+                    onChange={handleChange}
+                    id="confirmPass"
                     type="password"
                     name="confirmPass"
                     placeholder="Confirm Password"
-                    onChange={handleChange}
                     required
                 />
                 {error && <p style={{ color: 'red' }}>{error}</p>}
