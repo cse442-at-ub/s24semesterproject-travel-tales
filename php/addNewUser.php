@@ -33,7 +33,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $email = $data['email'];
-$pass = $data['password'];
+$pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
 
 if ($pass !== $confirmPass) { // check if passwords match
