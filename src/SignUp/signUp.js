@@ -5,9 +5,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function SignUp() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: ''
+    firstName: '',
+    lastName: '',
+    email: '',
+    pass: '',
+    confirmPass: '',
   });
+
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
@@ -15,6 +20,13 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.pass !== formData.confirmPass) {
+      setError('Passwords do not match.');
+      formData.pass = '';
+      formData.confirmPass = '';
+      return;
+    }
+    setError('');
     try {
       const response = await fetch('http://localhost/api/addNewUser.php', {
         method: 'POST',
@@ -40,19 +52,46 @@ function SignUp() {
         <form onSubmit={handleSubmit}>
             <input
                 type="text"
-                name="username"
-                value={formData.username}
+                name="firstName"
+                value={formData.firstName}
+                placeholder="First Name"
                 onChange={handleChange}
-                placeholder="Username"
+                required
+            />
+            <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                placeholder="Last Name"
+                onChange={handleChange}
+                required
             />
             <input
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
                 placeholder="Email"
+                onChange={handleChange}
+                required
             />
-            <button type="submit">Submit</button>
+            <input
+                type="password"
+                name="pass"
+                value={formData.pass}
+                placeholder="Password"
+                onChange={handleChange}
+                required
+            />
+            <input
+                type="password"
+                name="confirmPass"
+                value={formData.confirmPass}
+                placeholder="Confirm Password"
+                onChange={handleChange}
+                required
+            />
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <button type="submit">CREATE NEW ACCOUNT</button>
         </form>
     </Container>
   );
