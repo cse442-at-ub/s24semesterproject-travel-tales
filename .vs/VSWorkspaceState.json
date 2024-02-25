@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\Login"
+    "\\src\\ForgotPassword",
+    "\\src\\Login",
+    "\\src\\Register",
+    "\\src\\SignUp"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\App.js",
   "PreviewInSolutionExplorer": false
 }

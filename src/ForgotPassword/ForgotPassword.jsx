@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ForgotPassword.css";
-import BannerImage from "../Assets/Login/Background.png"
+import BannerImage from "../assets/Login/Background.png"
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
@@ -42,7 +42,7 @@ export const ForgotPassword = (props) => {
                 <label className="errorLabel">{emailError}</label>
                 <button className="confirm" onClick={onButtonClick}>Continue</button>
 
-                <Link className="link" to="/Login" >Go Back?</Link>
+                <Link className="link" to="/login" >Go Back?</Link>
             </form>
       
 

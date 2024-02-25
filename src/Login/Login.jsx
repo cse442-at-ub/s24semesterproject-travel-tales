@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
-import BannerImage from "../Assets/Login/Background.png"
-import Travel_Tales from "../Assets/Login/Title Section.png"
+import BannerImage from "../assets/Login/Background.png"
+import Travel_Tales from "../assets/Login/Title Section.png"
 
 
 export const Login = (props) => {
@@ -55,8 +55,8 @@ export const Login = (props) => {
                 <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Password" id="password" name="password" />
                     <label className="errorLabel">{passwordError}</label>
                     <button className="login-button" onClick={onButtonClick}>Log In</button>
-                <Link className="link" to="/ForgotPassword" >Forgot Password?</Link>
-                <Link className="link" to="/Register" >Create an account</Link>
+                <Link className="link" to="/Forgotpassword" >Forgot Password?</Link>
+                <Link className="link" to="/signUp" >Create an account</Link>
 
                 </form>
             </div>

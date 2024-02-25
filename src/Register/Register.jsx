@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Register.css";
-import BannerImage from "../Assets/Signup/Background.png"
-import Compass from "../Assets/Signup/Vector.png"
-import Signup from "../Assets/Signup/Sign_Up.png"
+import BannerImage from "../assets/Signup/Background.png"
+import Compass from "../assets/Signup/Vector.png"
+import Signup from "../assets/Signup/Sign_Up.png"
 
 export const Register = (props) => {
     const [email, setEmail] = useState('');
@@ -83,7 +83,7 @@ export const Register = (props) => {
                 <label className="errorLabel">{passwordError}</label>
 
                 <button className="create-new-acc" onClick={onButtonClick}>Create New Account</button>
-                <Link className="link" to="/Login" >Alread have an Account?</Link>
+                <Link className="link" to="/login" >Alread have an Account?</Link>
             </form>
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
