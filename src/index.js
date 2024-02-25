@@ -4,6 +4,7 @@ import './index.css';
 import App from '../../s24semesterproject-travel-tales/src/App';
 import reportWebVitals from './reportWebVitals';
 
+// eslint-disable-next-line
 const root = ReactDOM.render(
   <React.StrictMode>
     <App />
