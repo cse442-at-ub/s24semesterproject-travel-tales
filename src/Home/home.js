@@ -32,7 +32,7 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
+  width: '40%',
   height: '50%', 
   borderRadius: 10, // Set the border-radius for rounded edges
   bgcolor: 'rgba(255, 255, 255, 1.0)', // Set the background color with an alpha value for transparency
@@ -154,7 +154,7 @@ const App = () => {
               <button className="switch" onClick={handleToggleClick}>
                 {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
               </button>
-              <button className="add-pin-box" onClick={(handleSubmit)}></button>              
+              <Button className="add-pin-box" variant="contained" onClick={(handleSubmit)} style={{ borderRadius: 20 }}>Add Pin</Button>           
             </Box>
           </Modal>
         </header>  
