@@ -1,5 +1,8 @@
 // insertData.php
 <?php
+
+include_once('db.php');
+
 // Allow from any origin
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -18,17 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "test_db";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 $data = json_decode(file_get_contents("php://input"), true);
 $firstName = $data['firstName'];
 $lastName = $data['lastName'];
@@ -44,7 +36,7 @@ if (strlen($pass) < 8) { // check if password is at least 8 characters
     die(json_encode(['error'=> 'Password must be at least 8 characters long.']));
 }
 // hash and salt password
-$pass = password_hash($data['password'], PASSWORD_DEFAULT);
+$pass = password_hash($pass, PASSWORD_DEFAULT);
 
 if(isset($email) && isset($pass)) {
     if($email != "" and $pass != ""){
