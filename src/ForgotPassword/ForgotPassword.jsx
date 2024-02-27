@@ -5,46 +5,57 @@ import BannerImage from "../assets/Login/Background.png"
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
+    const [message, setMessage] = useState('');
 
+    const handleChange = (e) => {
+        setEmail(e.target.value);
+    };
 
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
-    }
-
-    const onButtonClick = () => {
-        setEmailError('')
-
-        // Check if the user has entered both fields correctly
-        if ('' === email) {
-            setEmailError('Please enter your email')
-            return
-        }
-
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setEmailError('Please enter a valid email')
-            return
-        }
-    }
-
-
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const response = await fetch('http://localhost/api/resetPassword.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+        const data = await response.json();
+        setMessage(data.message);
+    };
 
 
     return (
         <div className="Forgot-Password">
             
-            <form className="email-form" onSubmit={handleSubmit}>
+            {/* <form className="email-form" onSubmit={handleSubmit}>
                 <h1 className ="text">Enter the email associated with your account and we will send you a code to reset your password</h1>
                 <label htmlFor="email"></label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />
-                <label className="errorLabel">{emailError}</label>
-                <button className="confirm" onClick={onButtonClick}>Continue</button>
-
-                <Link className="link" to="/login" >Go Back?</Link>
+                <input
+                    value={email}
+                    onChange={handleChange}
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                />
+                <button type="submit" className="confirm">Continue</button>
+            </form> */}
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    name="email"
+                    onChange={handleChange} // Use handleChange to update state
+                    placeholder="Enter your email"
+                    required
+                />
+                <button type="submit">Send Reset Code</button>
             </form>
-      
+            <p>{message}</p>
+            <Link className="link" to="/login" >Go Back?</Link>
+            <label className="errorLabel">{message}</label>
 
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
