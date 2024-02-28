@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
@@ -7,7 +7,7 @@ import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
-
+import axios from 'axios';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -24,7 +24,6 @@ const center = {
 const mapOptions = {
   disableDefaultUI: true,
 };
-
 
 const modalStyle = {
   position: 'absolute',
@@ -49,30 +48,88 @@ const App = () => {
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
   const [isToggled, setToggled] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
+
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const response = await axios.post(
+          `https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCdI5i2yARvUIe3f75YqtWpYJRe7GFbLuI`
+        );
+
+        const { location } = response.data;
+        setCurrentLocation({ lat: location.lat, lng: location.lng });
+      } catch (error) {
+        setError('Error fetching location');
+        console.error('Error fetching location:', error.message);
+      }
+    };
+
+    // Call the fetchLocation function when the component mounts
+    fetchLocation();
+  }, []); // Empty dependency array means this effect runs once on mount
+  
+
+  // THIS IS GOING TO THROW AN ERROR AND THAT IS EXPECTED SINCE BACKEND ENDPOINT HASN'T BEEN SETUP
+  useEffect(() => {
+    const fetchMarkersFromBackend = async () => {
+      try {
+        // Replace YOUR_BACKEND_ENDPOINT with the actual endpoint for fetching markers
+        const response = await axios.get('YOUR_BACKEND_ENDPOINT');
+        setMarkers(response.data);
+      } catch (error) {
+        setError('Error fetching markers from backend');
+        console.error('Error fetching markers from backend:', error.message);
+      }
+    };
+
+    fetchMarkersFromBackend();
+  }, []);
+
+  const placeNewMarker = () => {
+    if (currentLocation) {
+      const newMarker = {
+        lat: currentLocation.lat,
+        lng: currentLocation.lng,
+        id: markers.length + 1,
+        draggable: true,
+      };
+  
+      setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+    
+      sendCoordinatesToBackend(newMarker.lat, newMarker.lng);
+    }
+  };
+
+  const sendCoordinatesToBackend = async (coordinates) => {
+    try {
+      const response = await fetch('your-backend-endpoint', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers if needed
+        },
+        body: JSON.stringify({ coordinates }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send coordinates to the backend');
+      }
+
+      const data = await response.json();
+      console.log('Coordinates sent successfully:', data);
+    } catch (error) {
+      console.error('Error sending coordinates to the backend:', error.message);
+    }
+  };
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setToggled(false); // Reset the state of the switch
-  };  const handleMapClick = (event) => {
-  };
-
-  
-  const handleMarkerClick = (markerId) => {
-    setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
-  };
-
-  const placeNewMarker = () => {
-    const newMarker = {
-      lat: center.lat,
-      lng: center.lng,
-      id: markers.length + 1,
-      draggable: true, // Make the marker draggable
-    };
-    
-
-    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-  };
-  
+  };  
+  const handleMapClick = (event) => {}; // does nothing
 
   const handleMarkerDrag = (markerId, newPosition) => {
     setMarkers((prevMarkers) =>
@@ -80,6 +137,10 @@ const App = () => {
         marker.id === markerId ? { ...marker, lat: newPosition.lat, lng: newPosition.lng } : marker
       )
     );
+  };
+
+  const handleMarkerClick = (markerId) => {
+    setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
   };
 
   const handleSubmit = (event) => {
@@ -90,7 +151,6 @@ const App = () => {
   const handleToggleClick = () => {
     setToggled(!isToggled);
   };
-
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -104,19 +164,18 @@ const App = () => {
     <div style={mapContainerStyle}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        center={center}
-        zoom={10}
+        center={currentLocation || center}
+        zoom={currentLocation ? 15 : 10}
         onClick={handleMapClick} // this does nothing 
         options={mapOptions}
-        //onDblClick={placeNewMarker}
       >
         {markers.map((marker) => (
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => handleMarkerClick(marker.id)}
-            draggable={marker.draggable}
-            onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
+            //draggable={marker.draggable}
+            //onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />
         ))}
         <header className="plus-icon">
@@ -167,6 +226,7 @@ const App = () => {
           </Modal>
         </header>  
       </GoogleMap>  
+      {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
     </div>
   );
 };
