@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\php",
     "\\src",
     "\\src\\ForgotPassword",
     "\\src\\Login",
-    "\\src\\Register",
-    "\\src\\SignUp"
+    "\\src\\Register"
   ],
-  "SelectedNode": "\\src\\App.js",
+  "SelectedNode": "\\src\\ForgotPassword\\ForgotPassword.jsx",
   "PreviewInSolutionExplorer": false
 }
