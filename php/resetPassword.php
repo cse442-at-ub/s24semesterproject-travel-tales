@@ -43,24 +43,44 @@ if ($result->num_rows == 0) {
     // Email found, generate and send reset code
     $reset_code = rand(100000, 999999); // Example code generation, consider more secure methods
     $expires_at = (new DateTime('+1 hour'))->format('Y-m-d H:i:s');
-    //$conn->prepare("INSERT INTO users (first_name, last_name, email, pass) VALUES (?, ?, ?, ?)");
-    $insertQuery = "INSERT INTO password_resets (email, reset_code, expires_at) VALUES (?, ?, ?)";
-    //"UPDATE users SET reset_code = ?, expires_at = ? WHERE email = ?";
-    $insertStmt = $conn->prepare($insertQuery);
-    $insertStmt->bind_param("sss", $email, $reset_code, $expires_at);
-    $insertStmt->execute();
+    $get_user_query = "SELECT * FROM password_resets WHERE email = ?";
+    $stmt = $conn->prepare($get_user_query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $get_user_result = $stmt->get_result();
 
-    // Send the email - need to use mail function
-    $to = $email;
-    $subject = 'Your Password Reset Code';
-    $message = 'Your password reset code is: ' . $code;
-    $headers = 'From: noreply@traveltales.com' . "\r\n" .
-               'Reply-To: noreply@traveltales.com' . "\r\n" .
-               'X-Mailer: PHP/' . phpversion();
+    if ($get_user_result->num_rows > 0) {
+        // user exists, update the reset_code and expires_at
+        $updateQuery = "UPDATE password_resets SET reset_code = ?, expires_at = ? WHERE email = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param("sss", $reset_code, $expires_at, $email);
+        
+        if ($updateStmt->execute()) {
+            echo "Reset code updated successfully.";
+        } else {
+            echo "Error updating reset code: " . $conn->error;
+        }
+    } else { // user does not exist in db - create new record
+        // Store the code and its expiration in the database
+        $insertQuery = "INSERT INTO password_resets (email, reset_code, expires_at) VALUES (?, ?, ?)";
+        //TODO: check if user already exists in the DB, update the reset_code and expires_at if so
+        //"UPDATE users SET reset_code = ?, expires_at = ? WHERE email = ?";
+        $insertStmt = $conn->prepare($insertQuery);
+        $insertStmt->bind_param("sss", $email, $reset_code, $expires_at);
+        $insertStmt->execute();
 
-    mail($to, $subject, $message, $headers);
+        // Send the email
+        $to = $email;
+        $subject = 'Your Password Reset Code';
+        $message = 'Your password reset code is: ' . $code;
+        $headers = 'From: noreply@traveltales.com' . "\r\n" .
+                'Reply-To: noreply@traveltales.com' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
 
-    echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
+        mail($to, $subject, $message, $headers);
+
+        echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
+    }
 }
 
 $conn->close();
