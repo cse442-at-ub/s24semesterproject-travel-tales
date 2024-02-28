@@ -2,10 +2,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ForgotPassword.css";
 import BannerImage from "../assets/Login/Background.png"
+import { Modal, Button, Box } from '@mui/material';
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+
+
+
+
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
 
 
@@ -27,12 +36,45 @@ export const ForgotPassword = (props) => {
             setEmailError('Please enter a valid email')
             return
         }
+        handleOpen()
     }
+
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 10,
+    };
 
 
 
 
     return (
+        <div>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className= 'confirm-box' sx={modalStyle}>
+                    <h2 id="modal-modal-title">Password Reset Request Sent!</h2>
+                    <p id="modal-modal-description">
+                        A password reset message was sent to your email address.
+                        Please click the link in that message to reset your password.
+                    </p>
+                    <Button onClick={handleClose}>Close</Button>
+                </Box>
+            </Modal>
+
+
+
+
         <div className="Forgot-Password">
             
             <form className="email-form" onSubmit={handleSubmit}>
@@ -50,7 +92,7 @@ export const ForgotPassword = (props) => {
                 <img src={BannerImage} alt="banner" />
             </div>
         </div>
-
+       </div>
     )
 
 }
