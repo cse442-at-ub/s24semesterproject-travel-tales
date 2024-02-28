@@ -28,21 +28,9 @@ export const ForgotPassword = (props) => {
     return (
         <div className="Forgot-Password">
             
-            {/* <form className="email-form" onSubmit={handleSubmit}>
+            <form className="email-form" onSubmit={handleSubmit}>
                 <h1 className ="text">Enter the email associated with your account and we will send you a code to reset your password</h1>
                 <label htmlFor="email"></label>
-                <input
-                    value={email}
-                    onChange={handleChange}
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                />
-                <button type="submit" className="confirm">Continue</button>
-            </form> */}
-            <form onSubmit={handleSubmit}>
                 <input
                     type="email"
                     value={email}
@@ -51,11 +39,11 @@ export const ForgotPassword = (props) => {
                     placeholder="Enter your email"
                     required
                 />
-                <button type="submit">Send Reset Code</button>
+                <button type="submit" className="confirm">Continue</button>
+                <Link className="link" to="/login" >Go Back?</Link>
+                {/* <label className="errorLabel">{message}</label> */}
+                <p>{message}</p>
             </form>
-            <p>{message}</p>
-            <Link className="link" to="/login" >Go Back?</Link>
-            <label className="errorLabel">{message}</label>
 
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
