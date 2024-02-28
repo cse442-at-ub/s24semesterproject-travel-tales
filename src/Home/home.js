@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import '../App.css';
 import Modal from '../Components/Modal/AddPinModal'
+import LanguageIcon from '@mui/icons-material/Language';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -28,6 +31,14 @@ const App = () => {
   const [markers, setMarkers] = useState([]);
 
   const handleMapClick = (event) => {
+  };
+
+  const handleLanguageButtonClick= () =>{
+
+  };
+
+  const handleAccountCircleButtonClick= () =>{
+
   };
 
   /*
@@ -73,11 +84,22 @@ const App = () => {
         zoom={10}
         onClick={handleMapClick} // this does nothing 
         options={mapOptions}
-        //onDblClick={placeNewMarker}
+        //onDblClick={placeNewMarker}      
       >
         <>
           <Modal/>
-        </>
+          <div className="another-icon">
+          <button className="white-button" onClick={() => handleLanguageButtonClick()}>
+            <LanguageIcon className="language-icon" />
+          </button>
+        </div>
+
+        <div className="account-icon">
+          <button className="white-button" onClick={() => handleAccountCircleButtonClick()}>
+            <AccountCircleIcon className="accountcircle-icon" />
+          </button>
+        </div>
+      </>
         {markers.map((marker) => (
           <Marker
             key={marker.id}
