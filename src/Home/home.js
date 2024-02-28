@@ -25,21 +25,18 @@ const mapOptions = {
   disableDefaultUI: true,
 };
 
-// temporary styles - this will need to be moved
 
 const modalStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '40%',
-  height: '50%', 
-  borderRadius: 10, // Set the border-radius for rounded edges
-  bgcolor: 'rgba(255, 255, 255, 1.0)', // Set the background color with an alpha value for transparency
+  borderRadius: 10, 
+  bgcolor: 'rgba(255, 255, 255, 1.0)', 
   border: '2px solid #000',
   boxShadow: 24,
   p: 10,
-  transition: 'bgcolor 0.3s ease', // Add a smooth transition effect
+  transition: 'bgcolor 0.3s ease',
 };
 
 
@@ -59,7 +56,7 @@ const App = () => {
   };  const handleMapClick = (event) => {
   };
 
-  /*
+  
   const handleMarkerClick = (markerId) => {
     setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
   };
@@ -75,7 +72,7 @@ const App = () => {
 
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
-  */
+  
 
   const handleMarkerDrag = (markerId, newPosition) => {
     setMarkers((prevMarkers) =>
@@ -117,7 +114,7 @@ const App = () => {
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            //onClick={() => handleMarkerClick(marker.id)}
+            onClick={() => handleMarkerClick(marker.id)}
             draggable={marker.draggable}
             onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />
@@ -130,7 +127,7 @@ const App = () => {
             open={open}
             onClose={handleClose}
           >
-            <Box sx={modalStyle}>
+            <Box className="modal" sx={modalStyle}>
               <div className="description"></div>
               <div className="title"></div>
               <div className="make-public"></div>
@@ -152,9 +149,20 @@ const App = () => {
                 <ArrowBackIosNewIcon/>
               </button>
               <button className="switch" onClick={handleToggleClick}>
-                {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large'/>}
+                {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled'/>}
               </button>
-              <Button sx={{ bgcolor: "#354545", color: "#FFFFFF", fontSize: "large" }} className="add-pin-box" variant="contained" onClick={(handleSubmit)} style={{ borderRadius: 10 }}>Add Pin</Button>           
+              <Button sx={{ 
+                bgcolor: "#354545", 
+                color: "#FFFFFF", 
+                fontSize: "large" 
+                }} 
+                className="add-pin-box" 
+                variant="contained" 
+                onClick={() => {
+                  handleSubmit();
+                  placeNewMarker();
+                }}                
+                style={{ borderRadius: 10 }}>Add Pin</Button>           
             </Box>
           </Modal>
         </header>  
