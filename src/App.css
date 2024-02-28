@@ -1,24 +1,69 @@
-.plus-icon {
+.plus-icon,
+.another-icon,
+.account-icon {
   position: absolute;
   height: 112px;
   width: 112px;
-  bottom: 63px;
-  right: 138px;
   background-color: transparent;
   color: white;
 }
 
-.plus-icon button {
-  background: none; 
-  border: none; 
+.plus-icon button,
+.another-icon button,
+.account-icon button {
+  background: none;
+  border: none;
   padding: 0;
+  color: white;
+  transition: transform 0.2s ease;
 }
 
-.plus-icon img {
-  display: block; 
+.plus-icon img,
+.another-icon .language-icon,
+.account-icon .accountcircle-icon {
+  display: block;
   width: 100%;
   height: 100%;
-  border-radius: 50%; 
+  border-radius: 50%;
+}
+
+.plus-icon {
+  bottom: 5vmin;
+  right: 5vmin;
+}
+
+.another-icon {
+  bottom: 5vmin;
+  left: 5vmin;
+}
+
+.account-icon {
+  top: 5vmin;
+  right: 5vmin;
+}
+
+.plus-icon button,
+.another-icon button,
+.account-icon button {
+  background: none;
+  border: none;
+  padding: 0;
+  transition: transform 0.2s ease; /* Adding a smooth transition effect */
+}
+
+.plus-icon button:active,
+.another-icon button:active,
+.account-icon button:active {
+  transform: scale(0.95); /* You can adjust the scale value as needed */
+}
+
+@media (max-width: 767px) {
+  .plus-icon,
+  .another-icon,
+  .account-icon {
+    height: 15vmin;
+    width: 15vmin;
+  }
 }
 
 .App {
@@ -70,7 +115,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 
 
