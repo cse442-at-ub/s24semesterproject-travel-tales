@@ -4,9 +4,10 @@
     "\\php",
     "\\src",
     "\\src\\ForgotPassword",
+    "\\src\\Home",
     "\\src\\Login",
     "\\src\\Register"
   ],
-  "SelectedNode": "\\src\\ForgotPassword\\ForgotPassword.jsx",
+  "SelectedNode": "\\php\\sharedPin.php",
   "PreviewInSolutionExplorer": false
 }
