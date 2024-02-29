@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Login } from "./Login/Login.jsx";
 import { ForgotPassword } from "./ForgotPassword/ForgotPassword";
+import { ResetPassword } from "./ResetPassword/ResetPassword";
 import {Register} from "./Register/Register";
 import Home from './Home/home';
 import './App.css';
@@ -50,6 +51,7 @@ function App() {
           <Route path="/login" element={<Login />} />
               <Route path="/signUp" element={<Register />} />
               <Route path="/forgotPassword" element={<ForgotPassword />} />
+              <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/home" element={<Home/>} />
           {/* <Route path="/" element={<HomePage />} /> */}
         </Routes>
