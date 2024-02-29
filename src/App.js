@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import LoginPage from "./Login/Login.jsx";
+import { Login } from "./Login/Login.jsx";
 import { ForgotPassword } from "./ForgotPassword/ForgotPassword";
-import SignUp from "./Register/Register";
+import {Register} from "./Register/Register";
 import Home from './Home/home';
-import logo from './logo.svg';
 import './App.css';
 import { Modal, Button, Box } from '@mui/material';
 import { AddCircleRounded } from '@mui/icons-material';
@@ -48,8 +47,9 @@ function App() {
   return (
     <Router>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signUp" element={<SignUp/>} />
+          <Route path="/login" element={<Login />} />
+              <Route path="/signUp" element={<Register />} />
+              <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/home" element={<Home/>} />
           {/* <Route path="/" element={<HomePage />} /> */}
         </Routes>
@@ -57,7 +57,6 @@ function App() {
         <div className="App">
           <header className="App-header">
             {/* <p>Message from backend: {backendMessage}</p> */}
-            <img src={logo} className="App-logo" alt="logo" />
             <Button variant="contained" color="primary">
               <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>Home</Link>
             </Button>
