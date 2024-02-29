@@ -346,7 +346,6 @@ const App = () => {
   useEffect(() => {
     const fetchMarkersFromBackend = async () => {
       try {
-        // Replace YOUR_BACKEND_ENDPOINT with the actual endpoint for fetching markers
         const response = await axios.get('YOUR_BACKEND_ENDPOINT');
         setMarkers(response.data);
       } catch (error) {
@@ -369,19 +368,19 @@ const App = () => {
   
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     
-      sendCoordinatesToBackend(newMarker.lat, newMarker.lng);
+      sendCoordinatesToBackend({lat: newMarker.lat, lng: newMarker.lng});
+      //sendCoordinatesToBackend({ lat: 123.456, lng: -78.901 });
     }
   };
 
   const sendCoordinatesToBackend = async (coordinates) => {
     try {
-      const response = await fetch('your-backend-endpoint', {
+      const response = await fetch('http://localhost/api/addpin.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Add any other headers if needed
         },
-        body: JSON.stringify({ coordinates }),
+        body: JSON.stringify(coordinates),
       });
 
       if (!response.ok) {
