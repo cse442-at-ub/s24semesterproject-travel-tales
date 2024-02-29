@@ -11,11 +11,11 @@
     width: 35%;
 }
 
-.title {
+.title-words {
     position: absolute;
     top: 12%;
     left: 10%;
-    background: url(../assets/title.png);
+    background: url(../assets/AddPinModal/title.png);
     flex-shrink: 0;
     width: 68px;
     height: 20px;
@@ -25,7 +25,7 @@
     position: absolute;
     top: 30%;
     left: 10%;
-    background: url(../assets/description.png);
+    background: url(../assets/AddPinModal/description.png);
     width: 168px;
     height: 25px;
 }
@@ -77,7 +77,7 @@
     position: absolute;
     top: 75%;
     left: 10%;
-    background: url(../assets/make-public.png);
+    background: url(../assets/AddPinModal/make-public.png);
     flex-shrink: 0;
     width: 165px;
     height: 16px;
