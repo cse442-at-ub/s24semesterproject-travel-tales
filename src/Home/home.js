@@ -198,10 +198,10 @@ const App = () => {
                                       Shared Pins </h2>
 
                               </ListItem>
-
+                              <Divider />
                               <ListItem alignItems="flex-start">
                                   <ListItemText
-                                      primary="Brunch this weekend?"
+                                      primary="City/State"
                                       secondary={
                                           <React.Fragment>
                                               <Typography
@@ -210,20 +210,20 @@ const App = () => {
                                                   variant="body2"
                                                   color="text.primary"
                                               >
-                                                  Ali Connors
+                                                  Date: 3/1/23
                                               </Typography>
-                                              {" — I'll be in your neighborhood doing errands this…"}
+                                              <Typography>
+                                                  {" Create by: User"}
+                                              </Typography>
                                           </React.Fragment>
 
                                       }
                                   />
-
-
                               </ListItem>
                               <Divider />
                               <ListItem alignItems="flex-start">
                                   <ListItemText
-                                      primary="Brunch this weekend?"
+                                      primary="City/State"
                                       secondary={
                                           <React.Fragment>
                                               <Typography
@@ -232,13 +232,16 @@ const App = () => {
                                                   variant="body2"
                                                   color="text.primary"
                                               >
-                                                  Ali Connors
+                                                  Date: 3/1/23
                                               </Typography>
-                                              {" — I'll be in your neighborhood doing errands this…"}
+                                              <Typography>
+                                                  {" Create by: User"}
+                                              </Typography>
                                           </React.Fragment>
-                                          }
+                                      }
                                   />
                               </ListItem>
+                              <Divider />
                           </List>                         
                       </Box>
                   </Modal>
