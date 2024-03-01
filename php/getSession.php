@@ -1,4 +1,8 @@
 <?php
+
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true'); 
+
 session_start();
 
 header('Content-Type: application/json');
