@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-
+import SwipeableDrawer from '@mui/material/Drawer';
 
 
 const libraries = ['places'];
@@ -182,7 +182,7 @@ const App = () => {
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
                   </button>
-                  <Modal
+                  <SwipeableDrawer
                         className= 'SharedPinsContainer'
                       open={open2}
                       onClose={handleClose2}>
@@ -244,7 +244,7 @@ const App = () => {
                               <Divider />
                           </List>                         
                       </Box>
-                  </Modal>
+                  </SwipeableDrawer>
               </div>
 
 

@@ -66,7 +66,7 @@ export const ForgotPassword = (props) => {
                     <h2 id="modal-modal-title">Password Reset Request Sent!</h2>
                     <p id="modal-modal-description">
                         A password reset message was sent to your email address.
-                        Please click the link in that message to reset your password.
+                        Please copy the code in that message to reset your password.
                     </p>
                     <Button onClick={handleClose}>Close</Button>
                 </Box>
