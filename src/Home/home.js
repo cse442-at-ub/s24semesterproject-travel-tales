@@ -9,6 +9,8 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import axios from 'axios';
 
+const username = "TestUser";
+
 const libraries = ['places'];
 const mapContainerStyle = {
   position: 'relative',
@@ -337,25 +339,56 @@ const App = () => {
       }
     };
 
-    // Call the fetchLocation function when the component mounts
     fetchLocation();
-  }, []); // Empty dependency array means this effect runs once on mount
-  
+  }, []); 
 
-  // THIS IS GOING TO THROW AN ERROR AND THAT IS EXPECTED SINCE BACKEND ENDPOINT HASN'T BEEN SETUP
   useEffect(() => {
     const fetchMarkersFromBackend = async () => {
       try {
-        const response = await axios.get('YOUR_BACKEND_ENDPOINT');
-        setMarkers(response.data);
+        const response = await fetch('http://localhost/api/addpin.php?username=TestUser', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const rawData = await response.text();
+        console.log('Raw Data:', rawData);
+
+        const data = JSON.parse(rawData);
+        console.log('Parsed Data:', data);
+
+        if (data.success) {
+          data.data.forEach(coordinate => {
+            updateMarker(coordinate)
+          });
+        } else {
+          console.error('Error:', data.error);
+        }
+
       } catch (error) {
-        setError('Error fetching markers from backend');
-        console.error('Error fetching markers from backend:', error.message);
+        setError('Error fetching coordinates from backend');
+        console.error('Error fetching coordinates from backend:', error.message);
       }
     };
 
     fetchMarkersFromBackend();
   }, []);
+
+
+  const updateMarker = (coordinates) => {
+    const newMarker = {
+      lat: coordinates.lat,
+      lng: coordinates.lng,
+      id: markers.length + 1,
+      draggable: true,
+    };
+
+    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+  };
 
   const placeNewMarker = () => {
     if (currentLocation) {
@@ -368,19 +401,18 @@ const App = () => {
   
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     
-      sendCoordinatesToBackend({lat: newMarker.lat, lng: newMarker.lng});
-      //sendCoordinatesToBackend({ lat: 123.456, lng: -78.901 });
+      sendCoordinatesToBackend({username, lat: newMarker.lat, lng: newMarker.lng});
     }
   };
 
-  const sendCoordinatesToBackend = async (coordinates) => {
+  const sendCoordinatesToBackend = async (info) => {
     try {
       const response = await fetch('http://localhost/api/addpin.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(coordinates),
+        body: JSON.stringify(info),
       });
 
       if (!response.ok) {
@@ -397,17 +429,9 @@ const App = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setToggled(false); // Reset the state of the switch
+    setToggled(false);
   };  
-  const handleMapClick = (event) => {}; // does nothing
-
-  const handleMarkerDrag = (markerId, newPosition) => {
-    setMarkers((prevMarkers) =>
-      prevMarkers.map((marker) =>
-        marker.id === markerId ? { ...marker, lat: newPosition.lat, lng: newPosition.lng } : marker
-      )
-    );
-  };
+  const handleMapClick = (event) => {}; 
 
   // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
   const handleMarkerClick = (markerId) => {
@@ -446,8 +470,6 @@ const App = () => {
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => handleMarkerClick(marker.id)}
-            //draggable={marker.draggable}
-            //onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />
         ))}
         <header className="plus-icon">

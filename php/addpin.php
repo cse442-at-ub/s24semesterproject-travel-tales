@@ -1,26 +1,72 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get JSON data from the request body
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "test";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Check if 'lat' and 'lng' keys exist in the received data
-    if (isset($data['lat']) && isset($data['lng'])) {
-        // Access latitude and longitude
+    if (isset($data['username']) && isset($data['lat']) && isset($data['lng'])) {
+        $username = $data['username'];
         $latitude = $data['lat'];
         $longitude = $data['lng'];
 
-        // Send a success response
-        echo json_encode(['message' => 'Coordinates received successfully']);
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng) VALUES (?, ?, ?)");
+        $stmt->bind_param("sdd", $username, $latitude, $longitude);
+
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Coordinates successfully added to the database']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error inserting coordinates: ' . $stmt->error]);
+        }
+
+        $stmt->close();
     } else {
-        // Send an error response for missing or incorrect data
-        echo json_encode(['error' => 'Invalid or missing coordinates']);
+        echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
     }
-} else {
-    // Handle other HTTP methods if needed
-    echo json_encode(['error' => 'Invalid request method']);
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $requestedUsername = $_GET['username'] ?? null;
+
+    if ($requestedUsername) {
+        $stmt = $conn->prepare("SELECT lat, lng FROM PinsInfo WHERE username = ?");
+        $stmt->bind_param("s", $requestedUsername);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $coordinates = []; 
+
+        while ($row = $result->fetch_assoc()) {
+            $coordinates[] = $row;
+        }
+
+        if (!empty($coordinates)) {
+            echo json_encode(['success' => true, 'data' => $coordinates]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Username not found']);
+        }
+
+        $stmt->close();
+    }
+}
+
+
+$conn->close();
 ?>
