@@ -28,9 +28,11 @@ export const Login = (props) => {
             const response = await fetch('http://localhost/api/login.php', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'include',
             });
             const data = await response.json();
             console.log(data.code);
