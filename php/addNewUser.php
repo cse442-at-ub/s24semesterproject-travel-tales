@@ -1,4 +1,4 @@
-// insertData.php
+,// insertData.php
 <?php
 
 include_once('db.php');

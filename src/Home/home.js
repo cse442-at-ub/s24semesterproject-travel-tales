@@ -3,10 +3,17 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
 import plusButtonImage from '../assets/plus-button.png';
+import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+
 
 
 const libraries = ['places'];
@@ -39,7 +46,6 @@ const modalStyle = {
   transition: 'bgcolor 0.3s ease',
 };
 
-
 const App = () => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_API_KEY,
@@ -54,7 +60,12 @@ const App = () => {
     setOpen(false);
     setToggled(false); // Reset the state of the switch
   };  const handleMapClick = (event) => {
-  };
+    };
+
+
+    const [open2, setOpen2] = useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
 
   
   const handleMarkerClick = (markerId) => {
@@ -165,7 +176,75 @@ const App = () => {
                 style={{ borderRadius: 10 }}>Add Pin</Button>           
             </Box>
           </Modal>
-        </header>  
+              </header>  
+
+              <div>
+                  <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
+                      <img src={sharedPin} alt="Shared Pins" />
+                  </button>
+                  <Modal
+                        className= 'SharedPinsContainer'
+                      open={open2}
+                      onClose={handleClose2}>
+
+                      <Box className='SharedPins' >
+                          <button className="leave-arrow" onClick={handleClose2}>
+                              <ArrowBackIosNewIcon />
+                          </button>
+                          <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
+
+                              <ListItem alignItems="center">
+                                  <h2 >
+                                      Shared Pins </h2>
+
+                              </ListItem>
+
+                              <ListItem alignItems="flex-start">
+                                  <ListItemText
+                                      primary="Brunch this weekend?"
+                                      secondary={
+                                          <React.Fragment>
+                                              <Typography
+                                                  sx={{ display: 'inline' }}
+                                                  component="span"
+                                                  variant="body2"
+                                                  color="text.primary"
+                                              >
+                                                  Ali Connors
+                                              </Typography>
+                                              {" — I'll be in your neighborhood doing errands this…"}
+                                          </React.Fragment>
+
+                                      }
+                                  />
+
+
+                              </ListItem>
+                              <Divider />
+                              <ListItem alignItems="flex-start">
+                                  <ListItemText
+                                      primary="Brunch this weekend?"
+                                      secondary={
+                                          <React.Fragment>
+                                              <Typography
+                                                  sx={{ display: 'inline' }}
+                                                  component="span"
+                                                  variant="body2"
+                                                  color="text.primary"
+                                              >
+                                                  Ali Connors
+                                              </Typography>
+                                              {" — I'll be in your neighborhood doing errands this…"}
+                                          </React.Fragment>
+                                          }
+                                  />
+                              </ListItem>
+                          </List>                         
+                      </Box>
+                  </Modal>
+              </div>
+
+
       </GoogleMap>  
     </div>
   );
