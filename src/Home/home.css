@@ -13,7 +13,7 @@
 
 .title-words {
     position: absolute;
-    top: 12%;
+    top: 13%;
     left: 5%;
     background: url(../assets/AddPinModal/title.png);
     flex-shrink: 0;
@@ -107,7 +107,7 @@
     }
     .title-words {
         position: absolute;
-        top: 12%;
+        top: 13%;
         left: 2%;
         background: url(../assets/AddPinModal/title.png);
         flex-shrink: 0;

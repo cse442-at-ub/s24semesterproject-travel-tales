@@ -9,7 +9,7 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import axios from 'axios';
 
-const username = "TestUser";
+const email = "TestUser@buffalo.edu";
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -320,7 +320,7 @@ const App = () => {
 
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
-  const [isToggled, setToggled] = useState(false);
+  const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
 
@@ -343,9 +343,9 @@ const App = () => {
   }, []); 
 
   useEffect(() => {
-    const fetchMarkersFromBackend = async () => {
+    const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch('http://localhost/api/addpin.php?username=TestUser', {
+        const response = await fetch('http://localhost/api/addpin.php?email=TestUser@buffalo.edu', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -375,7 +375,7 @@ const App = () => {
       }
     };
 
-    fetchMarkersFromBackend();
+    fetchInfoFromBackend();
   }, []);
 
 
@@ -398,10 +398,15 @@ const App = () => {
         id: markers.length + 1,
         draggable: true,
       };
-  
+
+      var title = document.querySelector('.title-box').value;
+      var description = document.querySelector('.description-box').value;
+
+      var currentDate = new Date();
+      var date = currentDate.toISOString().split('T')[0];       
+
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-    
-      sendCoordinatesToBackend({username, lat: newMarker.lat, lng: newMarker.lng});
+      sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
     }
   };
 
@@ -444,9 +449,8 @@ const App = () => {
   };
 
   const handleToggleClick = () => {
-    setToggled(!isToggled);
+    setToggled(!isPublic);
   };
-
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -484,25 +488,34 @@ const App = () => {
               <div className="description"></div>
               <div className="title-words"></div>
               <div className="make-public"></div>
-              <form>
-                <textarea 
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8"></meta>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                <title>Your Page Title</title>
+              </head>
+              <body>
+                <form>
+                  <textarea 
                   className="title-box" 
                   name="title"
                   rows="4" 
                   cols="50">
-                </textarea>
-                <textarea 
+                  </textarea>
+                  <textarea 
                   className="description-box" 
                   name="description"
                   rows="4" 
                   cols="50">
-                </textarea>
-              </form>
+                  </textarea>
+                </form>
+              </body>
+              </html>
               <button className="leave-arrow" onClick={handleClose}>
                 <ArrowBackIosNewIcon/>
               </button>
               <button className="switch" onClick={handleToggleClick}>
-                {isToggled ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled'/>}
+                {isPublic? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled'/>}
               </button>
               <Button sx={{ 
                 bgcolor: "#354545", 
@@ -515,7 +528,7 @@ const App = () => {
                   handleSubmit();
                   placeNewMarker();
                 }}                
-                style={{ borderRadius: 10 }}>Add Pin</Button>           
+                style={{ borderRadius: 10 }}>Add Pin</Button>         
             </Box>
           </Modal>
         </header>  
