@@ -35,17 +35,14 @@ export const Login = (props) => {
                 credentials: 'include',
             });
             const data = await response.json();
-            console.log(data.code);
             if (data.code === 200) {
-                console.log('Login successful');
                 // Redirect user to homepage
                 navigate('/'); // Redirect to homepage route
             } else {
                 setError(data.error || 'Login failed');
             }
         } catch (error) {
-        setError('An error occurred. Please try again later.');
-        console.error('Error:', error);
+            setError('An error occurred. Please try again later.');     
         }
     };
 

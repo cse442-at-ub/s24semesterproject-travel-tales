@@ -58,7 +58,7 @@ export const Register = (props) => {
             const data = await response.json();
             setError(data.message)
         } catch (error) {
-            console.error('Error:', error);
+            setError(error);
         }
     }
 
