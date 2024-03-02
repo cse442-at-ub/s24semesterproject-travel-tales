@@ -56,9 +56,8 @@ export const Register = (props) => {
             body: JSON.stringify(formData),
             });
             const data = await response.json();
-            setError(data.message)
         } catch (error) {
-            setError(error);
+            setError('An error occurred. Please try again later.');
         }
     }
 

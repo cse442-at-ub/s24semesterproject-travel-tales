@@ -42,7 +42,7 @@ export const Login = (props) => {
                 setError(data.error || 'Login failed');
             }
         } catch (error) {
-            setError('An error occurred. Please try again later.');     
+            setError('An error occurred. Please try again later.'); 
         }
     };
 
