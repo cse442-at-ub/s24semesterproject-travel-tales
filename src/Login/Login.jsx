@@ -39,7 +39,7 @@ export const Login = (props) => {
             if (data.code === 200) {
                 console.log('Login successful');
                 // Redirect user to homepage
-                navigate('/home'); // Redirect to homepage route
+                navigate('/'); // Redirect to homepage route
             } else {
                 setError(data.error || 'Login failed');
             }
