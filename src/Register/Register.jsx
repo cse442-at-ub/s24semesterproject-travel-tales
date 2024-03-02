@@ -57,6 +57,7 @@ export const Register = (props) => {
             });
             const data = await response.json();
         } catch (error) {
+            console.log(error)
             setError('An error occurred. Please try again later.');
         }
     }
