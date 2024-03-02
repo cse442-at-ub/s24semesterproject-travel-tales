@@ -1,8 +1,7 @@
-// insertData.php
 <?php
 
 include_once('db.php');
-
+header('Content-Type: application/json');
 // Allow from any origin
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -33,17 +32,17 @@ if ($pass !== $confirmPass) { // check if passwords match
 }
 
 if (strlen($pass) < 8) { // check if password is at least 8 characters
-    die(json_encode(['message'=> 'Password must be at least 8 characters long.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long.']));
 }
 
 $pattern = '/[\'^£$%&*()}{@#~?><>,|=_+¬-]/';
 if (!preg_match($pattern, $pass)) { // check for a special character
-    die(json_encode(['message'=> 'Password requires at least 1 special character.']));
+    die(json_encode(['message' => 'Password requires at least 1 special character.']));
 }
 
 $pattern = '/\d/';
 if (!preg_match($pattern, $pass)) { // check if the password contains a number
-    die(json_encode(['message'=> 'Password requires at least one number.']));
+    die(json_encode(['message' => 'Password requires at least one number.']));
 }
 
 // hash and salt password
@@ -55,14 +54,13 @@ if(isset($email) && isset($pass)) {
         $stmt->bind_param("ssss", $firstName, $lastName, $email, $pass);
         
         if($stmt->execute()) {
-            echo json_encode(["message" => "Record inserted successfully"]);
+            echo json_encode(['message' => 'Record inserted successfully']);
         } else {
-            echo json_encode(["message" => "Failed to insert record"]);
+            echo json_encode(['message' => 'Failed to insert record']);
         }
     }
 } else {
-    echo json_encode(["message" => "Please provide username and email"]);
+    echo json_encode(['message' => 'Please provide username and email']);
 }
 
 $conn->close();
-?>
