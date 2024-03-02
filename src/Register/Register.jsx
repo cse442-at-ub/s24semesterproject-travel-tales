@@ -39,27 +39,27 @@ export const Register = (props) => {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.pass !== formData.confirmPass) {
-        setError('Passwords do not match.');
-        formData.pass = '';
-        formData.confirmPass = '';
-        return;
-    }
-    setError('');
-    try {
-        const response = await fetch('http://localhost/api/addNewUser.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-        });
-        const data = await response.json();
-        console.log(data.message);
-    } catch (error) {
-        console.error('Error:', error);
-    }
+        e.preventDefault();
+        if (formData.pass !== formData.confirmPass) {
+            setError('Passwords do not match.');
+            formData.pass = '';
+            formData.confirmPass = '';
+            return;
+        }
+        setError('');
+        try {
+            const response = await fetch('http://localhost/api/addNewUser.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            });
+            const data = await response.json();
+            setError(data.message)
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
     // const onButtonClick = () => {
@@ -109,7 +109,6 @@ export const Register = (props) => {
                 </div>
                 <label htmlFor="firstName"></label>
                 <input
-                    value={formData.firstName}
                     onChange={handleChange}
                     id="firstName"
                     type="firstName"
@@ -121,7 +120,6 @@ export const Register = (props) => {
 
                 <label htmlFor="lastName"></label>
                 <input
-                    value={formData.lastName}
                     onChange={handleChange}
                     id="lastName"
                     type="lastName"
@@ -133,7 +131,6 @@ export const Register = (props) => {
 
                 <label htmlFor="email"></label>
                 <input
-                    value={formData.email}
                     onChange={handleChange}
                     id="email"
                     type="email"
@@ -145,7 +142,6 @@ export const Register = (props) => {
 
                 <label htmlFor="password"></label>
                 <input
-                    value={formData.pass}
                     onChange={handleChange}
                     id="password"
                     type="password"
@@ -157,7 +153,6 @@ export const Register = (props) => {
 
                 <label htmlFor="confirmPassword"></label>
                 <input
-                    value={formData.confirmPass}
                     onChange={handleChange}
                     id="confirmPass"
                     type="password"

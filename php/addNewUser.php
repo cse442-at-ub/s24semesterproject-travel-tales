@@ -29,21 +29,21 @@ $pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
 
 if ($pass !== $confirmPass) { // check if passwords match
-    die(json_encode(['error' => 'Passwords do not match.']));
+    die(json_encode(['message' => 'Passwords do not match.']));
 }
 
 if (strlen($pass) < 8) { // check if password is at least 8 characters
-    die(json_encode(['error'=> 'Password must be at least 8 characters long.']));
+    die(json_encode(['message'=> 'Password must be at least 8 characters long.']));
 }
 
 $pattern = '/[\'^£$%&*()}{@#~?><>,|=_+¬-]/';
 if (!preg_match($pattern, $pass)) { // check for a special character
-    die(json_encode(['error'=> 'Password requires at least 1 special character.']));
+    die(json_encode(['message'=> 'Password requires at least 1 special character.']));
 }
 
 $pattern = '/\d/';
 if (!preg_match($pattern, $pass)) { // check if the password contains a number
-    die(json_encode(['error'=> 'Password requires at least one number.']));
+    die(json_encode(['message'=> 'Password requires at least one number.']));
 }
 
 // hash and salt password

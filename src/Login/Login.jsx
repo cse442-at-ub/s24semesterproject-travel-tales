@@ -88,7 +88,6 @@ export const Login = (props) => {
 
                     <label htmlFor="email"></label>
                     <input
-                        value={formData.email}
                         onChange={handleChange}
                         id="email"
                         type="email"
@@ -98,8 +97,7 @@ export const Login = (props) => {
                     />
                     {/* <label className="errorLabel">{emailError}</label> */}
                     <label htmlFor="pass"></label>
-                    <input
-                        value={formData.pass}
+                    <input 
                         onChange={handleChange}
                         id="password"
                         type="password"
