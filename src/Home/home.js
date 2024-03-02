@@ -403,6 +403,9 @@ const App = () => {
       var description = document.querySelector('.description-box').value;
 
       var currentDate = new Date();
+      var offset = currentDate.getTimezoneOffset();
+      currentDate.setMinutes(currentDate.getMinutes() - offset);
+      
       var date = currentDate.toISOString().split('T')[0];       
 
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
