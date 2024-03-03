@@ -1,60 +1,96 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 import BannerImage from "../assets/Signup/Background.png"
 import Compass from "../assets/Signup/Vector.png"
 import Signup from "../assets/Signup/Sign_Up.png"
 
 export const Register = (props) => {
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const navigate = useNavigate();
 
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [firstNameError, setFirstNameError] = useState('');
-    const [lastNameError, setLastNameError] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        pass: '',
+        confirmPass: '',
+    });
 
-    const handleSubmit = (e) => {
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
+        const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email);
+        if (formData.pass !== formData.confirmPass) {
+            setError('Passwords do not match.');
+            formData.pass = '';
+            formData.confirmPass = '';
+            return;
+        }
+        setMessage('');
+        try {
+            const response = await fetch('http://localhost/api/addNewUser.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setMessage(data.message);
+                // Redirect to login page
+                navigate('/login');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message);
+            }
+        } catch (error) {
+            setError('An error occurred. Please try again later.');
+        }
     }
 
-    const onButtonClick = () => {
-        setEmailError('')
-        setPasswordError('')
-        setFirstNameError('')
-        setLastNameError('')
+    // const onButtonClick = () => {
+    //     setEmailError('')
+    //     setPasswordError('')
+    //     setFirstNameError('')
+    //     setLastNameError('')
 
-        if ('' === firstName && setFirstNameError !== '' ) {
-            setFirstNameError('Please enter your first name')
+    //     if ('' === firstName && setFirstNameError !== '' ) {
+    //         setFirstNameError('Please enter your first name')
        
-        }
+    //     }
         
-        if ('' === lastName) {
-            setLastNameError('Please enter your last name')
+    //     if ('' === lastName) {
+    //         setLastNameError('Please enter your last name')
             
-        }
+    //     }
 
-        if ('' === email) {
-            setEmailError('Please enter your email')
+    //     if ('' === email) {
+    //         setEmailError('Please enter your email')
             
-        }
+    //     }
 
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setEmailError('Please enter a valid email')
+    //     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    //         setEmailError('Please enter a valid email')
             
-        }
+    //     }
 
-        if ('' === pass) {
-            setPasswordError('Please enter a password')
+    //     if ('' === pass) {
+    //         setPasswordError('Please enter a password')
             
-        }
-        return
-    }
-
-
+    //     }
+    //     return
+    // }
 
     return (
         <div className="Register">
@@ -67,22 +103,62 @@ export const Register = (props) => {
                     <img src={Signup} alt="Signup" />
                 </div>
                 <label htmlFor="firstName"></label>
-                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} type="firstName" placeholder="First name" id="firstName" name="firstName" />
-                <label className="errorLabel">{firstNameError}</label>
+                <input
+                    onChange={handleChange}
+                    id="firstName"
+                    type="firstName"
+                    name="firstName"
+                    placeholder="First Name"
+                    required
+                />
+                {/* <label className="errorLabel">{firstNameError}</label> */}
 
                 <label htmlFor="lastName"></label>
-                <input value={lastName} onChange={(e) => setLastName(e.target.value)} type="lastName" placeholder="Last Name" id="lastName" name="lastName" />
-                <label className="errorLabel">{lastNameError}</label>
+                <input
+                    onChange={handleChange}
+                    id="lastName"
+                    type="lastName"
+                    name="lastName"
+                    placeholder="Last Name"
+                    required
+                />
+                {/* <label className="errorLabel">{lastNameError}</label> */}
 
                 <label htmlFor="email"></label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />
-                <label className="errorLabel">{emailError}</label>
+                <input
+                    onChange={handleChange}
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                />
+                {/* <label className="errorLabel">{emailError}</label> */}
 
                 <label htmlFor="password"></label>
-                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Password" id="password" name="password" />
-                <label className="errorLabel">{passwordError}</label>
+                <input
+                    onChange={handleChange}
+                    id="password"
+                    type="password"
+                    name="pass"
+                    placeholder="Password"
+                    required
+                />
+                {/* <label className="errorLabel">{passwordError}</label> */}
 
-                <button className="create-new-acc" onClick={onButtonClick}>Create New Account</button>
+                <label htmlFor="confirmPassword"></label>
+                <input
+                    onChange={handleChange}
+                    id="confirmPass"
+                    type="password"
+                    name="confirmPass"
+                    placeholder="Confirm Password"
+                    required
+                />
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {message && <p style={{ color: 'green' }}>{message}</p>}
+
+                <button type="submit" className="create-new-acc">Create New Account</button>
                 <Link className="link" to="/login" >Alread have an Account?</Link>
             </form>
             <div className="bannerimage">
@@ -90,6 +166,6 @@ export const Register = (props) => {
             </div>
         </div>
         
-    )
+    );
 
 }
