@@ -3,11 +3,18 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
+import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import axios from 'axios';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import SwipeableDrawer from '@mui/material/Drawer';
 
 const email = "TestUser@buffalo.edu";
 
@@ -311,7 +318,6 @@ const modalStyle = {
   transition: 'bgcolor 0.3s ease',
 };
 
-
 const App = () => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_API_KEY,
@@ -438,8 +444,13 @@ const App = () => {
   const handleClose = () => {
     setOpen(false);
     setToggled(false);
-  };  
+    };  
   const handleMapClick = (event) => {}; 
+
+    const [open2, setOpen2] = useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
+
 
   // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
   const handleMarkerClick = (markerId) => {
@@ -534,7 +545,78 @@ const App = () => {
                 style={{ borderRadius: 10 }}>Add Pin</Button>         
             </Box>
           </Modal>
-        </header>  
+              </header>  
+
+              <div>
+                  <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
+                      <img src={sharedPin} alt="Shared Pins" />
+                  </button>
+                  <SwipeableDrawer
+                        className= 'SharedPinsContainer'
+                      open={open2}
+                      onClose={handleClose2}>
+
+                      <Box className='SharedPins' >
+                          <button className="leave-arrow" onClick={handleClose2}>
+                              <ArrowBackIosNewIcon />
+                          </button>
+                          <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
+
+                              <ListItem alignItems="center">
+                                  <h2 >
+                                      Shared Pins </h2>
+
+                              </ListItem>
+                              <Divider />
+                              <ListItem alignItems="flex-start">
+                                  <ListItemText
+                                      primary="City/State"
+                                      secondary={
+                                          <React.Fragment>
+                                              <Typography
+                                                  sx={{ display: 'inline' }}
+                                                  component="span"
+                                                  variant="body2"
+                                                  color="text.primary"
+                                              >
+                                                  Date: 3/1/23
+                                              </Typography>
+                                              <Typography>
+                                                  {" Created by: User"}
+                                              </Typography>
+                                          </React.Fragment>
+
+                                      }
+                                  />
+                              </ListItem>
+                              <Divider />
+                              <ListItem alignItems="flex-start">
+                                  <ListItemText
+                                      primary="City/State"
+                                      secondary={
+                                          <React.Fragment>
+                                              <Typography
+                                                  sx={{ display: 'inline' }}
+                                                  component="span"
+                                                  variant="body2"
+                                                  color="text.primary"
+                                              >
+                                                  Date: 3/1/23
+                                              </Typography>
+                                              <Typography>
+                                                  {" Created by: User"}
+                                              </Typography>
+                                          </React.Fragment>
+                                      }
+                                  />
+                              </ListItem>
+                              <Divider />
+                          </List>                         
+                      </Box>
+                  </SwipeableDrawer>
+              </div>
+
+
       </GoogleMap>  
       {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
     </div>
