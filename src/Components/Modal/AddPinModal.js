@@ -26,7 +26,7 @@ export default function Modal() {
   };
 
   const handleSubmit = (event) => {
-    //event.preventDefault();
+    // event.preventDefault();
     // Handle form submission logic here
   };
 
