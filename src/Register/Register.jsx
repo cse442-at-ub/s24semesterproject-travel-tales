@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 import BannerImage from "../assets/Signup/Background.png"
 import Compass from "../assets/Signup/Vector.png"
 import Signup from "../assets/Signup/Sign_Up.png"
 
 export const Register = (props) => {
-    // const [email, setEmail] = useState('');
-    // const [pass, setPass] = useState('');
-    // const [firstName, setFirstName] = useState('');
-    // const [lastName, setLastName] = useState('');
-
-    // const [emailError, setEmailError] = useState('');
-    // const [passwordError, setPasswordError] = useState('');
-    // const [firstNameError, setFirstNameError] = useState('');
-    // const [lastNameError, setLastNameError] = useState('');
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -24,18 +16,15 @@ export const Register = (props) => {
         confirmPass: '',
     });
 
+    const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
-//   const handleChange = (e) => {
-//     setFormData({...formData, [e.target.name]: e.target.value});
-//   }
-
-    const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-        ...prevData,
-        [name]: value
-    }));
+        const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -46,7 +35,7 @@ export const Register = (props) => {
             formData.confirmPass = '';
             return;
         }
-        setError('');
+        setMessage('');
         try {
             const response = await fetch('http://localhost/api/addNewUser.php', {
             method: 'POST',
@@ -55,9 +44,17 @@ export const Register = (props) => {
             },
             body: JSON.stringify(formData),
             });
-            const data = await response.json();
+
+            if (response.ok) {
+                const data = await response.json();
+                setMessage(data.message);
+                // Redirect to login page
+                navigate('/login');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message);
+            }
         } catch (error) {
-            console.log(error)
             setError('An error occurred. Please try again later.');
         }
     }
@@ -94,8 +91,6 @@ export const Register = (props) => {
     //     }
     //     return
     // }
-
-
 
     return (
         <div className="Register">
@@ -161,6 +156,7 @@ export const Register = (props) => {
                     required
                 />
                 {error && <p style={{ color: 'red' }}>{error}</p>}
+                {message && <p style={{ color: 'green' }}>{message}</p>}
 
                 <button type="submit" className="create-new-acc">Create New Account</button>
                 <Link className="link" to="/login" >Alread have an Account?</Link>
