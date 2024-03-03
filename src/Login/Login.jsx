@@ -28,22 +28,21 @@ export const Login = (props) => {
             const response = await fetch('http://localhost/api/login.php', {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'include',
             });
             const data = await response.json();
-            console.log(data.code);
             if (data.code === 200) {
-                console.log('Login successful');
                 // Redirect user to homepage
-                navigate('/home'); // Redirect to homepage route
+                navigate('/'); // Redirect to homepage route
             } else {
                 setError(data.error || 'Login failed');
             }
         } catch (error) {
-        setError('An error occurred. Please try again later.');
-        console.error('Error:', error);
+            setError('An error occurred. Please try again later.'); 
         }
     };
 
@@ -86,7 +85,6 @@ export const Login = (props) => {
 
                     <label htmlFor="email"></label>
                     <input
-                        value={formData.email}
                         onChange={handleChange}
                         id="email"
                         type="email"
@@ -96,8 +94,7 @@ export const Login = (props) => {
                     />
                     {/* <label className="errorLabel">{emailError}</label> */}
                     <label htmlFor="pass"></label>
-                    <input
-                        value={formData.pass}
+                    <input 
                         onChange={handleChange}
                         id="password"
                         type="password"

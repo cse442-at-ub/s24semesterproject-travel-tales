@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 
     exit(0);
-
+}
     // Specify the path to your data file
 $dataFilePath = 'path/to/your/data/file.txt';
 
@@ -48,5 +48,3 @@ if ($file) {
     // Handle the case where the file cannot be opened
     echo "Error opening the file.";
 }
-
-?>

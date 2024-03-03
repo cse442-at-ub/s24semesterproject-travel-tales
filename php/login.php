@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include_once('db.php');
 
 // Allow from any origin
@@ -35,6 +35,7 @@ if (isset($email) && isset($pass)) {
             // User found, verify password
             $user = $result->fetch_assoc();
             if (password_verify($pass, $user['pass'])) {
+                $_SESSION['user_id'] = $user['id'];
                 echo json_encode(["code" => 200, "message" => "Login successful"]);
             } else {
                 echo json_encode(["code" => 401, "error" => "Invalid email or password"]);
