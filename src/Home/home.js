@@ -213,7 +213,7 @@ const App = () => {
                                                   Date: 3/1/23
                                               </Typography>
                                               <Typography>
-                                                  {" Create by: User"}
+                                                  {" Created by: User"}
                                               </Typography>
                                           </React.Fragment>
 
@@ -235,7 +235,7 @@ const App = () => {
                                                   Date: 3/1/23
                                               </Typography>
                                               <Typography>
-                                                  {" Create by: User"}
+                                                  {" Created by: User"}
                                               </Typography>
                                           </React.Fragment>
                                       }
