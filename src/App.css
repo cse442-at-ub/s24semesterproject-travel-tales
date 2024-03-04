@@ -1,5 +1,4 @@
 .plus-icon,
-.another-icon,
 .account-icon {
   position: absolute;
   height: 112px;
@@ -9,7 +8,6 @@
 }
 
 .plus-icon button,
-.another-icon button,
 .account-icon button {
   background: none;
   border: none;
@@ -19,7 +17,6 @@
 }
 
 .plus-icon img,
-.another-icon .language-icon,
 .account-icon .accountcircle-icon {
   display: block;
   width: 100%;
@@ -32,10 +29,6 @@
   right: 5vmin;
 }
 
-.another-icon {
-  bottom: 5vmin;
-  left: 5vmin;
-}
 
 .account-icon {
   top: 5vmin;
@@ -43,7 +36,6 @@
 }
 
 .plus-icon button,
-.another-icon button,
 .account-icon button {
   background: none;
   border: none;
@@ -52,14 +44,12 @@
 }
 
 .plus-icon button:active,
-.another-icon button:active,
 .account-icon button:active {
   transform: scale(0.95); /* You can adjust the scale value as needed */
 }
 
 @media (max-width: 767px) {
   .plus-icon,
-  .another-icon,
   .account-icon {
     height: 15vmin;
     width: 15vmin;

@@ -329,7 +329,7 @@ const App = () => {
 
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
-  const [isToggled, setToggled] = useState(false);
+  // const [isToggled, setToggled] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -463,12 +463,11 @@ const App = () => {
     }
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setToggled(false);
-    };  
-  const handleMapClick = (event) => {}; 
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => {
+  //   setOpen(false);
+  //   setToggled(false);
+  //   };  
 
     const [open2, setOpen2] = useState(false);
     const handleOpen2 = () => setOpen2(true);
@@ -512,11 +511,6 @@ const App = () => {
             onClick={() => handleMarkerClick(marker.id)}
           />
         ))}
-        <div className="another-icon">
-          <button className="white-button" onClick={() => handleLanguageButtonClick()}>
-            <LanguageIcon className="language-icon" />
-          </button>
-        </div>
 
         <div className="account-icon">
           <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
