@@ -6,35 +6,33 @@ import { Modal, Button, Box } from '@mui/material';
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState('');
-
-
-
-
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const handleChange = (e) => {
+        setEmail(e.target.value);
+    };
 
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
-    }
-
-    const onButtonClick = () => {
-        setEmailError('')
-
-        // Check if the user has entered both fields correctly
-        if ('' === email) {
-            setEmailError('Please enter your email')
-            return
-        }
-
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setEmailError('Please enter a valid email')
-            return
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setError('');
+        setMessage('');
+        const response = await fetch('http://localhost/api/resetPassword.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+        const data = await response.json();
+        if(response.ok) {
+            setMessage(data.message);
+        } else {
+            setError(data.message);
         }
         handleOpen()
     }
@@ -63,11 +61,12 @@ export const ForgotPassword = (props) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className= 'confirm-box' sx={modalStyle}>
-                    <h2 id="modal-modal-title">Password Reset Request Sent!</h2>
+                    {/* <h2 id="modal-modal-title">Password Reset Request Sent!</h2> */}
                     <p id="modal-modal-description">
-                        A password reset message was sent to your email address.
-                        Please copy the code in that message to reset your password.
+                        {message && <p>{message}</p>}
+                        {error && <p style={{ color: 'red' }}>{error}</p>}
                     </p>
+                    <br />
                     <Button onClick={handleClose}>Close</Button>
                 </Box>
             </Modal>
@@ -80,13 +79,18 @@ export const ForgotPassword = (props) => {
             <form className="email-form" onSubmit={handleSubmit}>
                 <h1 className ="text">Enter the email associated with your account and we will send you a code to reset your password</h1>
                 <label htmlFor="email"></label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />
-                <label className="errorLabel">{emailError}</label>
-                <button className="confirm" onClick={onButtonClick}>Continue</button>
-
+                <input
+                    type="email"
+                    value={email}
+                    name="email"
+                    onChange={handleChange} // Use handleChange to update state
+                    placeholder="Enter your email"
+                    required
+                />
+                <button type="submit" className="confirm">Continue</button>
                 <Link className="link" to="/login" >Go Back?</Link>
+                {/* <label className="errorLabel">{message}</label> */}
             </form>
-      
 
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
