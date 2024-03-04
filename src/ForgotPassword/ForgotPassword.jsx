@@ -21,7 +21,9 @@ export const ForgotPassword = (props) => {
             body: JSON.stringify({ email }),
         });
         const data = await response.json();
-        setMessage(data.message);
+        if(response.ok) {
+            setMessage(data.message);
+        }
     };
 
 
