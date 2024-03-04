@@ -1,7 +1,7 @@
 <?php
 
 include_once('db.php');
-
+header('Content-Type: application/json');
 // Allow from any origin
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -29,6 +29,7 @@ $email = $data['email'];
 
 // check if valid email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
     echo json_encode(['message' => 'Invalid email format']);
     exit;
 }
@@ -42,6 +43,7 @@ $result = $stmt->get_result();
 
 if($result->num_rows == 0) {
     // Email not found
+    http_response_code(400);
     echo json_encode(['message' => 'Email not found']);
 } else {
     // Email found, see how many times they have made a reset request in the last 24 hours
@@ -77,8 +79,21 @@ if($result->num_rows == 0) {
             $updateStmt->bind_param("sss", $reset_code, $expires_at, $email);
             
             if ($updateStmt->execute()) {
-                echo "Reset code updated successfully.";
+                http_response_code(200);
+                // Send the email
+                $to = $email;
+                $subject = 'Your Password Reset Code';
+                $message = 'Your password reset code is: ' . $reset_code;
+                $headers = 'From: noreply@traveltales.com' . "\r\n" .
+                        'Reply-To: noreply@traveltales.com' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+                mail($to, $subject, $message, $headers);
+                http_response_code(200);
+                echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
+
             } else {
+                http_response_code(500);
                 echo "Error updating reset code: " . $conn->error;
             }
         } else { // user does not exist in db - create new record
@@ -87,21 +102,22 @@ if($result->num_rows == 0) {
             $insertStmt = $conn->prepare($insertQuery);
             $insertStmt->bind_param("sss", $email, $reset_code, $expires_at);
             $insertStmt->execute();
+            // Send the email
+            $to = $email;
+            $subject = 'Your Password Reset Code';
+            $message = 'Your password reset code is: ' . $reset_code;
+            $headers = 'From: noreply@traveltales.com' . "\r\n" .
+                    'Reply-To: noreply@traveltales.com' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+            mail($to, $subject, $message, $headers);
+            http_response_code(200);
+            echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
         }
-        // Send the email
-        $to = $email;
-        $subject = 'Your Password Reset Code';
-        $message = 'Your password reset code is: ' . $reset_code;
-        $headers = 'From: noreply@traveltales.com' . "\r\n" .
-                'Reply-To: noreply@traveltales.com' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-
-        mail($to, $subject, $message, $headers);
-
-        echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
 
     } else {
-        echo json_encode(["message" => "You've reached the limit for password reset requests for today. Please try again later."]);
+        http_response_code(400);
+        echo json_encode(["message" => "You've reached the limit for password reset requests for today."]);
     }
 
 }

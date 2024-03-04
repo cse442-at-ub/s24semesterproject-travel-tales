@@ -6,6 +6,7 @@ import BannerImage from "../assets/Login/Background.png"
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setEmail(e.target.value);
@@ -13,6 +14,8 @@ export const ForgotPassword = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setError('');
+        setMessage('');
         const response = await fetch('http://localhost/api/resetPassword.php', {
             method: 'POST',
             headers: {
@@ -23,6 +26,8 @@ export const ForgotPassword = (props) => {
         const data = await response.json();
         if(response.ok) {
             setMessage(data.message);
+        } else {
+            setError(data.message);
         }
     };
 
@@ -44,7 +49,8 @@ export const ForgotPassword = (props) => {
                 <button type="submit" className="confirm">Continue</button>
                 <Link className="link" to="/login" >Go Back?</Link>
                 {/* <label className="errorLabel">{message}</label> */}
-                <p>{message}</p>
+                {message && <p>{message}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
 
             <div className="bannerimage">
