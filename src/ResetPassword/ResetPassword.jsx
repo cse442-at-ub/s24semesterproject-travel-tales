@@ -10,7 +10,6 @@ export const ResetPassword = (props) => {
     // const [message, setMessage] = useState('');
 
     const [formData, setFormData] = useState({
-        email: '',
         reset_code: '',
         pass: '',
     });
@@ -61,16 +60,6 @@ export const ResetPassword = (props) => {
 
             <form className="email-form" onSubmit={handleSubmit}>
                 <h1 className="text">Reset Password</h1>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
                 <div>
                     <label>Reset Code:</label>
                     <input
