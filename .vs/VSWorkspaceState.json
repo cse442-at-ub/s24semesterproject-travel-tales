@@ -1,12 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\php",
     "\\src",
     "\\src\\ForgotPassword",
+    "\\src\\Home",
     "\\src\\Login",
-    "\\src\\Register",
-    "\\src\\SignUp"
+    "\\src\\Register"
   ],
-  "SelectedNode": "\\src\\App.js",
+  "SelectedNode": "\\php\\sharedPin.php",
   "PreviewInSolutionExplorer": false
 }
