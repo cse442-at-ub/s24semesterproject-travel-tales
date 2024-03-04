@@ -51,6 +51,7 @@ function App() {
               <Route path="/signUp" element={<Register />} />
               <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/home" element={<Home/>} />
+          {/* <Route path ="/mypins" element= {<MyPinsModal/>}/> */}
           {/* <Route path="/" element={<HomePage />} /> */}
         </Routes>
       

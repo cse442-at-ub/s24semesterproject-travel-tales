@@ -7,6 +7,9 @@ import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import LanguageIcon from '@mui/icons-material/Language';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import UserProfile from '../UserProfile/UserProfile'
 
 
 const libraries = ['places'];
@@ -49,11 +52,24 @@ const App = () => {
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
   const [isToggled, setToggled] = useState(false);
+  const [userProfileOpen, setUserProfileOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setToggled(false); // Reset the state of the switch
-  };  const handleMapClick = (event) => {
+  };  
+  const handleMapClick = (event) => {
+  };
+
+
+  const handleLanguageButtonClick= () =>{
+
+  };
+
+  const handleAccountCircleButtonClick= () =>{
+    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
+    
+
   };
 
   
@@ -84,7 +100,6 @@ const App = () => {
 
   const handleSubmit = (event) => {
     handleClose()
-    // Handle form submission logic here
   };
 
   const handleToggleClick = () => {
@@ -119,6 +134,20 @@ const App = () => {
             onDragEnd={(e) => handleMarkerDrag(marker.id, e.latLng.toJSON())}
           />
         ))}
+        <div className="another-icon">
+          <button className="white-button" onClick={() => handleLanguageButtonClick()}>
+            <LanguageIcon className="language-icon" />
+          </button>
+        </div>
+
+        <div className="account-icon">
+          <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
+            <AccountCircleIcon className="accountcircle-icon" />
+          </button>
+          {userProfileOpen && (
+            <UserProfile onClose={() => setUserProfileOpen(true)} />
+          )}
+        </div>
         <header className="plus-icon">
           <Button variant="contained" color="primary" onClick={handleOpen}>
             <img src={plusButtonImage} alt="Plus Button" />
