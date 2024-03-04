@@ -20,27 +20,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-// Assume these come from user input (e.g., form submission)
-$userEmail = $_POST['email']; // User's email address
-$resetCode = $_POST['reset_code']; // User-provided reset code
-$newPassword = $_POST['password']; // User's new password
+$data = json_decode(file_get_contents("php://input"), true);
+//$email = $data['email'];
+$reset_code = intval($data['reset_code']);
+$pass = $data['pass'];
 
 // Secure the user input
-$userEmail = $conn->real_escape_string($userEmail);
-$resetCode = $conn->real_escape_string($resetCode);
-$newPassword = $conn->real_escape_string($newPassword);
+//$userEmail = $conn->real_escape_string($email);
+$resetCode = $conn->real_escape_string($reset_code);
+$newPassword = $conn->real_escape_string($pass);
 
 // Hash the new password
 $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
 // SQL to validate the reset code
-$sql = "SELECT * FROM password_resets WHERE email = '$userEmail' AND reset_code = '$resetCode' AND reset_code_expires_at > NOW()";
+$sql = "SELECT email FROM password_resets WHERE reset_code = '$reset_code' AND expires_at > NOW()";
 
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $email = $row["email"];
     // Reset code is valid, update the user's password
-    $updateSql = "UPDATE users SET password = '$newPasswordHash'";
+    $updateSql = "UPDATE users SET pass = '$newPasswordHash' WHERE email = '$email'";
+    // $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+    // $stmt->bind_param("ss", $hashedPassword, $email);
 
     $stmt = $conn->prepare("DELETE FROM password_resets WHERE email = ?");
     $stmt->bind_param("s", $email);
