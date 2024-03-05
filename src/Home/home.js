@@ -374,7 +374,7 @@ const App = () => {
   useEffect(() => {
     const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch('http://localhost/api/addpin.php?email=TestUser@buffalo.edu', {
+        const response = await fetch('https://localhost/api/addpin.php?email=TestUser@buffalo.edu', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -382,7 +382,7 @@ const App = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTPS error! Status: ${response.status}`);
         }
         const rawData = await response.text();
         console.log('Raw Data:', rawData);
@@ -444,7 +444,7 @@ const App = () => {
 
   const sendCoordinatesToBackend = async (info) => {
     try {
-      const response = await fetch('http://localhost/api/addpin.php', {
+      const response = await fetch('https://localhost/api/addpin.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

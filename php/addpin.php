@@ -3,9 +3,26 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Force HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
+
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
+
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+
+header("X-Content-Type-Options: nosniff");
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+
+header("X-Frame-Options: SAMEORIGIN");
+
+header("X-XSS-Protection: 1; mode=block");
+
 header('Content-Type: application/json');
 
 $servername = "localhost";
@@ -55,25 +72,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $stmt->execute();
         $result = $stmt->get_result();
 
-        $coordinates = [];  // Initialize an array to hold coordinates
+        $coordinates = []; 
 
         while ($row = $result->fetch_assoc()) {
-            // Fetch all rows into the $coordinates array
             $coordinates[] = $row;
         }
 
         if (!empty($coordinates)) {
-            // If there are coordinates, return them as JSON
             echo json_encode(['success' => true, 'data' => $coordinates]);
         } else {
-            // If no coordinates are found, return an error
             echo json_encode(['success' => false, 'error' => 'Email not found']);
         }
 
         $stmt->close();
-    } //else {
-        //echo json_encode(['success' => false, 'error' => 'Missing email parameter']);
-    //}
+    }
 }
 
 
