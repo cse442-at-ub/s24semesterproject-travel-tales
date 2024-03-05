@@ -36,6 +36,8 @@ export const Login = (props) => {
             });
             const data = await response.json();
             if (data.code === 200) {
+                // stores users email to access pins
+                localStorage.setItem('email', formData.email);
                 // Redirect user to homepage
                 navigate('/'); // Redirect to homepage route
             } else {

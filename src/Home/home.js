@@ -19,8 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
 
-const email = "TestUser@buffalo.edu";
-
 const libraries = ['places'];
 const mapContainerStyle = {
   position: 'relative',
@@ -329,7 +327,6 @@ const App = () => {
 
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
-  // const [isToggled, setToggled] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -338,20 +335,13 @@ const App = () => {
   };  
   const handleMapClick = (event) => {
   };
-
-
-  const handleLanguageButtonClick= () =>{
-
-  };
-
   const handleAccountCircleButtonClick= () =>{
     setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
-    
-
   };
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const email = localStorage.getItem('email');
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -374,7 +364,7 @@ const App = () => {
   useEffect(() => {
     const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch('http://localhost/api/addpin.php?email=TestUser@buffalo.edu', {
+        const response = await fetch(`https://localhost/api/addpin.php?email=${email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -382,7 +372,7 @@ const App = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTPS error! Status: ${response.status}`);
         }
         const rawData = await response.text();
         console.log('Raw Data:', rawData);
@@ -444,7 +434,7 @@ const App = () => {
 
   const sendCoordinatesToBackend = async (info) => {
     try {
-      const response = await fetch('http://localhost/api/addpin.php', {
+      const response = await fetch('https://localhost/api/addpin.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
