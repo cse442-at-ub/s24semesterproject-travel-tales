@@ -5,14 +5,15 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useNavigate } from 'react-router-dom';
 
 const SettingsDialog = () => {
+  const navigate = useNavigate();
   const handleLogout = () => {
     //fetch logout.php
   }
   
   // Delete account functionality
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const deleteAccount = () => {
     //fetch deleteAccount.php
@@ -26,11 +27,10 @@ const SettingsDialog = () => {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        setSuccessMessage(data.message);
         setErrorMessage('');
+        navigate('/login');
       } else {
         setErrorMessage(data.message);
-        setSuccessMessage('');
       }
     })
     .catch((error) => {
@@ -85,7 +85,6 @@ const SettingsDialog = () => {
             <Button variant="contained" color="error" onClick={deleteAccount} sx={{ mt: 2 }}>
               Delete Account
             </Button>
-            {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
           </Box>
         </AccordionDetails>
