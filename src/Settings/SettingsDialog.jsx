@@ -17,13 +17,7 @@ const SettingsDialog = () => {
   }
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      p: 3,
-    }}>
+    <>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -41,11 +35,8 @@ const SettingsDialog = () => {
             p: 3,
           }}>
             <Typography>
-              No longer interested in Travel Tales?
+              General Settings will go here.
             </Typography>
-            <Button variant="contained" color="error" onClick={handleDeleteAccount} sx={{ mt: 2 }}>
-              Delete Account
-            </Button>
           </Box>
         </AccordionDetails>
       </Accordion>
@@ -74,11 +65,18 @@ const SettingsDialog = () => {
           </Box>
         </AccordionDetails>
       </Accordion>
-      <br/>
-      <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mt: 2 }}>
-        Logout
-      </Button>
-    </Box>
+      <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 3,
+      }}>
+        <Button variant="contained" color="primary" onClick={handleLogout} sx={{ mt: 2 }}>
+          Logout
+        </Button>
+      </Box>
+    </>
   );
 };
 
