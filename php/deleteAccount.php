@@ -3,6 +3,20 @@
 session_start();
 
 require 'db.php';
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
 
 // Check if the request is POST for security
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             // Successfully deleted the user
+            session_unset();
+            session_destroy();
             echo json_encode(["success" => true, "message" => "Account deleted successfully."]);
         } else {
             // Handle error, e.g., user not found or DB error
