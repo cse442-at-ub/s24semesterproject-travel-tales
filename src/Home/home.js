@@ -374,7 +374,7 @@ const App = () => {
   useEffect(() => {
     const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch('http://localhost/api/addpin.php?email=TestUser@buffalo.edu', {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=TestUser@buffalo.edu`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -444,7 +444,7 @@ const App = () => {
 
   const sendCoordinatesToBackend = async (info) => {
     try {
-      const response = await fetch('http://localhost/api/addpin.php', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
