@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\php",
+    "\\src",
+    "\\src\\ForgotPassword",
+    "\\src\\Home",
+    "\\src\\Login",
+    "\\src\\Register"
+  ],
+  "SelectedNode": "\\php\\sharedPin.php",
+  "PreviewInSolutionExplorer": false
+}
