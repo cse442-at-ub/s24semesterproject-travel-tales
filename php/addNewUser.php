@@ -86,7 +86,6 @@ if (!preg_match($pattern, $pass)) {
 
 // hash and salt password
 $pass = password_hash($pass, PASSWORD_DEFAULT);
-$pass = password_hash($pass, PASSWORD_DEFAULT);
 
 if(isset($email) && isset($pass)) {
     if($email != "" and $pass != ""){

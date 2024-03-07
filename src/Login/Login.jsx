@@ -25,7 +25,7 @@ export const Login = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://localhost/api/login.php', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

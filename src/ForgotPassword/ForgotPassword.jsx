@@ -21,7 +21,7 @@ export const ForgotPassword = (props) => {
         event.preventDefault();
         setError('');
         setMessage('');
-        const response = await fetch('https://localhost/api/resetPassword.php', {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/resetPassword.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
