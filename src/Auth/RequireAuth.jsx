@@ -8,7 +8,7 @@ const RequireAuth = ({ children }) => {
 
     useEffect(() => {
         const checkLoginStatus = async () => {
-            const response = await fetch('http://localhost/api/getSession.php', {
+            const response = await fetch('https://localhost/api/getSession.php', {
                 credentials: 'include', // To send the cookie
             });
             const data = await response.json();

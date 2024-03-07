@@ -1,4 +1,5 @@
 <?php
+include_once('db.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -10,25 +11,14 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 }
 
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
-
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
-
 header("X-Content-Type-Options: nosniff");
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-
 header("X-Frame-Options: SAMEORIGIN");
-
 header("X-XSS-Protection: 1; mode=block");
-
 header('Content-Type: application/json');
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "test";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
