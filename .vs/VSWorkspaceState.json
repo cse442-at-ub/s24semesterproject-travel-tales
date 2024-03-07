@@ -3,11 +3,8 @@
     "",
     "\\php",
     "\\src",
-    "\\src\\ForgotPassword",
-    "\\src\\Home",
-    "\\src\\Login",
-    "\\src\\Register"
+    "\\src\\Home"
   ],
-  "SelectedNode": "\\php\\sharedPin.php",
+  "SelectedNode": "\\php\\pinfetch.php",
   "PreviewInSolutionExplorer": false
 }

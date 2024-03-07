@@ -337,7 +337,8 @@ const App = () => {
   };
   const handleAccountCircleButtonClick= () =>{
     setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
-  };
+    };
+
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -396,6 +397,8 @@ const App = () => {
 
     fetchInfoFromBackend();
   }, []);
+
+
 
 
   const updateMarker = (coordinates) => {
@@ -458,10 +461,36 @@ const App = () => {
   //   setOpen(false);
   //   setToggled(false);
   //   };  
-
+    const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
+
+    useEffect(() => {
+        const pinfetch = async () => {
+            try {
+                const response = await fetch('https://localhost/api/sharedPinFetch.php');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Check if the result has a message indicating no matches
+                if (result.message) {
+                    setError(result.message);
+                } else {
+                    setMatchedData(result);
+                }
+            } catch (error) {
+                setError('Error fetching data from PHP script');
+                console.error('Error fetching data:', error.message);
+            }
+        };
+        pinfetch();
+    }, []);
+    
 
 
   // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
@@ -567,75 +596,74 @@ const App = () => {
           </Modal>
               </header>  
 
+
+
+
+
+
+
+
+
               <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
                   </button>
                   <SwipeableDrawer
-                        className= 'SharedPinsContainer'
+                      className='SharedPinsContainer'
                       open={open2}
-                      onClose={handleClose2}>
+                      onClose={handleClose2}
+                  >
 
-                      <Box className='SharedPins' >
+                      <Box className='SharedPins'>
                           <button className="leave-arrow" onClick={handleClose2}>
                               <ArrowBackIosNewIcon />
                           </button>
                           <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
 
                               <ListItem alignItems="center">
-                                  <h2 >
-                                      Shared Pins </h2>
+                                  <h2>Shared Pins</h2>
+                              </ListItem>
+                              <Divider />
 
-                              </ListItem>
-                              <Divider />
-                              <ListItem alignItems="flex-start">
-                                  <ListItemText
-                                      primary="City/State"
-                                      secondary={
-                                          <React.Fragment>
-                                              <Typography
-                                                  sx={{ display: 'inline' }}
-                                                  component="span"
-                                                  variant="body2"
-                                                  color="text.primary"
-                                              >
-                                                  Date: 3/1/23
-                                              </Typography>
-                                              <Typography>
-                                                  {" Created by: User"}
-                                              </Typography>
-                                          </React.Fragment>
+                              {matchedData.length > 0 ? (
+                                  matchedData.map((item) => (
+                                      <React.Fragment key={item.email}>
+                                          <ListItem alignItems="flex-start">
+                                              <ListItemText
+                                                  primary={`Lat/Lng: ${item.lat}, ${item.lng}`}
+                                                  secondary={
+                                                      <React.Fragment>
+                                                          <Typography
+                                                              sx={{ display: 'inline' }}
+                                                              component="span"
+                                                              variant="body2"
+                                                              color="text.primary"
+                                                          >
+                                                              Date: {item.date}
+                                                          </Typography>
+                                                          <Typography>
+                                                              {" Created by: " + item.email}
+                                                          </Typography>
+                                                      </React.Fragment>
+                                                  }
+                                              />
+                                          </ListItem>
+                                          <Divider />
+                                      </React.Fragment>
+                                  ))
+                              ) : (
+                                  <ListItem alignItems="flex-start">
+                                      <ListItemText
+                                          primary="No matching records found"
+                                      />
+                                  </ListItem>
+                              )}
 
-                                      }
-                                  />
-                              </ListItem>
-                              <Divider />
-                              <ListItem alignItems="flex-start">
-                                  <ListItemText
-                                      primary="City/State"
-                                      secondary={
-                                          <React.Fragment>
-                                              <Typography
-                                                  sx={{ display: 'inline' }}
-                                                  component="span"
-                                                  variant="body2"
-                                                  color="text.primary"
-                                              >
-                                                  Date: 3/1/23
-                                              </Typography>
-                                              <Typography>
-                                                  {" Created by: User"}
-                                              </Typography>
-                                          </React.Fragment>
-                                      }
-                                  />
-                              </ListItem>
-                              <Divider />
-                          </List>                         
+                          </List>
                       </Box>
                   </SwipeableDrawer>
               </div>
-
+              );
 
       </GoogleMap>  
       {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
