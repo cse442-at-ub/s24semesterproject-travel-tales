@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -18,7 +18,7 @@ import Photo8 from '../assets/photo8.jpeg'
 import Photo9 from '../assets/photo9.jpeg'
 import SettingsIcon from '@mui/icons-material/Settings';
 
-const SwipeableTemporaryDrawer = ({ open, onClose }) => {
+const SwipeableTemporaryDrawer = ({ open, onClose, userData }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 
@@ -90,15 +90,15 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         }}
       >
         <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-          200 PINS | 
+          {userData.user_pins} PINS | 
         </Typography>
 
         <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-          200 LIKES |
+          {userData.user_likes} LIKES |
         </Typography>
 
         <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-          2000 FRIENDS
+          {userData.user_friends} FRIENDS
         </Typography>
       </div>
 
@@ -174,6 +174,19 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 const UserProfile = ({ onClose }) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
+  const [userData, setUserData] = useState({ user_like: 0, user_pins: 0, user_friends: 0 });
+
+  useEffect(() => {
+    fetch('UserProfileinfo.php')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => setUserData(data.data))
+    .catch(error => console.error('Error fetching user data:', error));
+  }, []); // Empty dependency array ensures the effect runs once on component mount
 
   const handlePinsButtonClick = () => {
     // Close the drawer and trigger the callback to open the MyPins modal
@@ -184,7 +197,7 @@ const UserProfile = ({ onClose }) => {
 
   return (
     <div>
-      <SwipeableTemporaryDrawer open={drawerOpen} onClose={() => { setDrawerOpen(false); onClose(); }} />
+      <SwipeableTemporaryDrawer open={drawerOpen} onClose={() => { setDrawerOpen(false); onClose(); }} userData={userData} />
     </div>
   );
 };
