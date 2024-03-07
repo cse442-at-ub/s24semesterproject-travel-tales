@@ -382,7 +382,7 @@ const App = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTPS error! Status: ${response.status}`);
         }
         const rawData = await response.text();
         console.log('Raw Data:', rawData);
