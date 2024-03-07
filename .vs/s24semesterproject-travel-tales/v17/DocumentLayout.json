@@ -3,52 +3,48 @@
   "WorkspaceRootPath": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPin.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\sharedPin.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\Source\\Repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\sharedPinFetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\fetchData.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Register\\Register.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\resetPassword.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\resetPassword.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Register\\Register.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\ForgotPassword\\ForgotPassword.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addNewUser.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\addNewUser.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\db.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\login.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\index.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\index.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\App.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Home\\home.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\Source\\Repos\\s24semesterproject-travel-tales\\src\\App.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\App.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Home\\home.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:package.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addpin.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\addpin.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\fetchData.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\login.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addNewUser.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\addNewUser.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.test.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
@@ -59,8 +55,20 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\App.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\reportWebVitals.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\reportWebVitals.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\db.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\getSession.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\getSession.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\index.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,149 +78,121 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 5,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "package.json",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\package.json",
+              "RelativeDocumentMoniker": "package.json",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\package.json",
+              "RelativeToolTip": "package.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-03-07T21:32:53.742Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Register.css",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css",
-              "RelativeDocumentMoniker": "src\\Register\\Register.css",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.css",
-              "RelativeToolTip": "src\\Register\\Register.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-29T01:19:25.006Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ForgotPassword.css",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
-              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.css",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.css",
-              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-29T01:18:36.453Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "login.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php",
-              "RelativeDocumentMoniker": "php\\login.php",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php",
-              "RelativeToolTip": "php\\login.php",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-29T01:17:44.366Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "fetchData.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php",
-              "RelativeDocumentMoniker": "php\\fetchData.php",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php",
-              "RelativeToolTip": "php\\fetchData.php",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-29T01:17:24.521Z",
-              "EditorCaption": ""
+              "Title": "App.jsx",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.jsx",
+              "RelativeDocumentMoniker": "src\\App.jsx",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.jsx",
+              "RelativeToolTip": "src\\App.jsx",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAxwBQAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2024-03-07T20:54:30.739Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ForgotPassword.jsx",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
-              "RelativeDocumentMoniker": "src\\ForgotPassword\\ForgotPassword.jsx",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\ForgotPassword\\ForgotPassword.jsx",
-              "RelativeToolTip": "src\\ForgotPassword\\ForgotPassword.jsx",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-02-29T01:10:09.186Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "sharedPin.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPin.php",
-              "RelativeDocumentMoniker": "php\\sharedPin.php",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPin.php",
-              "RelativeToolTip": "php\\sharedPin.php",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-29T00:55:58.369Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "db.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php",
-              "RelativeDocumentMoniker": "php\\db.php",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php",
-              "RelativeToolTip": "php\\db.php",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-29T00:55:56.6Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Register.jsx",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx",
-              "RelativeDocumentMoniker": "src\\Register\\Register.jsx",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Register\\Register.jsx",
-              "RelativeToolTip": "src\\Register\\Register.jsx",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAAD0AAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-02-29T00:54:36.507Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "home.js",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.js",
               "RelativeDocumentMoniker": "src\\Home\\home.js",
               "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.js",
               "RelativeToolTip": "src\\Home\\home.js",
-              "ViewState": "AQIAACQAAAAAAAAAAAAAAAAAAAARAAAA",
+              "ViewState": "AQIAAHYCAAAAAAAAAAAAAJ8CAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-28T20:31:52.53Z",
+              "WhenOpened": "2024-03-07T18:03:36.946Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "login.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php",
+              "RelativeDocumentMoniker": "php\\login.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\login.php",
+              "RelativeToolTip": "php\\login.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:57:53.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "pinfetch.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php",
+              "RelativeDocumentMoniker": "php\\pinfetch.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php",
+              "RelativeToolTip": "php\\pinfetch.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:54:09.273Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "App.test.js",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.test.js",
-              "RelativeDocumentMoniker": "src\\App.test.js",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.test.js",
-              "RelativeToolTip": "src\\App.test.js",
+              "DocumentIndex": 0,
+              "Title": "sharedPinFetch.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
+              "RelativeDocumentMoniker": "php\\sharedPinFetch.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
+              "RelativeToolTip": "php\\sharedPinFetch.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:57:49.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "fetchData.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php",
+              "RelativeDocumentMoniker": "php\\fetchData.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\fetchData.php",
+              "RelativeToolTip": "php\\fetchData.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:58:06.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "home.css",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.css",
+              "RelativeDocumentMoniker": "src\\Home\\home.css",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\Home\\home.css",
+              "RelativeToolTip": "src\\Home\\home.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-28T19:39:41.809Z",
-              "EditorCaption": ""
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-03-07T18:56:08.552Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
+              "Title": "resetPassword.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\resetPassword.php",
+              "RelativeDocumentMoniker": "php\\resetPassword.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\resetPassword.php",
+              "RelativeToolTip": "php\\resetPassword.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T18:57:15.91Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "addNewUser.php",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addNewUser.php",
               "RelativeDocumentMoniker": "php\\addNewUser.php",
@@ -220,57 +200,91 @@
               "RelativeToolTip": "php\\addNewUser.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-28T16:39:09.035Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:35.253Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "App.test.js",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.test.js",
+              "RelativeDocumentMoniker": "src\\App.test.js",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.test.js",
+              "RelativeToolTip": "src\\App.test.js",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-03-07T20:55:29.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "addpin.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addpin.php",
+              "RelativeDocumentMoniker": "php\\addpin.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\addpin.php",
+              "RelativeToolTip": "php\\addpin.php",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAABYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:58:11.29Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
+              "Title": "reportWebVitals.js",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\reportWebVitals.js",
+              "RelativeDocumentMoniker": "src\\reportWebVitals.js",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\reportWebVitals.js",
+              "RelativeToolTip": "src\\reportWebVitals.js",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-03-07T20:55:27.373Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "index.js",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\index.js",
               "RelativeDocumentMoniker": "src\\index.js",
               "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\index.js",
               "RelativeToolTip": "src\\index.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-28T05:09:08.902Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "index.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\index.php",
-              "RelativeDocumentMoniker": "php\\index.php",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\index.php",
-              "RelativeToolTip": "php\\index.php",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-02-28T03:47:01.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:42:49.296Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 14,
-              "Title": "App.css",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.css",
-              "RelativeDocumentMoniker": "src\\App.css",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.css",
-              "RelativeToolTip": "src\\App.css",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-02-26T18:05:40.196Z"
+              "Title": "db.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php",
+              "RelativeDocumentMoniker": "php\\db.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\db.php",
+              "RelativeToolTip": "php\\db.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:58:08.933Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "App.js",
-              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.js",
-              "RelativeDocumentMoniker": "src\\App.js",
-              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\App.js",
-              "RelativeToolTip": "src\\App.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-02-24T02:26:37.667Z"
+              "DocumentIndex": 15,
+              "Title": "getSession.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\getSession.php",
+              "RelativeDocumentMoniker": "php\\getSession.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\getSession.php",
+              "RelativeToolTip": "php\\getSession.php",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
+              "WhenOpened": "2024-03-07T17:58:04.74Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "index.css",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\index.css",
+              "RelativeDocumentMoniker": "src\\index.css",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\src\\index.css",
+              "RelativeToolTip": "src\\index.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-03-07T17:42:48.191Z"
             }
           ]
         }

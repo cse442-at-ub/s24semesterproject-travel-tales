@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT email, lat, lng, title, description, date, isPublic FROM PinsInfo";
+$sql = "SELECT email, lat, lng, title, description, date, isPublic, FROM PinsInfo";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
