@@ -1,4 +1,26 @@
 <?php
+include_once('db.php');
+
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400'); // cache for 1 day
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
+
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -14,14 +36,16 @@ $matchedData = array();
 
 $sql = "SELECT sp1.pin_id, sp2.email, sp2.lat, sp2.lng, sp2.date
         FROM SharedPins sp1
-        JOIN PinsInfo sp2 ON sp1.pin_id = sp2.pin_id";
+        JOIN PinsInfo sp2 ON sp1.pin_id = sp2.pin_id
+        JOIN users sp3 ON sp2.email = sp3.email";
 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $matchedData[] = array(
-            "email" => $row["email"],
+            "first_name" => $row["first_name"],
+            "last_name" => $row["last_name"],
             "lat" => $row["lat"],
             "lng" => $row["lng"],
             "date" => $row["date"]

@@ -18,9 +18,9 @@ function App() {
           <Route path="/signUp" element={<Register />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/" element={
-            <RequireAuth>
+           
               <Home/>
-            </RequireAuth>
+            
           } />
         </Routes>         
       </Router>

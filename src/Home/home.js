@@ -469,7 +469,7 @@ const App = () => {
     useEffect(() => {
         const pinfetch = async () => {
             try {
-                const response = await fetch('https://localhost/api/sharedPinFetch.php');
+                const response = await fetch('http://localhost/api/sharedPinFetch.php');
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -642,7 +642,7 @@ const App = () => {
                                                               Date: {item.date}
                                                           </Typography>
                                                           <Typography>
-                                                              {" Created by: " + item.email}
+                                                              {" Created by: " + item.first_name + " " + item.last_name}
                                                           </Typography>
                                                       </React.Fragment>
                                                   }
@@ -654,7 +654,7 @@ const App = () => {
                               ) : (
                                   <ListItem alignItems="flex-start">
                                       <ListItemText
-                                          primary="No matching records found"
+                                          primary="No Shared Pins"
                                       />
                                   </ListItem>
                               )}

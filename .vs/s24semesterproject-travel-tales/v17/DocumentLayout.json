@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\Source\\Repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\sharedPinFetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:php\\pinfetch.php||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\resetPassword.php||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -78,7 +78,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -90,8 +90,7 @@
               "RelativeToolTip": "package.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-03-07T21:32:53.742Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T21:32:53.742Z"
             },
             {
               "$type": "Document",
@@ -103,8 +102,7 @@
               "RelativeToolTip": "src\\App.jsx",
               "ViewState": "AQIAAAsAAAAAAAAAAAAxwBQAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
-              "WhenOpened": "2024-03-07T20:54:30.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T20:54:30.739Z"
             },
             {
               "$type": "Document",
@@ -116,8 +114,7 @@
               "RelativeToolTip": "src\\Home\\home.js",
               "ViewState": "AQIAAHYCAAAAAAAAAAAAAJ8CAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-03-07T18:03:36.946Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T18:03:36.946Z"
             },
             {
               "$type": "Document",
@@ -129,31 +126,30 @@
               "RelativeToolTip": "php\\login.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:57:53.022Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:57:53.022Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "pinfetch.php",
               "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php",
               "RelativeDocumentMoniker": "php\\pinfetch.php",
               "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\pinfetch.php",
               "RelativeToolTip": "php\\pinfetch.php",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
               "WhenOpened": "2024-03-07T17:54:09.273Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "sharedPinFetch.php",
-              "DocumentMoniker": "C:\\Users\\sitjo\\Source\\Repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
+              "DocumentMoniker": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
               "RelativeDocumentMoniker": "php\\sharedPinFetch.php",
-              "ToolTip": "C:\\Users\\sitjo\\Source\\Repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
+              "ToolTip": "C:\\Users\\sitjo\\source\\repos\\s24semesterproject-travel-tales\\php\\sharedPinFetch.php",
               "RelativeToolTip": "php\\sharedPinFetch.php",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
               "WhenOpened": "2024-03-07T17:57:49.63Z",
               "EditorCaption": ""
@@ -168,8 +164,7 @@
               "RelativeToolTip": "php\\fetchData.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:58:06.903Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:06.903Z"
             },
             {
               "$type": "Document",
@@ -181,8 +176,7 @@
               "RelativeToolTip": "src\\Home\\home.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-03-07T18:56:08.552Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T18:56:08.552Z"
             },
             {
               "$type": "Document",
@@ -194,8 +188,7 @@
               "RelativeToolTip": "php\\resetPassword.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T18:57:15.91Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T18:57:15.91Z"
             },
             {
               "$type": "Document",
@@ -207,8 +200,7 @@
               "RelativeToolTip": "php\\addNewUser.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:58:35.253Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:35.253Z"
             },
             {
               "$type": "Document",
@@ -220,8 +212,7 @@
               "RelativeToolTip": "src\\App.test.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-03-07T20:55:29.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T20:55:29.397Z"
             },
             {
               "$type": "Document",
@@ -233,8 +224,7 @@
               "RelativeToolTip": "php\\addpin.php",
               "ViewState": "AQIAAAwAAAAAAAAAAAAAABYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:58:11.29Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:11.29Z"
             },
             {
               "$type": "Document",
@@ -246,8 +236,7 @@
               "RelativeToolTip": "src\\reportWebVitals.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-03-07T20:55:27.373Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T20:55:27.373Z"
             },
             {
               "$type": "Document",
@@ -259,8 +248,7 @@
               "RelativeToolTip": "src\\index.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-03-07T17:42:49.296Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:42:49.296Z"
             },
             {
               "$type": "Document",
@@ -272,8 +260,7 @@
               "RelativeToolTip": "php\\db.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:58:08.933Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:08.933Z"
             },
             {
               "$type": "Document",
@@ -285,8 +272,7 @@
               "RelativeToolTip": "php\\getSession.php",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002338|",
-              "WhenOpened": "2024-03-07T17:58:04.74Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:58:04.74Z"
             },
             {
               "$type": "Document",
@@ -298,8 +284,7 @@
               "RelativeToolTip": "src\\index.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-03-07T17:42:48.191Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-07T17:42:48.191Z"
             }
           ]
         }
