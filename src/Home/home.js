@@ -342,7 +342,12 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const email = localStorage.getItem('email');
+    const email = localStorage.getItem('email');
+
+    const [matchedData, setMatchedData] = useState([]);
+    const [open2, setOpen2] = useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -399,6 +404,41 @@ const App = () => {
   }, []);
 
 
+
+    useEffect(() => {
+        const pinfetch = async () => {
+            try {
+                const response = await fetch('http://localhost/api/sharedPinFetch.php');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Check if the result has a message indicating no matches
+                if (result.message) {
+                    setError(result.message);
+                } else {
+                    // Set the matched data and then proceed with the loop
+                    await setMatchedData(result);
+
+                    // Loop through the matchedData and perform additional actions
+                    
+                    for (let i = 0; i < result.length; i++) {
+                        const item = result[i];
+                        await fetchCityState(item.lat, item.lng)
+                        // Perform actions for each item in the loop
+                    }
+                }
+            } catch (error) {
+                setError('Error fetching data from PHP script');
+                console.error('Error fetching data:', error.message);
+            }
+        };
+
+        pinfetch();
+    }, []);
 
 
   const updateMarker = (coordinates) => {
@@ -461,24 +501,30 @@ const App = () => {
   //   setOpen(false);
   //   setToggled(false);
   //   };  
-    const [matchedData, setMatchedData] = useState([]);
-    const [open2, setOpen2] = useState(false);
-    const handleOpen2 = () => setOpen2(true);
-    const handleClose2 = () => setOpen2(false);
+  
 
     const fetchCityState = async (lat, lng) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
 
         try {
             const response = await fetch(geocodingUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.status === 'OK' && data.results.length > 0) {
-                const city = data.results[0].address_components.find(component => component.types.includes('locality'))?.long_name || '';
-                const state = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'))?.long_name || '';
 
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data. Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.status === 'OK' && data.results.length > 0) {
+                // Extract city and state
+                const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
+                const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
+
+                const city = cityComponent?.long_name || '';
+                const state = stateComponent?.long_name || '';
+
+                console.log(city);
+                console.log(state);
                 // Update matchedData with city and state
                 setMatchedData(prevData => {
                     return prevData.map(item => {
@@ -493,44 +539,13 @@ const App = () => {
                     });
                 });
             } else {
-                console.error('Error fetching address information');
+                console.error('No results or unexpected response:', data);
             }
         } catch (error) {
-            console.error('Error fetching address information:', error.message);
+            console.error('Error fetching data:', error.message);
         }
-    };
+    }; 
 
-    useEffect(() => {
-        // Loop through matchedData and fetch city/state for each entry
-        matchedData.forEach(item => {
-            fetchCityState(item.lat, item.lng);
-        });
-    }, [matchedData]);
-
-    useEffect(() => {
-        const pinfetch = async () => {
-            try {
-                const response = await fetch('https://localhost/api/sharedPinFetch.php');
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                // Check if the result has a message indicating no matches
-                if (result.message) {
-                    setError(result.message);
-                } else {
-                    setMatchedData(result);
-                }
-            } catch (error) {
-                setError('Error fetching data from PHP script');
-                console.error('Error fetching data:', error.message);
-            }
-        };
-        pinfetch();
-    }, []);
     
 
 
@@ -668,7 +683,7 @@ const App = () => {
 
                               {matchedData.length > 0 ? (
                                   matchedData.map((item) => (
-                                      <React.Fragment key={item.email}>
+                                      <React.Fragment key={item.pin_id}>
                                           <ListItem alignItems="flex-start">
                                               <ListItemText
                                                   primary={`City/State: ${item.city || item.state}, ${item.state}`}

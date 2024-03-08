@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
