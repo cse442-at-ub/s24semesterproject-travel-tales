@@ -30,14 +30,13 @@
     font-family: Arial;
     font-size: 20px;
     padding-top: 25px;
-    width: 100%;
+    width: 70%;
     height: 100%;
     display: flex;
     justify-content: center;
     background-color: white;
     padding-left: 80px;
     padding-right: 30px;
-    justify-content: center;
 }
 
     .leave-arrow2 {

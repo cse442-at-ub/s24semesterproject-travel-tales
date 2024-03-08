@@ -12,14 +12,17 @@ function App() {
   return (
     
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signUp" element={<Register />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
-      </Routes>
-    </Router>
-
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<Register />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/" element={
+            <RequireAuth>
+              <Home/>
+            </RequireAuth>
+          } />
+        </Routes>         
+      </Router>
   );
 }
 
