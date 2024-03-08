@@ -466,6 +466,47 @@ const App = () => {
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
 
+    const fetchCityState = async (lat, lng) => {
+        const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
+
+        try {
+            const response = await fetch(geocodingUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.status === 'OK' && data.results.length > 0) {
+                const city = data.results[0].address_components.find(component => component.types.includes('locality'))?.long_name || '';
+                const state = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'))?.long_name || '';
+
+                // Update matchedData with city and state
+                setMatchedData(prevData => {
+                    return prevData.map(item => {
+                        if (item.lat === lat && item.lng === lng) {
+                            return {
+                                ...item,
+                                city: city,
+                                state: state
+                            };
+                        }
+                        return item;
+                    });
+                });
+            } else {
+                console.error('Error fetching address information');
+            }
+        } catch (error) {
+            console.error('Error fetching address information:', error.message);
+        }
+    };
+
+    useEffect(() => {
+        // Loop through matchedData and fetch city/state for each entry
+        matchedData.forEach(item => {
+            fetchCityState(item.lat, item.lng);
+        });
+    }, [matchedData]);
+
     useEffect(() => {
         const pinfetch = async () => {
             try {
@@ -630,7 +671,7 @@ const App = () => {
                                       <React.Fragment key={item.email}>
                                           <ListItem alignItems="flex-start">
                                               <ListItemText
-                                                  primary={`Lat/Lng: ${item.lat}, ${item.lng}`}
+                                                  primary={`City/State: ${item.city || item.state}, ${item.state}`}
                                                   secondary={
                                                       <React.Fragment>
                                                           <Typography
