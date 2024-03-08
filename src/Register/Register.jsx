@@ -37,12 +37,12 @@ export const Register = (props) => {
         }
         setMessage('');
         try {
-            const response = await fetch('http://localhost/api/addNewUser.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addNewUser.php`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData),
             });
 
             if (response.ok) {

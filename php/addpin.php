@@ -1,4 +1,5 @@
 <?php
+include_once('db.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -22,11 +23,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-XSS-Protection: 1; mode=block");
 header('Content-Type: application/json');
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "test";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
