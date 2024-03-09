@@ -336,7 +336,7 @@ const App = () => {
   const handleMapClick = (event) => {
   };
   const handleAccountCircleButtonClick= () =>{
-    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
+    setUserProfileOpen((prevOpen) => !prevOpen);
     };
 
   const [isPublic, setToggled] = useState(false);
@@ -596,7 +596,7 @@ const App = () => {
             <AccountCircleIcon className="accountcircle-icon" />
           </button>
           {userProfileOpen && (
-            <UserProfile onClose={() => setUserProfileOpen(true)} />
+            <UserProfile onClose={() => setUserProfileOpen(false)} />
           )}
         </div>
         <header className="plus-icon">
