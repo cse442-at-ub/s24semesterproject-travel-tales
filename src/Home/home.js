@@ -587,7 +587,7 @@ const App = () => {
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker.id)}
+            //onClick={() => handleMarkerClick(marker.id)}
           />
         ))}
 
