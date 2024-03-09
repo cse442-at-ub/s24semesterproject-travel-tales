@@ -391,7 +391,7 @@ const App = () => {
             updateMarker(coordinate)
           });
         } else {
-          console.error('Error:', data.error);
+          //console.error('Error:', data.error);
         }
 
       } catch (error) {
@@ -408,8 +408,12 @@ const App = () => {
     useEffect(() => {
         const pinfetch = async () => {
             try {
-                const response = await fetch('https://localhost/api/sharedPinFetch.php');
-
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  }
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -418,7 +422,7 @@ const App = () => {
 
                 // Check if the result has a message indicating no matches
                 if (result.message) {
-                    setError(result.message);
+                    //setError(result.message);
                 } else {
                     // Set the matched data and then proceed with the loop
                     await setMatchedData(result);
@@ -583,7 +587,7 @@ const App = () => {
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker.id)}
+            //onClick={() => handleMarkerClick(marker.id)}
           />
         ))}
 
