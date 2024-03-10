@@ -342,12 +342,12 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-    const email = localStorage.getItem('email');
+  const email = localStorage.getItem('email');
 
-    const [matchedData, setMatchedData] = useState([]);
-    const [open2, setOpen2] = useState(false);
-    const handleOpen2 = () => setOpen2(true);
-    const handleClose2 = () => setOpen2(false);
+  const [matchedData, setMatchedData] = useState([]);
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -370,7 +370,7 @@ const App = () => {
   useEffect(() => {
     const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch(`https://localhost/api/addpin.php?email=${email}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -378,7 +378,7 @@ const App = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTPS error! Status: ${response.status}`);
+          throw new Error(`HTTPSS error! Status: ${response.status}`);
         }
         const rawData = await response.text();
         console.log('Raw Data:', rawData);
@@ -408,7 +408,7 @@ const App = () => {
     useEffect(() => {
         const pinfetch = async () => {
             try {
-                const response = await fetch('http://localhost/api/sharedPinFetch.php');
+                const response = await fetch('https://localhost/api/sharedPinFetch.php');
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -477,7 +477,7 @@ const App = () => {
 
   const sendCoordinatesToBackend = async (info) => {
     try {
-      const response = await fetch('https://localhost/api/addpin.php', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

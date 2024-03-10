@@ -17,6 +17,11 @@ import Photo7 from '../assets/photo7.jpeg'
 import Photo8 from '../assets/photo8.jpeg'
 import Photo9 from '../assets/photo9.jpeg'
 import SettingsIcon from '@mui/icons-material/Settings';
+import {Dialog, DialogContent, DialogTitle} from '@mui/material/';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import SettingsDialog from '../Settings/SettingsDialog';
+// import { useNavigate } from 'react-router-dom';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
@@ -29,6 +34,18 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const handlePinsButtonClick = () => {
     setMyPinsModalOpen(true);
   };
+
+  // Start: Settings dialog handlers
+  const [openSettings, setOpenSettings] = useState(false);
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
+  // End: Settings dialog handlers
 
   const list = () => (
     <div
@@ -66,8 +83,10 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
       >
         Log Out
       </Button>
+      
 
-      <Button sx={{position: 'absolute',
+      {/* Start: Settings Dialog */}
+      <Button onClick={handleOpenSettings} sx={{position: 'absolute',
           top: 0,
           right: 0,
           margin: '10px',
@@ -76,6 +95,28 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           style={{ backgroundColor: 'white', color: 'black' }}>
           <SettingsIcon/>
       </Button>
+      <Dialog open={openSettings} onClose={handleCloseSettings} fullWidth maxWidth="sm">
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          User Settings
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseSettings}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <SettingsDialog />
+        </DialogContent>
+      </Dialog>
+      {/* End: Settings Dialog */}
+
 
       <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
 
