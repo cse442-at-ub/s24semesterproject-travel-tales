@@ -34,7 +34,7 @@ if ($conn->connect_error) {
 
 $matchedData = array();
 
-$sql = "SELECT sp1.pin_id, sp2.email, sp2.lat, sp2.lng, sp2.date, sp3.first_name, sp3.last_name
+$sql = "SELECT sp1.pin_id, sp1.shared_with, sp2.lat, sp2.lng, sp2.date, sp3.first_name, sp3.last_name
         FROM SharedPins sp1
         JOIN PinsInfo sp2 ON sp1.pin_id = sp2.pin_id
         JOIN users sp3 ON sp2.email = sp3.email";
@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
         $matchedData[] = array(
             "first_name" => $row["first_name"],
             "last_name" => $row["last_name"],
-            "email" => $row["email"],
+            "email" => $row["shared_with"],
             "lat" => $row["lat"],
             "lng" => $row["lng"],
             "date" => $row["date"]

@@ -420,15 +420,21 @@ const App = () => {
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    // Set the matched data and then proceed with the loop
-                    await setMatchedData(result);
+                    // Filter the result to include only items with matching email
+                    const filteredResult = result.filter(item => item.email === email);
 
-                    // Loop through the matchedData and perform additional actions
-                    
-                    for (let i = 0; i < result.length; i++) {
-                        const item = result[i];
-                        await fetchCityState(item.lat, item.lng)
-                        // Perform actions for each item in the loop
+                    if (filteredResult.length > 0) {
+                        // Set the matched data with the filtered result
+                        await setMatchedData(filteredResult);
+
+                        // Loop through the matchedData and perform additional actions
+                        for (let i = 0; i < filteredResult.length; i++) {
+                            const item = filteredResult[i];
+                            await fetchCityState(item.lat, item.lng);
+                            // Perform actions for each item in the loop
+                        }
+                    } else {
+                        setError('No matching data found.');
                     }
                 }
             } catch (error) {
