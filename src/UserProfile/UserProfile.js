@@ -59,7 +59,9 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         background: 'white',
       }}
       role="presentation"
-      onClick={toggleDrawer(false)}
+      onClick={(e)=>{
+        e.stopPropagation();
+      }}
       onKeyDown={toggleDrawer(false)}
     >
       <Typography variant="h5" gutterBottom>
@@ -225,7 +227,7 @@ const UserProfile = ({ onClose }) => {
 
   return (
     <div>
-      <SwipeableTemporaryDrawer open={drawerOpen} onClose={() => { setDrawerOpen(false); onClose(); }} />
+      <SwipeableTemporaryDrawer open={drawerOpen} onClose={() => { setDrawerOpen(true); onClose(); }} />
     </div>
   );
 };
