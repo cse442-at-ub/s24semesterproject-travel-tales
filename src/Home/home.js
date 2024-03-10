@@ -19,8 +19,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
 
-const email = "TestUser@buffalo.edu";
-
 const libraries = ['places'];
 const mapContainerStyle = {
   position: 'relative',
@@ -329,7 +327,6 @@ const App = () => {
 
   const [markers, setMarkers] = useState([]);
   const [open, setOpen] = useState(false);
-  // const [isToggled, setToggled] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -338,20 +335,19 @@ const App = () => {
   };  
   const handleMapClick = (event) => {
   };
-
-
-  const handleLanguageButtonClick= () =>{
-
-  };
-
   const handleAccountCircleButtonClick= () =>{
-    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
-    
+    setUserProfileOpen((prevOpen) => !prevOpen);
+    };
 
-  };
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const email = localStorage.getItem('email');
+
+  const [matchedData, setMatchedData] = useState([]);
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -374,7 +370,7 @@ const App = () => {
   useEffect(() => {
     const fetchInfoFromBackend = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=TestUser@buffalo.edu`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -382,7 +378,7 @@ const App = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTPS error! Status: ${response.status}`);
+          throw new Error(`HTTPSS error! Status: ${response.status}`);
         }
         const rawData = await response.text();
         console.log('Raw Data:', rawData);
@@ -395,7 +391,7 @@ const App = () => {
             updateMarker(coordinate)
           });
         } else {
-          console.error('Error:', data.error);
+          //console.error('Error:', data.error);
         }
 
       } catch (error) {
@@ -406,6 +402,47 @@ const App = () => {
 
     fetchInfoFromBackend();
   }, []);
+
+
+
+    useEffect(() => {
+        const pinfetch = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Check if the result has a message indicating no matches
+                if (result.message) {
+                    //setError(result.message);
+                } else {
+                    // Set the matched data and then proceed with the loop
+                    await setMatchedData(result);
+
+                    // Loop through the matchedData and perform additional actions
+                    
+                    for (let i = 0; i < result.length; i++) {
+                        const item = result[i];
+                        await fetchCityState(item.lat, item.lng)
+                        // Perform actions for each item in the loop
+                    }
+                }
+            } catch (error) {
+                setError('Error fetching data from PHP script');
+                console.error('Error fetching data:', error.message);
+            }
+        };
+
+        pinfetch();
+    }, []);
 
 
   const updateMarker = (coordinates) => {
@@ -468,10 +505,52 @@ const App = () => {
   //   setOpen(false);
   //   setToggled(false);
   //   };  
+  
 
-    const [open2, setOpen2] = useState(false);
-    const handleOpen2 = () => setOpen2(true);
-    const handleClose2 = () => setOpen2(false);
+    const fetchCityState = async (lat, lng) => {
+        const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
+
+        try {
+            const response = await fetch(geocodingUrl);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data. Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.status === 'OK' && data.results.length > 0) {
+                // Extract city and state
+                const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
+                const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
+
+                const city = cityComponent?.long_name || '';
+                const state = stateComponent?.long_name || '';
+
+                console.log(city);
+                console.log(state);
+                // Update matchedData with city and state
+                setMatchedData(prevData => {
+                    return prevData.map(item => {
+                        if (item.lat === lat && item.lng === lng) {
+                            return {
+                                ...item,
+                                city: city,
+                                state: state
+                            };
+                        }
+                        return item;
+                    });
+                });
+            } else {
+                console.error('No results or unexpected response:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    }; 
+
+    
 
 
   // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
@@ -508,7 +587,7 @@ const App = () => {
           <Marker
             key={marker.id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker.id)}
+            //onClick={() => handleMarkerClick(marker.id)}
           />
         ))}
 
@@ -517,7 +596,7 @@ const App = () => {
             <AccountCircleIcon className="accountcircle-icon" />
           </button>
           {userProfileOpen && (
-            <UserProfile onClose={() => setUserProfileOpen(true)} />
+            <UserProfile onClose={() => setUserProfileOpen(false)} />
           )}
         </div>
         <header className="plus-icon">
@@ -577,75 +656,74 @@ const App = () => {
           </Modal>
               </header>  
 
+
+
+
+
+
+
+
+
               <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
                   </button>
                   <SwipeableDrawer
-                        className= 'SharedPinsContainer'
+                      className='SharedPinsContainer'
                       open={open2}
-                      onClose={handleClose2}>
+                      onClose={handleClose2}
+                  >
 
-                      <Box className='SharedPins' >
+                      <Box className='SharedPins'>
                           <button className="leave-arrow" onClick={handleClose2}>
                               <ArrowBackIosNewIcon />
                           </button>
                           <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
 
                               <ListItem alignItems="center">
-                                  <h2 >
-                                      Shared Pins </h2>
+                                  <h2>Shared Pins</h2>
+                              </ListItem>
+                              <Divider />
 
-                              </ListItem>
-                              <Divider />
-                              <ListItem alignItems="flex-start">
-                                  <ListItemText
-                                      primary="City/State"
-                                      secondary={
-                                          <React.Fragment>
-                                              <Typography
-                                                  sx={{ display: 'inline' }}
-                                                  component="span"
-                                                  variant="body2"
-                                                  color="text.primary"
-                                              >
-                                                  Date: 3/1/23
-                                              </Typography>
-                                              <Typography>
-                                                  {" Created by: User"}
-                                              </Typography>
-                                          </React.Fragment>
+                              {matchedData.length > 0 ? (
+                                  matchedData.map((item) => (
+                                      <React.Fragment key={item.pin_id}>
+                                          <ListItem alignItems="flex-start">
+                                              <ListItemText
+                                                  primary={`City/State: ${item.city || item.state}, ${item.state}`}
+                                                  secondary={
+                                                      <React.Fragment>
+                                                          <Typography
+                                                              sx={{ display: 'inline' }}
+                                                              component="span"
+                                                              variant="body2"
+                                                              color="text.primary"
+                                                          >
+                                                              Date: {item.date}
+                                                          </Typography>
+                                                          <Typography>
+                                                              {" Created by: " + item.first_name + " " + item.last_name}
+                                                          </Typography>
+                                                      </React.Fragment>
+                                                  }
+                                              />
+                                          </ListItem>
+                                          <Divider />
+                                      </React.Fragment>
+                                  ))
+                              ) : (
+                                  <ListItem alignItems="flex-start">
+                                      <ListItemText
+                                          primary="No Shared Pins"
+                                      />
+                                  </ListItem>
+                              )}
 
-                                      }
-                                  />
-                              </ListItem>
-                              <Divider />
-                              <ListItem alignItems="flex-start">
-                                  <ListItemText
-                                      primary="City/State"
-                                      secondary={
-                                          <React.Fragment>
-                                              <Typography
-                                                  sx={{ display: 'inline' }}
-                                                  component="span"
-                                                  variant="body2"
-                                                  color="text.primary"
-                                              >
-                                                  Date: 3/1/23
-                                              </Typography>
-                                              <Typography>
-                                                  {" Created by: User"}
-                                              </Typography>
-                                          </React.Fragment>
-                                      }
-                                  />
-                              </ListItem>
-                              <Divider />
-                          </List>                         
+                          </List>
                       </Box>
                   </SwipeableDrawer>
               </div>
-
+              );
 
       </GoogleMap>  
       {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
