@@ -523,8 +523,7 @@ const App = () => {
                 const city = cityComponent?.long_name || '';
                 const state = stateComponent?.long_name || '';
 
-                console.log(city);
-                console.log(state);
+              
                 // Update matchedData with city and state
                 setMatchedData(prevData => {
                     return prevData.map(item => {
@@ -660,7 +659,7 @@ const App = () => {
 
 
 
-              <div>
+                <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
                   </button>
@@ -686,7 +685,7 @@ const App = () => {
                                       <React.Fragment key={item.pin_id}>
                                           <ListItem alignItems="flex-start">
                                               <ListItemText
-                                                  primary={`City/State: ${item.city || item.state}, ${item.state}`}
+                                                  primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
                                                   secondary={
                                                       <React.Fragment>
                                                           <Typography
