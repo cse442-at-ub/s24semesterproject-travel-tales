@@ -5,12 +5,26 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { red } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
 const SettingsDialog = () => {
-  const handleLogout = () => {
-    //fetch logout.php
-  }
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout.php`, {
+          method: 'POST', // Or 'GET', depending on your backend setup
+          credentials: 'include', // To include cookies in the request for session management
+        });
+        const data = await response.json(); // Parse JSON response
+        if (data.success) {
+          // Redirect to the login page after successful logout
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    };
   
   const handleDeleteAccount = () => {
     //fetch deleteAccount.php
