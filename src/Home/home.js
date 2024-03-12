@@ -343,7 +343,7 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const email = localStorage.getItem('email');
+  const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
   const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
@@ -418,11 +418,12 @@ const App = () => {
     useEffect(() => {
         const getSharedPins = async () => {
             try {
-                const response = await fetch('https://localhost/api/sharedPinFetch.php');
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
                 const result = await response.json();
 
