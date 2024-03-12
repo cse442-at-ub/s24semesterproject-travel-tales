@@ -343,7 +343,7 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
+  const email = localStorage.getItem('email');
   const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
@@ -492,14 +492,6 @@ const App = () => {
   };
 
   const placeNewMarker = () => {
-    if (currentLocation) {
-      const newMarker = {
-        lat: currentLocation.lat,
-        lng: currentLocation.lng,
-        id: markers.length + 1,
-        draggable: true,
-      };
-
       var title = document.querySelector('.title-box').value;
       var description = document.querySelector('.description-box').value;
 
@@ -508,6 +500,17 @@ const App = () => {
       currentDate.setMinutes(currentDate.getMinutes() - offset);
       
       var date = currentDate.toISOString().split('T')[0];       
+
+      if (currentLocation) {
+          const newMarker = {
+              lat: currentLocation.lat,
+              lng: currentLocation.lng,
+              id: markers.length + 1,
+              draggable: true,
+              title: title,
+              description: description,
+              date: date
+          };
 
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
       sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
