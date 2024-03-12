@@ -10,6 +10,7 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     exit();
 }
 
+header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $requestedEmail = $_GET['email'] ?? null;
 
     if ($requestedEmail) {
-        $stmt = $conn->prepare("SELECT lat, lng FROM PinsInfo WHERE email = ?");
+        $stmt = $conn->prepare("SELECT lat, lng, title, description, date, pin_id FROM PinsInfo WHERE email = ?");
         $stmt->bind_param("s", $requestedEmail);
         $stmt->execute();
         $result = $stmt->get_result();

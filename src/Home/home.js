@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
@@ -326,6 +326,7 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null); // New state to track selected marker
   const [open, setOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -342,12 +343,22 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const email = localStorage.getItem('email');
-
+  const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
+  const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
-  const handleClose2 = () => setOpen2(false);
+    const handleClose2 = () => setOpen2(false);
+
+    const InfoWindowContent = ({ title, description, date, lat, lng }) => (
+        <div>
+            <h1>{title}</h1>
+            <h2>{description }</h2>
+            <h3>{date}</h3>
+            <p>{lat}N , {lng}W </p>
+        </div>
+    );
+
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -391,8 +402,9 @@ const App = () => {
             updateMarker(coordinate)
           });
         } else {
-          console.error('Error:', data.error);
-        }
+            console.error('Error:', data.error);
+          }
+
 
       } catch (error) {
         setError('Error fetching coordinates from backend');
@@ -403,10 +415,8 @@ const App = () => {
     fetchInfoFromBackend();
   }, []);
 
-
-
     useEffect(() => {
-        const pinfetch = async () => {
+        const getSharedPins = async () => {
             try {
                 const response = await fetch('https://localhost/api/sharedPinFetch.php');
 
@@ -430,22 +440,42 @@ const App = () => {
                         // Loop through the matchedData and perform additional actions
                         for (let i = 0; i < filteredResult.length; i++) {
                             const item = filteredResult[i];
-                            await fetchCityState(item.lat, item.lng);
+                            await fetchCityState(item.lat, item.lng, setMatchedData);
                             // Perform actions for each item in the loop
                         }
                     } else {
-                        setError('No matching data found.');
+                        
                     }
                 }
             } catch (error) {
-                setError('Error fetching data from PHP script');
+               
                 console.error('Error fetching data:', error.message);
             }
         };
 
-        pinfetch();
+        getSharedPins();
     }, []);
 
+    useEffect(() => {
+        if (!markers.find(marker => marker.id === selectedMarker?.id)) {
+            setSelectedMarker(null);
+        }
+    }, [markers, selectedMarker]);
+
+    const handleMarkerClick = (marker) => {
+        console.log(marker)
+        setSelectedMarker(marker);
+    };
+
+    const renderMarkers = () => {
+        return markers.map((marker) => (
+            <Marker
+                key={marker.id}
+                position={{ lat: marker.lat, lng: marker.lng }}
+                onClick={() => handleMarkerClick(marker)}
+            />
+        ));
+    };
 
   const updateMarker = (coordinates) => {
     const newMarker = {
@@ -453,6 +483,9 @@ const App = () => {
       lng: coordinates.lng,
       id: markers.length + 1,
       draggable: true,
+      title: coordinates.title,
+      description: coordinates.description,
+      date: coordinates.date
     };
 
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -502,14 +535,9 @@ const App = () => {
     }
   };
 
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => {
-  //   setOpen(false);
-  //   setToggled(false);
-  //   };  
   
 
-    const fetchCityState = async (lat, lng) => {
+    const fetchCityState = async (lat, lng, location) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
 
         try {
@@ -531,7 +559,7 @@ const App = () => {
 
               
                 // Update matchedData with city and state
-                setMatchedData(prevData => {
+                location(prevData => {
                     return prevData.map(item => {
                         if (item.lat === lat && item.lng === lng) {
                             return {
@@ -555,9 +583,6 @@ const App = () => {
 
 
   // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
-  const handleMarkerClick = (markerId) => {
-    setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
-  };
 
   const handleSubmit = (event) => {
     handleClose()
@@ -573,7 +598,8 @@ const App = () => {
 
   if (!isLoaded) {
     return <div>Loading maps</div>;
-  }
+    }
+
 
   return (
     <div style={mapContainerStyle}>
@@ -584,13 +610,22 @@ const App = () => {
         onClick={handleMapClick} // this does nothing 
         options={mapOptions}
       >
-        {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => handleMarkerClick(marker.id)}
+       {renderMarkers()}
+
+       {selectedMarker && (
+          <InfoWindow
+            position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+            onCloseClick={() => setSelectedMarker(null)}
+          >
+          <InfoWindowContent
+           title={selectedMarker.title}
+           description={selectedMarker.description}
+           date={selectedMarker.date}
+           lat={selectedMarker.lat}
+           lng={selectedMarker.lng }
           />
-        ))}
+          </InfoWindow>
+          )}
 
         <div className="account-icon">
           <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
@@ -659,12 +694,6 @@ const App = () => {
 
 
 
-
-
-
-
-
-
                 <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
@@ -688,7 +717,7 @@ const App = () => {
 
                               {matchedData.length > 0 ? (
                                   matchedData.map((item) => (
-                                      <React.Fragment key={item.pin_id}>
+                                      <React.Fragment key={item.lat}>
                                           <ListItem alignItems="flex-start">
                                               <ListItemText
                                                   primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
