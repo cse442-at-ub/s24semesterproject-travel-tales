@@ -47,6 +47,29 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   };
   // End: Settings dialog handlers
 
+  // Start: Fetch friends
+  const [friends, setFriends] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchFriends = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {      
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`);
+      if (!response.ok) {
+        throw new Error('Something went wrong');
+      }
+      const data = await response.json();
+      setFriends(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  // End: Fetch friends
+
   const list = () => (
     <div
       style={{
@@ -147,7 +170,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
       <ListItem disablePadding>
         <ButtonGroup style={{ width: '100%', justifyContent: 'center' }}>
-          <Button
+          <Button onClick={fetchFriends}
             style={{
               background: 'linear-gradient(45deg, #4CAF50 30%, #2E7D32 90%)',
               borderRadius: 3,
@@ -160,7 +183,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
               boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
             }}
           >
-            HISTORY
+            FRIENDS
           </Button>
           <Button
             onClick={handlePinsButtonClick}
