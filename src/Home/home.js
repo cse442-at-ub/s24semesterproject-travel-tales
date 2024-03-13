@@ -18,6 +18,8 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatIcon from '@mui/icons-material/Chat';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -307,19 +309,17 @@ const mapOptions = {
 };
 
 const pinModalStyle = {
-  position: 'fixed',
+  position: 'absolute',
   top: '50%',
-  left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 300,
-  borderRadius: 7, 
-  bgcolor: 'background.paper',
+  backgroundColor: '#f5f5f5',
   border: '2px solid #000',
-  boxShadow: 24,
-  p: 2,
+  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+  padding: '20px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  borderRadius: 10, 
 };
 
 const modalStyle = {
@@ -623,25 +623,39 @@ const App = () => {
        {renderMarkers()}
        {selectedMarker && (
         <Modal open={openModal} onClose={handleClosePinModal}>
-          <Box sx={{ ...pinModalStyle, m: 2 }}>
-            <Typography variant="h5" component="div" textAlign="center">
-              Pin Info
+          <Box className="PinInfo" sx={pinModalStyle}>
+            <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+            <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '5px', textAlign: 'center' }}>
+              Name
             </Typography>
-            <Typography variant="body2" textAlign="center">
-              Title: {selectedMarker.title}
+            <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '5px', textAlign: 'center' }}>
+              {selectedMarker.title}
             </Typography>
-            <Typography variant="body2" textAlign="center">
-              Description: {selectedMarker.description}
+            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
+              {selectedMarker.date}
             </Typography>
-            <Typography variant="body2" textAlign="center">
-              Date: {selectedMarker.date}
+            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '10px', textAlign: 'center' }}>
+              {selectedMarker.lat}, {selectedMarker.lng}
             </Typography>
-            <Typography variant="body2" textAlign="center">
-              Latitude: {selectedMarker.lat}
+            <div style={{ display: 'flex' }}>
+              <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
+              <ChatIcon fontSize='large' />
+            </div>         
+            <Box
+              sx={{
+                border: '1px solid #000',
+                borderRadius: '10px',
+                padding: '5px',
+                marginTop: '10px',
+                textAlign: 'center',
+                height: '25%',
+                width: '90%',
+              }}
+            >
+            <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+              {selectedMarker.description}
             </Typography>
-            <Typography variant="body2" textAlign="center">
-              Longitude: {selectedMarker.lng}
-            </Typography>
+            </Box>
             <button className="leave-arrow" onClick={handleClosePinModal}>
                 <ArrowBackIosNewIcon/>
             </button>
@@ -664,7 +678,7 @@ const App = () => {
             open={open}
             onClose={handleClose}
           >
-            <Box className="modal" sx={modalStyle}>
+            <Box className="modalAddPin" sx={modalStyle}>
               <div className="description"></div>
               <div className="title-words"></div>
               <div className="make-public"></div>
