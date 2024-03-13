@@ -343,19 +343,20 @@ const App = () => {
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
-  const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
+  const email = localStorage.getItem('email');
   const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
 
-    const InfoWindowContent = ({ title, description, date, lat, lng }) => (
+    const InfoWindowContent = ({ title, description, date, lat, lng, first_name, last_name, city, state }) => (
         <div>
             <h1>{title}</h1>
             <h2>{description }</h2>
-            <h3>{date}</h3>
-            <p>{lat}N , {lng}W </p>
+            <h3>{city || state} / {state}</h3>
+            <p>{date}</p>
+            <p>Created by: {first_name} {last_name}</p>
         </div>
     );
 
@@ -398,8 +399,14 @@ const App = () => {
         console.log('Parsed Data:', data);
 
         if (data.success) {
-          data.data.forEach(coordinate => {
-            updateMarker(coordinate)
+            data.data.forEach(coordinate => {
+                if (coordinate.email === email) {
+                    coordinate.first_name = "You"
+                    coordinate.last_name = ""
+                }
+               updateMarker(coordinate);
+               fetchCityState(coordinate.lat,coordinate.lng, setMarkers);
+               // console.log("coordinate", coordinate)
           });
         } else {
             console.error('Error:', data.error);
@@ -427,22 +434,17 @@ const App = () => {
 
                 const result = await response.json();
 
-                // Check if the result has a message indicating no matches
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    // Filter the result to include only items with matching email
                     const filteredResult = result.filter(item => item.email === email);
 
                     if (filteredResult.length > 0) {
-                        // Set the matched data with the filtered result
                         await setMatchedData(filteredResult);
 
-                        // Loop through the matchedData and perform additional actions
                         for (let i = 0; i < filteredResult.length; i++) {
                             const item = filteredResult[i];
                             await fetchCityState(item.lat, item.lng, setMatchedData);
-                            // Perform actions for each item in the loop
                         }
                     } else {
                         
@@ -468,6 +470,7 @@ const App = () => {
         setSelectedMarker(marker);
     };
 
+
     const renderMarkers = () => {
         return markers.map((marker) => (
             <Marker
@@ -482,13 +485,15 @@ const App = () => {
     const newMarker = {
       lat: coordinates.lat,
       lng: coordinates.lng,
-      id: markers.length + 1,
+      id: coordinates.pin_id,
       draggable: true,
       title: coordinates.title,
       description: coordinates.description,
-      date: coordinates.date
+      date: coordinates.date,
+      first_name: coordinates.first_name,
+      last_name: coordinates.last_name,
+      email: coordinates.email
     };
-
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
 
@@ -510,7 +515,9 @@ const App = () => {
               draggable: true,
               title: title,
               description: description,
-              date: date
+              date: date,
+              email: email,
+              first_name: "You"
           };
 
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -554,7 +561,6 @@ const App = () => {
             const data = await response.json();
 
             if (data.status === 'OK' && data.results.length > 0) {
-                // Extract city and state
                 const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
                 const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
 
@@ -562,7 +568,6 @@ const App = () => {
                 const state = stateComponent?.long_name || '';
 
               
-                // Update matchedData with city and state
                 location(prevData => {
                     return prevData.map(item => {
                         if (item.lat === lat && item.lng === lng) {
@@ -584,10 +589,6 @@ const App = () => {
     }; 
 
     
-
-
-  // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
-
   const handleSubmit = (event) => {
     handleClose()
   };
@@ -615,18 +616,23 @@ const App = () => {
         options={mapOptions}
       >
        {renderMarkers()}
-
+       
        {selectedMarker && (
           <InfoWindow
             position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
             onCloseClick={() => setSelectedMarker(null)}
           >
           <InfoWindowContent
-           title={selectedMarker.title}
-           description={selectedMarker.description}
-           date={selectedMarker.date}
-           lat={selectedMarker.lat}
-           lng={selectedMarker.lng }
+                          title={selectedMarker.title}
+                          description={selectedMarker.description}
+                          date={selectedMarker.date}
+                          lat={selectedMarker.lat}
+                          lng={selectedMarker.lng}
+                          first_name={selectedMarker.first_name}
+                          last_name={selectedMarker.last_name}
+                          email={selectedMarker.email}
+                          city={selectedMarker.city}
+                          state={selectedMarker.state }
           />
           </InfoWindow>
           )}
@@ -636,7 +642,7 @@ const App = () => {
             <AccountCircleIcon className="accountcircle-icon" />
           </button>
           {userProfileOpen && (
-            <UserProfile onClose={() => setUserProfileOpen(true)} />
+            <UserProfile onClose={() => setUserProfileOpen(false)} />
           )}
         </div>
         <header className="plus-icon">
