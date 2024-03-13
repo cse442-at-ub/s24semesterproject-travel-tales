@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Button, Box} from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -14,15 +14,13 @@ const SettingsDialog = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout.php`, {
           method: 'POST', // Or 'GET', depending on your backend setup
-          credentials: 'include', // To include cookies in the request for session management
+          credentials: 'include',
         });
-        const data = await response.json(); // Parse JSON response
+        const data = await response.json();
         if (data.success) {
-          // Redirect to the login page after successful logout
           navigate('/login');
         }
       } catch (error) {
-        console.error('Logout failed:', error);
       }
     };
   

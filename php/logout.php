@@ -1,5 +1,5 @@
 <?php
-
+include_once('db.php');
 session_start();
 
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
