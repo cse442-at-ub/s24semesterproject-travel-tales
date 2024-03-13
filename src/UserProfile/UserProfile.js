@@ -48,6 +48,15 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   // End: Settings dialog handlers
 
   // Start: Fetch friends
+  const [openFriends, setOpenFriends] = useState(false);
+  const handleOpenFriends = () => {
+    setOpenFriends(true);
+    fetchFriends();
+  };
+
+  const handleCloseFriends = () => {
+    setOpenFriends(false);
+  };
   const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -174,7 +183,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
       <ListItem disablePadding>
         <ButtonGroup style={{ width: '100%', justifyContent: 'center' }}>
-          <Button onClick={fetchFriends}
+          <Button onClick={handleOpenFriends}
             style={{
               background: 'linear-gradient(45deg, #4CAF50 30%, #2E7D32 90%)',
               borderRadius: 3,
@@ -189,6 +198,32 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           >
             FRIENDS
           </Button>
+          <Dialog open={openFriends} onClose={handleCloseFriends} fullWidth maxWidth="sm">
+            <DialogTitle sx={{ m: 0, p: 2 }}>
+              Friends List
+              <IconButton
+                aria-label="close"
+                onClick={handleCloseFriends}
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  top: 8,
+                  color: (theme) => theme.palette.grey[500],
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+              <ul>
+                {friends.map((friend) => (
+                  <li key={friend.id}>
+                    First Name: {friend.first_name} - Last Name: {friend.last_name} - Email: {friend.email}
+                  </li>
+                ))}
+              </ul>
+            </DialogContent>
+          </Dialog>
           <Button
             onClick={handlePinsButtonClick}
             style={{
