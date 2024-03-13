@@ -56,11 +56,15 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     setIsLoading(true);
     setError(null);
     try {      
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`);
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
+        method: 'GET',
+        credentials: 'include', 
+      });
       if (!response.ok) {
         throw new Error('Something went wrong');
       }
       const data = await response.json();
+      console.log(data);
       setFriends(data);
     } catch (error) {
       setError(error.message);
