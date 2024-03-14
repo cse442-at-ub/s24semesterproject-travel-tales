@@ -59,7 +59,7 @@
 
 .PinInfo {
     position: absolute;
-    height: 75%;
+    height: 80%;
     width: 25%;
     left: 20%;
 } 
@@ -236,7 +236,7 @@
 @media (max-width: 1000px) {
     .PinInfo {
         position: absolute;
-        height: 75%;
+        height: 80%;
         width: 75%;
         left: 50%;
     } 

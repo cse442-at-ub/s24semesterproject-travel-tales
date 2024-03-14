@@ -20,6 +20,7 @@ import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
+import MapIcon from '@mui/icons-material/Map';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -342,13 +343,14 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
-  const [selectedMarker, setSelectedMarker] = useState(null); // New state to track selected marker
+  const [selectedMarker, setSelectedMarker] = useState(null); 
   const [open, setOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const email = localStorage.getItem('email');
+  const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
@@ -357,7 +359,7 @@ const App = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setToggled(false); // Reset the state of the switch
+    setToggled(false); 
   };  
   const handleMapClick = (event) => {
   };
@@ -365,24 +367,24 @@ const App = () => {
     setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
     };
 
-  const handleSubmit = (event) => {
-    handleClose()
-  };
-
-  const handleToggleClick = () => {
-    setToggled(!isPublic);
-  };
-
-  const handleMarkerClick = (marker) => {
-    setSelectedMarker(marker);
-    setOpenPinModal(true);       
-  };
-  const handleClosePinModal = () => {
-    setSelectedMarker(null);
-    setOpenPinModal(false);
-  };
-
-  useEffect(() => {
+    const handleSubmit = (event) => {
+      handleClose()
+    };
+  
+    const handleToggleClick = () => {
+      setToggled(!isPublic);
+    };
+  
+    const handleMarkerClick = (marker) => {
+      setSelectedMarker(marker);
+      setOpenPinModal(true);       
+    };
+    const handleClosePinModal = () => {
+      setSelectedMarker(null);
+      setOpenPinModal(false);
+    };
+    
+    useEffect(() => {
     const fetchLocation = async () => {
       try {
         const response = await axios.post(
@@ -420,8 +422,13 @@ const App = () => {
         console.log('Parsed Data:', data);
 
         if (data.success) {
-          data.data.forEach(coordinate => {
-            updateMarker(coordinate)
+            data.data.forEach(coordinate => {
+                if (coordinate.email === email) {
+                    coordinate.first_name = "You"
+                    coordinate.last_name = ""
+                }
+               updateMarker(coordinate);
+               fetchCityState(coordinate.lat,coordinate.lng, setMarkers);
           });
         } else {
             console.error('Error:', data.error);
@@ -440,34 +447,26 @@ const App = () => {
     useEffect(() => {
         const getSharedPins = async () => {
             try {
-              const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                }
-              });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
                 const result = await response.json();
 
-                // Check if the result has a message indicating no matches
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    // Filter the result to include only items with matching email
                     const filteredResult = result.filter(item => item.email === email);
 
                     if (filteredResult.length > 0) {
-                        // Set the matched data with the filtered result
                         await setMatchedData(filteredResult);
 
-                        // Loop through the matchedData and perform additional actions
                         for (let i = 0; i < filteredResult.length; i++) {
                             const item = filteredResult[i];
                             await fetchCityState(item.lat, item.lng, setMatchedData);
-                            // Perform actions for each item in the loop
                         }
                     } else {
                         
@@ -501,13 +500,15 @@ const App = () => {
     const newMarker = {
       lat: coordinates.lat,
       lng: coordinates.lng,
-      id: markers.length + 1,
+      id: coordinates.pin_id,
       draggable: true,
       title: coordinates.title,
       description: coordinates.description,
-      date: coordinates.date
+      date: coordinates.date,
+      first_name: coordinates.first_name,
+      last_name: coordinates.last_name,
+      email: coordinates.email
     };
-
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
 
@@ -529,9 +530,11 @@ const App = () => {
               draggable: true,
               title: title,
               description: description,
-              date: date
+              date: date,
+              email: email,
+              first_name: "You"
           };
-
+          fetchCityState(newMarker.lat,newMarker.lng,setMarkers)
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
       sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
     }
@@ -573,7 +576,6 @@ const App = () => {
             const data = await response.json();
 
             if (data.status === 'OK' && data.results.length > 0) {
-                // Extract city and state
                 const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
                 const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
 
@@ -581,7 +583,6 @@ const App = () => {
                 const state = stateComponent?.long_name || '';
 
               
-                // Update matchedData with city and state
                 location(prevData => {
                     return prevData.map(item => {
                         if (item.lat === lat && item.lng === lng) {
@@ -600,7 +601,7 @@ const App = () => {
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
-    }; 
+    };
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -622,52 +623,56 @@ const App = () => {
       >
        {renderMarkers()}
        {selectedMarker && (
-        <Modal open={openModal} onClose={handleClosePinModal}>
-          <Box className="PinInfo" sx={pinModalStyle}>
-            <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
-            <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '5px', textAlign: 'center' }}>
-              Name
-            </Typography>
-            <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '5px', textAlign: 'center' }}>
-              {selectedMarker.title}
-            </Typography>
-            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
-              {selectedMarker.date}
-            </Typography>
-            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '10px', textAlign: 'center' }}>
-              {selectedMarker.lat}, {selectedMarker.lng}
-            </Typography>
-            <div style={{ display: 'flex' }}>
-              <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
-              <ChatIcon fontSize='large' />
-            </div>         
-            <Box
-              sx={{
-                border: '1px solid #000',
-                borderRadius: '10px',
-                padding: '5px',
-                marginTop: '10px',
-                textAlign: 'center',
-                height: '25%',
-                width: '90%',
-              }}
-            >
-            <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-              {selectedMarker.description}
-            </Typography>
+          <Modal open={openModal} onClose={handleClosePinModal}>
+            <Box className="PinInfo" sx={pinModalStyle}>
+              <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+              <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.first_name} {selectedMarker.last_name}
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.title}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                {selectedMarker.city}, {selectedMarker.state}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.lat}, {selectedMarker.lng}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
+                on {selectedMarker.date}
+              </Typography>
+              <div style={{ display: 'flex' }}>
+                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <MapIcon fontSize='large' />
+              </div>         
+              <Box
+                sx={{
+                  border: '1px solid #000',
+                  borderRadius: '10px',
+                  padding: '5px',
+                  marginTop: '10px',
+                  textAlign: 'center',
+                  height: '25%',
+                  width: '90%',
+                }}
+              >
+                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                  {selectedMarker.description}
+                </Typography>
+              </Box>
+              <button className="leave-arrow" onClick={handleClosePinModal}>
+                  <ArrowBackIosNewIcon/>
+              </button>
             </Box>
-            <button className="leave-arrow" onClick={handleClosePinModal}>
-                <ArrowBackIosNewIcon/>
-            </button>
-          </Box>
-        </Modal>
-        )}
+          </Modal>
+          )}
         <div className="account-icon">
           <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
             <AccountCircleIcon className="accountcircle-icon" />
           </button>
           {userProfileOpen && (
-            <UserProfile onClose={() => setUserProfileOpen(true)} />
+            <UserProfile onClose={() => setUserProfileOpen(false)} />
           )}
         </div>
         <header className="plus-icon">
