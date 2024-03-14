@@ -519,7 +519,7 @@ const App = () => {
               email: email,
               first_name: "You"
           };
-
+          fetchCityState(newMarker.lat,newMarker.lng,setMarkers)
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
       sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
     }
