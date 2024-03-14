@@ -6,7 +6,8 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MyPinsModal from '../Components/Modal/MyPinsModal'
+import MyPinsModal from '../Components/Modal/MyPinsModal';
+import FriendsPin from '../Components/Modal/FriendsModal';
 import Photo1 from '../assets/photo1.png'
 import Photo2 from '../assets/photo2.jpeg'
 import Photo3 from '../assets/photo3.jpeg'
@@ -26,6 +27,7 @@ import SettingsDialog from '../Settings/SettingsDialog';
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
+  const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 
   const toggleDrawer = (isopen) => () => {
     onClose(isopen);
@@ -33,6 +35,10 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
   const handlePinsButtonClick = () => {
     setMyPinsModalOpen(true);
+  };
+
+  const handleFriendsButtonClick = () => {
+    setFriendsModalOpen(true);
   };
 
   // Start: Settings dialog handlers
@@ -148,6 +154,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
       <ListItem disablePadding>
         <ButtonGroup style={{ width: '100%', justifyContent: 'center' }}>
           <Button
+            onClick={handleFriendsButtonClick}
             style={{
               background: 'linear-gradient(45deg, #4CAF50 30%, #2E7D32 90%)',
               borderRadius: 3,
@@ -160,7 +167,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
               boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
             }}
           >
-            HISTORY
+            FRIENDS
           </Button>
           <Button
             onClick={handlePinsButtonClick}
@@ -209,6 +216,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           {list()}
         </SwipeableDrawer>
         <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
+        <FriendsPin open={FriendsModalOpen} onClose={() => setFriendsModalOpen(false)} />
       </React.Fragment>
     </div>
   );
@@ -224,6 +232,9 @@ const UserProfile = ({ onClose }) => {
     setMyPinsModalOpen(false);
     onClose();
   };
+  
+
+
 
   return (
     <div>
