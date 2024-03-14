@@ -1,33 +1,41 @@
 <?php
 include_once('db.php');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-// Force HTTPS
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
+
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
 if (isset($_SERVER['HTTPS_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
+
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
+
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-XSS-Protection: 1; mode=block");
-header('Content-Type: application/json');
+header("Content-Type: application/json");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+    exit(0);
+}
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+    die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -57,30 +65,112 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $requestedEmail = $_GET['email'] ?? null;
 
-    if ($requestedEmail) {
-        $stmt = $conn->prepare("SELECT lat, lng FROM PinsInfo WHERE email = ?");
-        $stmt->bind_param("s", $requestedEmail);
-        $stmt->execute();
-        $result = $stmt->get_result();
 
-        $coordinates = []; 
+// Assuming you receive the email from the frontend
+$requestEmail = $_GET['email'] ?? null;
 
-        while ($row = $result->fetch_assoc()) {
-            $coordinates[] = $row;
+// Check if the email is provided
+if ($requestEmail) {
+    // Fetch the user's pins
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE email = ?");
+    $userPinsQuery->bind_param("s", $requestEmail);
+    $userPinsQuery->execute();
+    $userPinsResult = $userPinsQuery->get_result();
+
+    // Fetch user's first and last name
+    $userQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+    $userQuery->bind_param("s", $requestEmail);
+    $userQuery->execute();
+    $userResult = $userQuery->get_result();
+    $userRow = $userResult->fetch_assoc();
+
+    // Array to store user's pins
+    $userPins = array();
+
+    // Check if there are any user's pins
+    if ($userPinsResult->num_rows > 0) {
+        while ($userPinRow = $userPinsResult->fetch_assoc()) {
+            // Check if the pin is public
+           
+                $userPins[] = array(
+                    "first_name" => $userRow['first_name'],
+                    "last_name" => $userRow['last_name'],
+                    "email" => $requestEmail,
+                    "lat" => $userPinRow['lat'],
+                    "lng" => $userPinRow['lng'],
+                    "date" => $userPinRow['date'],
+                    "title" => $userPinRow['title'],
+                    "description" => $userPinRow['description'],
+                    "pin_id" => $userPinRow['pin_id']
+                );
+            
         }
-
-        if (!empty($coordinates)) {
-            echo json_encode(['success' => true, 'data' => $coordinates]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Email not found']);
-        }
-
-        $stmt->close();
     }
+
+    // Fetch the user's friends from the friends_list table
+    $friendsQuery = $conn->prepare("SELECT friends_with FROM friends_list WHERE user = ?");
+    $friendsQuery->bind_param("s", $requestEmail);
+    $friendsQuery->execute();
+    $friendsResult = $friendsQuery->get_result();
+
+    // Array to store friends' pins
+    $friendsPins = array();
+
+    // Check if there are any friends
+    if ($friendsResult->num_rows > 0) {
+        while ($friendRow = $friendsResult->fetch_assoc()) {
+            $friendEmail = $friendRow['friends_with'];
+
+            // Fetch the friend's pins
+            $pinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, isPublic, pin_id FROM PinsInfo WHERE email = ?");
+            $pinsQuery->bind_param("s", $friendEmail);
+            $pinsQuery->execute();
+            $pinsResult = $pinsQuery->get_result();
+
+            // Check if there are any pins
+            if ($pinsResult->num_rows > 0) {
+                while ($pinRow = $pinsResult->fetch_assoc()) {
+                    // Check if the pin is public
+                    if ($pinRow['isPublic'] == 1) {
+                        // Fetch friend's first and last name
+                        $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+                        $friendUserQuery->bind_param("s", $friendEmail);
+                        $friendUserQuery->execute();
+                        $friendUserResult = $friendUserQuery->get_result();
+                        $friendUserRow = $friendUserResult->fetch_assoc();
+
+                        $friendsPins[] = array(
+                            "first_name" => $friendUserRow['first_name'],
+                            "last_name" => $friendUserRow['last_name'],
+                            "email" => $friendEmail,
+                            "lat" => $pinRow['lat'],
+                            "lng" => $pinRow['lng'],
+                            "date" => $pinRow['date'],
+                            "title" => $pinRow['title'],
+                            "description" => $pinRow['description'],
+                            "pin_id" => $pinRow['pin_id']
+                        );
+                    }
+                }
+            }
+        }
+
+        $friendsQuery->close();
+        $pinsQuery->close();
+        $friendUserQuery->close();
+    }
+
+    // Combine user and friends' pins
+    $combinedPins = array_merge($userPins, $friendsPins);
+
+    // Return matched data as JSON
+    echo json_encode(['success' => true, 'data' => $combinedPins]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
 }
 
+$userPinsQuery->close();
+$userQuery->close();
 $conn->close();
 ?>

@@ -343,6 +343,7 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
+
   const [selectedMarker, setSelectedMarker] = useState(null); 
   const [open, setOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
@@ -428,7 +429,7 @@ const App = () => {
                     coordinate.last_name = ""
                 }
                updateMarker(coordinate);
-               fetchCityState(coordinate.lat,coordinate.lng, setMarkers);
+               fetchCityState(coordinate.lat,coordinate.lng, setMarkers)
           });
         } else {
             console.error('Error:', data.error);
@@ -473,6 +474,7 @@ const App = () => {
                     }
                 }
             } catch (error) {
+
                 console.error('Error fetching data:', error.message);
             }
         };
@@ -601,7 +603,6 @@ const App = () => {
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
-    };
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -667,6 +668,7 @@ const App = () => {
             </Box>
           </Modal>
           )}
+
         <div className="account-icon">
           <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
             <AccountCircleIcon className="accountcircle-icon" />
@@ -731,6 +733,7 @@ const App = () => {
             </Box>
           </Modal>
               </header>  
+
                 <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
