@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
@@ -18,6 +18,9 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatIcon from '@mui/icons-material/Chat';
+import MapIcon from '@mui/icons-material/Map';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -306,6 +309,20 @@ const mapOptions = {
   ]
 };
 
+const pinModalStyle = {
+  position: 'absolute',
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: '#f5f5f5',
+  border: '2px solid #000',
+  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+  padding: '20px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderRadius: 10, 
+};
+
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -326,30 +343,48 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null); 
   const [open, setOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setToggled(false); // Reset the state of the switch
-  };  
-  const handleMapClick = (event) => {
-  };
-  const handleAccountCircleButtonClick= () =>{
-    setUserProfileOpen((prevOpen) => !prevOpen);
-    };
-
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const email = localStorage.getItem('email');
-
+  const [pinData, setPinData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
+  const [openModal, setOpenPinModal] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setToggled(false); 
+  };  
+  const handleMapClick = (event) => {
+  };
+  const handleAccountCircleButtonClick= () =>{
+    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
+    };
 
-  useEffect(() => {
+    const handleSubmit = (event) => {
+      handleClose()
+    };
+  
+    const handleToggleClick = () => {
+      setToggled(!isPublic);
+    };
+  
+    const handleMarkerClick = (marker) => {
+      setSelectedMarker(marker);
+      setOpenPinModal(true);       
+    };
+    const handleClosePinModal = () => {
+      setSelectedMarker(null);
+      setOpenPinModal(false);
+    };
+    
+    useEffect(() => {
     const fetchLocation = async () => {
       try {
         const response = await axios.post(
@@ -387,12 +422,18 @@ const App = () => {
         console.log('Parsed Data:', data);
 
         if (data.success) {
-          data.data.forEach(coordinate => {
-            updateMarker(coordinate)
+            data.data.forEach(coordinate => {
+                if (coordinate.email === email) {
+                    coordinate.first_name = "You"
+                    coordinate.last_name = ""
+                }
+               updateMarker(coordinate);
+               fetchCityState(coordinate.lat,coordinate.lng, setMarkers);
           });
         } else {
-          //console.error('Error:', data.error);
-        }
+            console.error('Error:', data.error);
+          }
+
 
       } catch (error) {
         setError('Error fetching coordinates from backend');
@@ -403,68 +444,75 @@ const App = () => {
     fetchInfoFromBackend();
   }, []);
 
-
-
     useEffect(() => {
-        const pinfetch = async () => {
+        const getSharedPins = async () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  }
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
 
                 const result = await response.json();
 
-                // Check if the result has a message indicating no matches
                 if (result.message) {
-                    //setError(result.message);
+                    setError(result.message);
                 } else {
-                    // Set the matched data and then proceed with the loop
-                    await setMatchedData(result);
+                    const filteredResult = result.filter(item => item.email === email);
 
-                    // Loop through the matchedData and perform additional actions
-                    
-                    for (let i = 0; i < result.length; i++) {
-                        const item = result[i];
-                        await fetchCityState(item.lat, item.lng)
-                        // Perform actions for each item in the loop
+                    if (filteredResult.length > 0) {
+                        await setMatchedData(filteredResult);
+
+                        for (let i = 0; i < filteredResult.length; i++) {
+                            const item = filteredResult[i];
+                            await fetchCityState(item.lat, item.lng, setMatchedData);
+                        }
+                    } else {
+                        
                     }
                 }
             } catch (error) {
-                setError('Error fetching data from PHP script');
                 console.error('Error fetching data:', error.message);
             }
         };
 
-        pinfetch();
+        getSharedPins();
     }, []);
 
+    useEffect(() => {
+        if (!markers.find(marker => marker.id === selectedMarker?.id)) {
+            setSelectedMarker(null);
+        }
+    }, [markers, selectedMarker]);
+
+    const renderMarkers = () => {
+        return markers.map((marker) => (
+            <Marker
+                key={marker.id}
+                position={{ lat: marker.lat, lng: marker.lng }}
+                onClick={() => handleMarkerClick(marker)}
+            />
+        ));
+    };
 
   const updateMarker = (coordinates) => {
     const newMarker = {
       lat: coordinates.lat,
       lng: coordinates.lng,
-      id: markers.length + 1,
+      id: coordinates.pin_id,
       draggable: true,
+      title: coordinates.title,
+      description: coordinates.description,
+      date: coordinates.date,
+      first_name: coordinates.first_name,
+      last_name: coordinates.last_name,
+      email: coordinates.email
     };
-
     setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
   };
 
   const placeNewMarker = () => {
-    if (currentLocation) {
-      const newMarker = {
-        lat: currentLocation.lat,
-        lng: currentLocation.lng,
-        id: markers.length + 1,
-        draggable: true,
-      };
-
       var title = document.querySelector('.title-box').value;
       var description = document.querySelector('.description-box').value;
 
@@ -474,6 +522,19 @@ const App = () => {
       
       var date = currentDate.toISOString().split('T')[0];       
 
+      if (currentLocation) {
+          const newMarker = {
+              lat: currentLocation.lat,
+              lng: currentLocation.lng,
+              id: markers.length + 1,
+              draggable: true,
+              title: title,
+              description: description,
+              date: date,
+              email: email,
+              first_name: "You"
+          };
+          fetchCityState(newMarker.lat,newMarker.lng,setMarkers)
       setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
       sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
     }
@@ -500,14 +561,9 @@ const App = () => {
     }
   };
 
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => {
-  //   setOpen(false);
-  //   setToggled(false);
-  //   };  
   
 
-    const fetchCityState = async (lat, lng) => {
+    const fetchCityState = async (lat, lng, location) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
 
         try {
@@ -520,17 +576,14 @@ const App = () => {
             const data = await response.json();
 
             if (data.status === 'OK' && data.results.length > 0) {
-                // Extract city and state
                 const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
                 const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
 
                 const city = cityComponent?.long_name || '';
                 const state = stateComponent?.long_name || '';
 
-                console.log(city);
-                console.log(state);
-                // Update matchedData with city and state
-                setMatchedData(prevData => {
+              
+                location(prevData => {
                     return prevData.map(item => {
                         if (item.lat === lat && item.lng === lng) {
                             return {
@@ -548,23 +601,7 @@ const App = () => {
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
-    }; 
-
-    
-
-
-  // right now this just deletes the marker which is temp feature. At some point this will pull up the pin details page
-  const handleMarkerClick = (markerId) => {
-    setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== markerId));
-  };
-
-  const handleSubmit = (event) => {
-    handleClose()
-  };
-
-  const handleToggleClick = () => {
-    setToggled(!isPublic);
-  };
+    };
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -572,7 +609,8 @@ const App = () => {
 
   if (!isLoaded) {
     return <div>Loading maps</div>;
-  }
+    }
+
 
   return (
     <div style={mapContainerStyle}>
@@ -583,14 +621,52 @@ const App = () => {
         onClick={handleMapClick} // this does nothing 
         options={mapOptions}
       >
-        {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            //onClick={() => handleMarkerClick(marker.id)}
-          />
-        ))}
-
+       {renderMarkers()}
+       {selectedMarker && (
+          <Modal open={openModal} onClose={handleClosePinModal}>
+            <Box className="PinInfo" sx={pinModalStyle}>
+              <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+              <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.first_name} {selectedMarker.last_name}
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.title}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                {selectedMarker.city}, {selectedMarker.state}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.lat}, {selectedMarker.lng}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
+                on {selectedMarker.date}
+              </Typography>
+              <div style={{ display: 'flex' }}>
+                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <MapIcon fontSize='large' />
+              </div>         
+              <Box
+                sx={{
+                  border: '1px solid #000',
+                  borderRadius: '10px',
+                  padding: '5px',
+                  marginTop: '10px',
+                  textAlign: 'center',
+                  height: '25%',
+                  width: '90%',
+                }}
+              >
+                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                  {selectedMarker.description}
+                </Typography>
+              </Box>
+              <button className="leave-arrow" onClick={handleClosePinModal}>
+                  <ArrowBackIosNewIcon/>
+              </button>
+            </Box>
+          </Modal>
+          )}
         <div className="account-icon">
           <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
             <AccountCircleIcon className="accountcircle-icon" />
@@ -607,7 +683,7 @@ const App = () => {
             open={open}
             onClose={handleClose}
           >
-            <Box className="modal" sx={modalStyle}>
+            <Box className="modalAddPin" sx={modalStyle}>
               <div className="description"></div>
               <div className="title-words"></div>
               <div className="make-public"></div>
@@ -655,16 +731,7 @@ const App = () => {
             </Box>
           </Modal>
               </header>  
-
-
-
-
-
-
-
-
-
-              <div>
+                <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
                   </button>
@@ -673,7 +740,6 @@ const App = () => {
                       open={open2}
                       onClose={handleClose2}
                   >
-
                       <Box className='SharedPins'>
                           <button className="leave-arrow" onClick={handleClose2}>
                               <ArrowBackIosNewIcon />
@@ -687,10 +753,10 @@ const App = () => {
 
                               {matchedData.length > 0 ? (
                                   matchedData.map((item) => (
-                                      <React.Fragment key={item.pin_id}>
+                                      <React.Fragment key={item.lat}>
                                           <ListItem alignItems="flex-start">
                                               <ListItemText
-                                                  primary={`City/State: ${item.city || item.state}, ${item.state}`}
+                                                  primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
                                                   secondary={
                                                       <React.Fragment>
                                                           <Typography
@@ -723,8 +789,6 @@ const App = () => {
                       </Box>
                   </SwipeableDrawer>
               </div>
-              );
-
       </GoogleMap>  
       {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
     </div>
