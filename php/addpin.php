@@ -5,8 +5,14 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("X-Content-Type-Options: nosniff");
+if (isset($_SERVER['HTTPS_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
+
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }

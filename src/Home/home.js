@@ -18,6 +18,9 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatIcon from '@mui/icons-material/Chat';
+import MapIcon from '@mui/icons-material/Map';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -306,6 +309,20 @@ const mapOptions = {
   ]
 };
 
+const pinModalStyle = {
+  position: 'absolute',
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: '#f5f5f5',
+  border: '2px solid #000',
+  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+  padding: '20px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderRadius: 10, 
+};
+
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -326,20 +343,10 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([]);
-  const [selectedMarker, setSelectedMarker] = useState(null); // New state to track selected marker
+
+  const [selectedMarker, setSelectedMarker] = useState(null); 
   const [open, setOpen] = useState(false);
   const [userProfileOpen, setUserProfileOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setToggled(false); // Reset the state of the switch
-  };  
-  const handleMapClick = (event) => {
-  };
-  const handleAccountCircleButtonClick= () =>{
-    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
-    };
-
   const [isPublic, setToggled] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -348,20 +355,37 @@ const App = () => {
   const [matchedData, setMatchedData] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
-    const handleClose2 = () => setOpen2(false);
+  const handleClose2 = () => setOpen2(false);
+  const [openModal, setOpenPinModal] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setToggled(false); 
+  };  
+  const handleMapClick = (event) => {
+  };
+  const handleAccountCircleButtonClick= () =>{
+    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
+    };
 
-    const InfoWindowContent = ({ title, description, date, lat, lng, first_name, last_name, city, state }) => (
-        <div>
-            <h1>{title}</h1>
-            <h2>{description }</h2>
-            <h3>{city || state} / {state}</h3>
-            <p>{date}</p>
-            <p>Created by: {first_name} {last_name}</p>
-        </div>
-    );
-
-
-  useEffect(() => {
+    const handleSubmit = (event) => {
+      handleClose()
+    };
+  
+    const handleToggleClick = () => {
+      setToggled(!isPublic);
+    };
+  
+    const handleMarkerClick = (marker) => {
+      setSelectedMarker(marker);
+      setOpenPinModal(true);       
+    };
+    const handleClosePinModal = () => {
+      setSelectedMarker(null);
+      setOpenPinModal(false);
+    };
+    
+    useEffect(() => {
     const fetchLocation = async () => {
       try {
         const response = await axios.post(
@@ -405,8 +429,7 @@ const App = () => {
                     coordinate.last_name = ""
                 }
                updateMarker(coordinate);
-               fetchCityState(coordinate.lat,coordinate.lng, setMarkers);
-               // console.log("coordinate", coordinate)
+               fetchCityState(coordinate.lat,coordinate.lng, setMarkers)
           });
         } else {
             console.error('Error:', data.error);
@@ -451,7 +474,7 @@ const App = () => {
                     }
                 }
             } catch (error) {
-               
+
                 console.error('Error fetching data:', error.message);
             }
         };
@@ -464,12 +487,6 @@ const App = () => {
             setSelectedMarker(null);
         }
     }, [markers, selectedMarker]);
-
-    const handleMarkerClick = (marker) => {
-        console.log(marker)
-        setSelectedMarker(marker);
-    };
-
 
     const renderMarkers = () => {
         return markers.map((marker) => (
@@ -586,16 +603,6 @@ const App = () => {
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
-    }; 
-
-    
-  const handleSubmit = (event) => {
-    handleClose()
-  };
-
-  const handleToggleClick = () => {
-    setToggled(!isPublic);
-  };
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -616,25 +623,50 @@ const App = () => {
         options={mapOptions}
       >
        {renderMarkers()}
-       
        {selectedMarker && (
-          <InfoWindow
-            position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
-            onCloseClick={() => setSelectedMarker(null)}
-          >
-          <InfoWindowContent
-                          title={selectedMarker.title}
-                          description={selectedMarker.description}
-                          date={selectedMarker.date}
-                          lat={selectedMarker.lat}
-                          lng={selectedMarker.lng}
-                          first_name={selectedMarker.first_name}
-                          last_name={selectedMarker.last_name}
-                          email={selectedMarker.email}
-                          city={selectedMarker.city}
-                          state={selectedMarker.state }
-          />
-          </InfoWindow>
+          <Modal open={openModal} onClose={handleClosePinModal}>
+            <Box className="PinInfo" sx={pinModalStyle}>
+              <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+              <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.first_name} {selectedMarker.last_name}
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.title}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                {selectedMarker.city}, {selectedMarker.state}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                {selectedMarker.lat}, {selectedMarker.lng}
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
+                on {selectedMarker.date}
+              </Typography>
+              <div style={{ display: 'flex' }}>
+                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
+                <MapIcon fontSize='large' />
+              </div>         
+              <Box
+                sx={{
+                  border: '1px solid #000',
+                  borderRadius: '10px',
+                  padding: '5px',
+                  marginTop: '10px',
+                  textAlign: 'center',
+                  height: '25%',
+                  width: '90%',
+                }}
+              >
+                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                  {selectedMarker.description}
+                </Typography>
+              </Box>
+              <button className="leave-arrow" onClick={handleClosePinModal}>
+                  <ArrowBackIosNewIcon/>
+              </button>
+            </Box>
+          </Modal>
           )}
 
         <div className="account-icon">
@@ -653,7 +685,7 @@ const App = () => {
             open={open}
             onClose={handleClose}
           >
-            <Box className="modal" sx={modalStyle}>
+            <Box className="modalAddPin" sx={modalStyle}>
               <div className="description"></div>
               <div className="title-words"></div>
               <div className="make-public"></div>
@@ -702,8 +734,6 @@ const App = () => {
           </Modal>
               </header>  
 
-
-
                 <div>
                   <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
                       <img src={sharedPin} alt="Shared Pins" />
@@ -713,7 +743,6 @@ const App = () => {
                       open={open2}
                       onClose={handleClose2}
                   >
-
                       <Box className='SharedPins'>
                           <button className="leave-arrow" onClick={handleClose2}>
                               <ArrowBackIosNewIcon />
@@ -763,8 +792,6 @@ const App = () => {
                       </Box>
                   </SwipeableDrawer>
               </div>
-              );
-
       </GoogleMap>  
       {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
     </div>

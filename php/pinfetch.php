@@ -33,10 +33,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
 $matchedData = array();
 
-$sql = "SELECT email, lat, lng, title, description, date, inPublin, pin_id FROM PinsInfo";
 
+$sql = "SELECT email, lat, lng, title, description, date, isPublic FROM PinsInfo"; // Removed the extra comma
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -52,6 +53,7 @@ if ($result->num_rows > 0) {
             "pin_id" => $row["pin_id"]
 
         );
+
     }
 } else {
     // No matches, set a message or specific value

@@ -39,23 +39,30 @@
     padding-right: 30px;
 }
 
-    .leave-arrow2 {
-        position: absolute;
-        top: 30px;
-        left: 20px;
-        width: 50px;
-        height: 50px;
-        border: none;
-        transform: scale(1.8);
-        background-color: transparent;
-        padding-right: 10px;
-    }
+.leave-arrow2 {
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    transform: scale(1.8);
+    background-color: transparent;
+    padding-right: 10px;
+}
 
 
-    .modal {
-        height: 55%;
-        width: 35%;
-    }
+.modalAddPin {
+    height: 55%;
+    width: 35%;
+}
+
+.PinInfo {
+    position: absolute;
+    height: 80%;
+    width: 25%;
+    left: 20%;
+} 
 
 .title-words {
     position: absolute;
@@ -224,6 +231,16 @@
         background: transparent;
         border: none;
     }    
+}
+
+@media (max-width: 1000px) {
+    .PinInfo {
+        position: absolute;
+        height: 80%;
+        width: 75%;
+        left: 50%;
+    } 
+
 }
 
 
