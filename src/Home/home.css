@@ -62,7 +62,7 @@
     height: 80%;
     width: 25%;
     left: 20%;
-}
+} 
 
 .title-words {
     position: absolute;
@@ -238,7 +238,17 @@
         transform: scale(2.0);
         background: transparent;
         border: none;
-    }
+    }    
+}
+
+@media (max-width: 1000px) {
+    .PinInfo {
+        position: absolute;
+        height: 80%;
+        width: 75%;
+        left: 50%;
+    } 
+
 }
 
 @media (max-width: 1000px) {
