@@ -32,6 +32,35 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    if (isset($data['email']) && isset($data['lat']) && isset($data['lng']) && isset($data['title']) && isset($data['description']) && isset($data['date']) && isset($data['isPublic'])) {
+        $email = $data['email'];
+        $latitude = $data['lat'];
+        $longitude = $data['lng'];
+        $title = $data['title'];
+        $description = $data['description'];
+        $date = $data['date'];
+        $isPublic = $data['isPublic'];
+
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (email, lat, lng, title, description, date, isPublic) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssi", $email, $latitude, $longitude, $title, $description, $date, $isPublic);
+
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error inserting coordinates: ' . $stmt->error]);
+        }
+
+        $stmt->close();
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
+    }
+}
+
+
+
 // Assuming you receive the email from the frontend
 $requestEmail = $_GET['email'] ?? null;
 
