@@ -24,426 +24,425 @@ import MapIcon from '@mui/icons-material/Map';
 
 const libraries = ['places'];
 const mapContainerStyle = {
-  position: 'relative',
-  width: '100%',
-  height: '100vh',
+    position: 'relative',
+    width: '100%',
+    height: '100vh',
 };
 
 const mapOptions = {
-  disableDefaultUI: true,
-  styles: [
-    {
-      "elementType": "geometry",
-      "stylers": [
+    disableDefaultUI: true,
+    styles: [
         {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#1d2c4d"
+                }
+            ]
+        },
         {
-          "color": "#8ec3b9"
-        }
-      ]
-    },
-    {
-      "elementType": "labels.text.stroke",
-      "stylers": [
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#8ec3b9"
+                }
+            ]
+        },
         {
-          "color": "#1a3646"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.country",
-      "elementType": "geometry.stroke",
-      "stylers": [
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#1a3646"
+                }
+            ]
+        },
         {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.land_parcel",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "administrative.country",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#4b6878"
+                }
+            ]
+        },
         {
-          "color": "#64779e"
-        }
-      ]
-    },
-    {
-      "featureType": "administrative.province",
-      "elementType": "geometry.stroke",
-      "stylers": [
+            "featureType": "administrative.land_parcel",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#64779e"
+                }
+            ]
+        },
         {
-          "color": "#4b6878"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.man_made",
-      "elementType": "geometry.stroke",
-      "stylers": [
+            "featureType": "administrative.province",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#4b6878"
+                }
+            ]
+        },
         {
-          "color": "#334e87"
-        }
-      ]
-    },
-    {
-      "featureType": "landscape.natural",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#334e87"
+                }
+            ]
+        },
         {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "landscape.natural",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#023e58"
+                }
+            ]
+        },
         {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#283d6a"
+                }
+            ]
+        },
         {
-          "color": "#6f9ba5"
-        }
-      ]
-    },
-    {
-      "featureType": "poi",
-      "elementType": "labels.text.stroke",
-      "stylers": [
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#6f9ba5"
+                }
+            ]
+        },
         {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.business",
-      "stylers": [
+            "featureType": "poi",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#1d2c4d"
+                }
+            ]
+        },
         {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "geometry.fill",
-      "stylers": [
+            "featureType": "poi.business",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
         {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "labels.text",
-      "stylers": [
+            "featureType": "poi.park",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#023e58"
+                }
+            ]
+        },
         {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "poi.park",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "poi.park",
+            "elementType": "labels.text",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
         {
-          "color": "#3C7680"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "poi.park",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#3C7680"
+                }
+            ]
+        },
         {
-          "color": "#304a7d"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#304a7d"
+                }
+            ]
+        },
         {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "road",
-      "elementType": "labels.text.stroke",
-      "stylers": [
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#98a5be"
+                }
+            ]
+        },
         {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "road.arterial",
-      "elementType": "labels",
-      "stylers": [
+            "featureType": "road",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#1d2c4d"
+                }
+            ]
+        },
         {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "road.arterial",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
         {
-          "color": "#2c6675"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [
+            "featureType": "road.highway",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#2c6675"
+                }
+            ]
+        },
         {
-          "color": "#255763"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels",
-      "stylers": [
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#255763"
+                }
+            ]
+        },
         {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "road.highway",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
         {
-          "color": "#b0d5ce"
-        }
-      ]
-    },
-    {
-      "featureType": "road.highway",
-      "elementType": "labels.text.stroke",
-      "stylers": [
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#b0d5ce"
+                }
+            ]
+        },
         {
-          "color": "#023e58"
-        }
-      ]
-    },
-    {
-      "featureType": "road.local",
-      "stylers": [
+            "featureType": "road.highway",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#023e58"
+                }
+            ]
+        },
         {
-          "visibility": "off"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "road.local",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
         {
-          "color": "#98a5be"
-        }
-      ]
-    },
-    {
-      "featureType": "transit",
-      "elementType": "labels.text.stroke",
-      "stylers": [
+            "featureType": "transit",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#98a5be"
+                }
+            ]
+        },
         {
-          "color": "#1d2c4d"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.line",
-      "elementType": "geometry.fill",
-      "stylers": [
+            "featureType": "transit",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#1d2c4d"
+                }
+            ]
+        },
         {
-          "color": "#283d6a"
-        }
-      ]
-    },
-    {
-      "featureType": "transit.station",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "transit.line",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#283d6a"
+                }
+            ]
+        },
         {
-          "color": "#3a4762"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [
+            "featureType": "transit.station",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#3a4762"
+                }
+            ]
+        },
         {
-          "color": "#0e1626"
-        }
-      ]
-    },
-    {
-      "featureType": "water",
-      "elementType": "labels.text.fill",
-      "stylers": [
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#0e1626"
+                }
+            ]
+        },
         {
-          "color": "#4e6d70"
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#4e6d70"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 };
 
 const pinModalStyle = {
-  position: 'absolute',
-  top: '50%',
-  transform: 'translate(-50%, -50%)',
-  backgroundColor: '#f5f5f5',
-  border: '2px solid #000',
-  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
-  padding: '20px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  borderRadius: 10, 
+    position: 'absolute',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: '#f5f5f5',
+    border: '2px solid #000',
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderRadius: 10,
 };
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  borderRadius: 10, 
-  bgcolor: 'rgba(255, 255, 255, 1.0)', 
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 10,
-  transition: 'bgcolor 0.3s ease',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    borderRadius: 10,
+    bgcolor: 'rgba(255, 255, 255, 1.0)',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 10,
+    transition: 'bgcolor 0.3s ease',
 };
 
 const App = () => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_API_KEY,
-    libraries,
-  });
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: process.env.REACT_APP_API_KEY,
+        libraries,
+    });
 
-  const [markers, setMarkers] = useState([]);
-
-  const [selectedMarker, setSelectedMarker] = useState(null); 
-  const [open, setOpen] = useState(false);
-  const [userProfileOpen, setUserProfileOpen] = useState(false);
-  const [isPublic, setToggled] = useState(false);
-  const [error, setError] = useState(null);
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const email = localStorage.getItem('email');
-  const [pinData, setPinData] = useState([]);
-  const [matchedData, setMatchedData] = useState([]);
-  const [open2, setOpen2] = useState(false);
-  const handleOpen2 = () => setOpen2(true);
-  const handleClose2 = () => setOpen2(false);
-  const [openModal, setOpenPinModal] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setToggled(false); 
-  };  
-  const handleMapClick = (event) => {
-  };
-  const handleAccountCircleButtonClick= () =>{
-    setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
+    const [markers, setMarkers] = useState([]);
+    const [selectedMarker, setSelectedMarker] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [userProfileOpen, setUserProfileOpen] = useState(false);
+    const [isPublic, setToggled] = useState(false);
+    const [error, setError] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
+    const email = localStorage.getItem('email');
+    const [pinData, setPinData] = useState([]);
+    const [matchedData, setMatchedData] = useState([]);
+    const [open2, setOpen2] = useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
+    const [openModal, setOpenPinModal] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+        setOpen(false);
+        setToggled(false);
+    };
+    const handleMapClick = (event) => {
+    };
+    const handleAccountCircleButtonClick = () => {
+        setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
     };
 
     const handleSubmit = (event) => {
-      handleClose()
+        handleClose()
     };
-  
+
     const handleToggleClick = () => {
-      setToggled(!isPublic);
+        setToggled(!isPublic);
     };
-  
+
     const handleMarkerClick = (marker) => {
-      setSelectedMarker(marker);
-      setOpenPinModal(true);       
+        setSelectedMarker(marker);
+        setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
-      setSelectedMarker(null);
-      setOpenPinModal(false);
+        setSelectedMarker(null);
+        setOpenPinModal(false);
     };
-    
+
     useEffect(() => {
-    const fetchLocation = async () => {
-      try {
-        const response = await axios.post(
-          `https://www.googleapis.com/geolocation/v1/geolocate?key=${process.env.REACT_APP_API_KEY}`
-        );
+        const fetchLocation = async () => {
+            try {
+                const response = await axios.post(
+                    `https://www.googleapis.com/geolocation/v1/geolocate?key=${process.env.REACT_APP_API_KEY}`
+                );
 
-        const { location } = response.data;
-        setCurrentLocation({ lat: location.lat, lng: location.lng });
-      } catch (error) {
-        setError('Error fetching location');
-        console.error('Error fetching location:', error.message);
-      }
-    };
+                const { location } = response.data;
+                setCurrentLocation({ lat: location.lat, lng: location.lng });
+            } catch (error) {
+                setError('Error fetching location');
+                console.error('Error fetching location:', error.message);
+            }
+        };
 
-    fetchLocation();
-  }, []); 
+        fetchLocation();
+    }, []);
 
-  useEffect(() => {
-    const fetchInfoFromBackend = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        });
+    useEffect(() => {
+        const fetchInfoFromBackend = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
-        if (!response.ok) {
-          throw new Error(`HTTPSS error! Status: ${response.status}`);
-        }
-        const rawData = await response.text();
-        console.log('Raw Data:', rawData);
-
-        const data = JSON.parse(rawData);
-        console.log('Parsed Data:', data);
-
-        if (data.success) {
-            data.data.forEach(coordinate => {
-                if (coordinate.email === email) {
-                    coordinate.first_name = "You"
-                    coordinate.last_name = ""
+                if (!response.ok) {
+                    throw new Error(`HTTPSS error! Status: ${response.status}`);
                 }
-               updateMarker(coordinate);
-               fetchCityState(coordinate.lat,coordinate.lng, setMarkers)
-          });
-        } else {
-            console.error('Error:', data.error);
-          }
+                const rawData = await response.text();
+                console.log('Raw Data:', rawData);
+
+                const data = JSON.parse(rawData);
+                console.log('Parsed Data:', data);
+
+                if (data.success) {
+                    data.data.forEach(coordinate => {
+                        if (coordinate.email === email) {
+                            coordinate.first_name = "You"
+                            coordinate.last_name = ""
+                        }
+                        updateMarker(coordinate);
+                        fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
+                    });
+                } else {
+                    console.error('Error:', data.error);
+                }
 
 
-      } catch (error) {
-        setError('Error fetching coordinates from backend');
-        console.error('Error fetching coordinates from backend:', error.message);
-      }
-    };
+            } catch (error) {
+                setError('Error fetching coordinates from backend');
+                console.error('Error fetching coordinates from backend:', error.message);
+            }
+        };
 
-    fetchInfoFromBackend();
-  }, []);
+        fetchInfoFromBackend();
+    }, []);
 
     useEffect(() => {
         const getSharedPins = async () => {
@@ -470,11 +469,10 @@ const App = () => {
                             await fetchCityState(item.lat, item.lng, setMatchedData);
                         }
                     } else {
-                        
+
                     }
                 }
             } catch (error) {
-
                 console.error('Error fetching data:', error.message);
             }
         };
@@ -498,72 +496,72 @@ const App = () => {
         ));
     };
 
-  const updateMarker = (coordinates) => {
-    const newMarker = {
-      lat: coordinates.lat,
-      lng: coordinates.lng,
-      id: coordinates.pin_id,
-      draggable: true,
-      title: coordinates.title,
-      description: coordinates.description,
-      date: coordinates.date,
-      first_name: coordinates.first_name,
-      last_name: coordinates.last_name,
-      email: coordinates.email
+    const updateMarker = (coordinates) => {
+        const newMarker = {
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+            id: coordinates.pin_id,
+            draggable: true,
+            title: coordinates.title,
+            description: coordinates.description,
+            date: coordinates.date,
+            first_name: coordinates.first_name,
+            last_name: coordinates.last_name,
+            email: coordinates.email
+        };
+        setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
-    setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-  };
 
-  const placeNewMarker = () => {
-      var title = document.querySelector('.title-box').value;
-      var description = document.querySelector('.description-box').value;
+    const placeNewMarker = () => {
+        var title = document.querySelector('.title-box').value;
+        var description = document.querySelector('.description-box').value;
 
-      var currentDate = new Date();
-      var offset = currentDate.getTimezoneOffset();
-      currentDate.setMinutes(currentDate.getMinutes() - offset);
-      
-      var date = currentDate.toISOString().split('T')[0];       
+        var currentDate = new Date();
+        var offset = currentDate.getTimezoneOffset();
+        currentDate.setMinutes(currentDate.getMinutes() - offset);
 
-      if (currentLocation) {
-          const newMarker = {
-              lat: currentLocation.lat,
-              lng: currentLocation.lng,
-              id: markers.length + 1,
-              draggable: true,
-              title: title,
-              description: description,
-              date: date,
-              email: email,
-              first_name: "You"
-          };
-          fetchCityState(newMarker.lat,newMarker.lng,setMarkers)
-      setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-      sendCoordinatesToBackend({email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
-    }
-  };
+        var date = currentDate.toISOString().split('T')[0];
 
-  const sendCoordinatesToBackend = async (info) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(info),
-      });
+        if (currentLocation) {
+            const newMarker = {
+                lat: currentLocation.lat,
+                lng: currentLocation.lng,
+                id: markers.length + 1,
+                draggable: true,
+                title: title,
+                description: description,
+                date: date,
+                email: email,
+                first_name: "You"
+            };
+            fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
+            setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+            sendCoordinatesToBackend({ email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+        }
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to send coordinates to the backend');
-      }
+    const sendCoordinatesToBackend = async (info) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(info),
+            });
 
-      const data = await response.json();
-      console.log('Coordinates sent successfully:', data);
-    } catch (error) {
-      console.error('Error sending coordinates to the backend:', error.message);
-    }
-  };
+            if (!response.ok) {
+                throw new Error('Failed to send coordinates to the backend');
+            }
 
-  
+            const data = await response.json();
+            console.log('Coordinates sent successfully:', data);
+        } catch (error) {
+            console.error('Error sending coordinates to the backend:', error.message);
+        }
+    };
+
+
 
     const fetchCityState = async (lat, lng, location) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
@@ -584,7 +582,7 @@ const App = () => {
                 const city = cityComponent?.long_name || '';
                 const state = stateComponent?.long_name || '';
 
-              
+
                 location(prevData => {
                     return prevData.map(item => {
                         if (item.lat === lat && item.lng === lng) {
@@ -603,199 +601,198 @@ const App = () => {
         } catch (error) {
             console.error('Error fetching data:', error.message);
         }
+    };
 
-  if (loadError) {
-    return <div>Error loading maps</div>;
-  }
+    if (loadError) {
+        return <div>Error loading maps</div>;
+    }
 
-  if (!isLoaded) {
-    return <div>Loading maps</div>;
+    if (!isLoaded) {
+        return <div>Loading maps</div>;
     }
 
 
-  return (
-    <div style={mapContainerStyle}>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={currentLocation}
-        zoom={currentLocation ? 12 : 12}
-        onClick={handleMapClick} // this does nothing 
-        options={mapOptions}
-      >
-       {renderMarkers()}
-       {selectedMarker && (
-          <Modal open={openModal} onClose={handleClosePinModal}>
-            <Box className="PinInfo" sx={pinModalStyle}>
-              <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
-              <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                {selectedMarker.first_name} {selectedMarker.last_name}
-              </Typography>
-              <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                {selectedMarker.title}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
-                {selectedMarker.city}, {selectedMarker.state}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                {selectedMarker.lat}, {selectedMarker.lng}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
-                on {selectedMarker.date}
-              </Typography>
-              <div style={{ display: 'flex' }}>
-                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
-                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
-                <MapIcon fontSize='large' />
-              </div>         
-              <Box
-                sx={{
-                  border: '1px solid #000',
-                  borderRadius: '10px',
-                  padding: '5px',
-                  marginTop: '10px',
-                  textAlign: 'center',
-                  height: '25%',
-                  width: '90%',
-                }}
-              >
-                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-                  {selectedMarker.description}
-                </Typography>
-              </Box>
-              <button className="leave-arrow" onClick={handleClosePinModal}>
-                  <ArrowBackIosNewIcon/>
-              </button>
-            </Box>
-          </Modal>
-          )}
-
-        <div className="account-icon">
-          <button className="white-button" onClick={()=>handleAccountCircleButtonClick()}>
-            <AccountCircleIcon className="accountcircle-icon" />
-          </button>
-          {userProfileOpen && (
-            <UserProfile onClose={() => setUserProfileOpen(false)} />
-          )}
-        </div>
-        <header className="plus-icon">
-          <Button variant="contained" color="primary" onClick={handleOpen}>
-            <img src={plusButtonImage} alt="Plus Button" />
-          </Button>
-          <Modal
-            open={open}
-            onClose={handleClose}
-          >
-            <Box className="modalAddPin" sx={modalStyle}>
-              <div className="description"></div>
-              <div className="title-words"></div>
-              <div className="make-public"></div>
-              <html lang="en">
-              <head>
-                <meta charset="UTF-8"></meta>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-                <title>Your Page Title</title>
-              </head>
-              <body>
-                <form>
-                  <textarea 
-                  className="title-box" 
-                  name="title"
-                  rows="4" 
-                  cols="50">
-                  </textarea>
-                  <textarea 
-                  className="description-box" 
-                  name="description"
-                  rows="4" 
-                  cols="50">
-                  </textarea>
-                </form>
-              </body>
-              </html>
-              <button className="leave-arrow" onClick={handleClose}>
-                <ArrowBackIosNewIcon/>
-              </button>
-              <button className="switch" onClick={handleToggleClick}>
-                {isPublic? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled'/>}
-              </button>
-              <Button sx={{ 
-                bgcolor: "#354545", 
-                color: "#FFFFFF", 
-                fontSize: "large" 
-                }} 
-                className="add-pin-box" 
-                variant="contained" 
-                onClick={() => {
-                  handleSubmit();
-                  placeNewMarker();
-                }}                
-                style={{ borderRadius: 10 }}>Add Pin</Button>         
-            </Box>
-          </Modal>
-              </header>  
-
+    return (
+        <div style={mapContainerStyle}>
+            <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={currentLocation}
+                zoom={currentLocation ? 12 : 12}
+                onClick={handleMapClick} // this does nothing 
+                options={mapOptions}
+            >
+                {renderMarkers()}
+                {selectedMarker && (
+                    <Modal open={openModal} onClose={handleClosePinModal}>
+                        <Box className="PinInfo" sx={pinModalStyle}>
+                            <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+                            <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                {selectedMarker.first_name} {selectedMarker.last_name}
+                            </Typography>
+                            <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                {selectedMarker.title}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                                {selectedMarker.city}, {selectedMarker.state}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                {selectedMarker.lat}, {selectedMarker.lng}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
+                                on {selectedMarker.date}
+                            </Typography>
+                            <div style={{ display: 'flex' }}>
+                                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
+                                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
+                                <MapIcon fontSize='large' />
+                            </div>
+                            <Box
+                                sx={{
+                                    border: '1px solid #000',
+                                    borderRadius: '10px',
+                                    padding: '5px',
+                                    marginTop: '10px',
+                                    textAlign: 'center',
+                                    height: '25%',
+                                    width: '90%',
+                                }}
+                            >
+                                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                                    {selectedMarker.description}
+                                </Typography>
+                            </Box>
+                            <button className="leave-arrow" onClick={handleClosePinModal}>
+                                <ArrowBackIosNewIcon />
+                            </button>
+                        </Box>
+                    </Modal>
+                )}
+                <div className="account-icon">
+                    <button className="white-button" onClick={() => handleAccountCircleButtonClick()}>
+                        <AccountCircleIcon className="accountcircle-icon" />
+                    </button>
+                    {userProfileOpen && (
+                        <UserProfile onClose={() => setUserProfileOpen(false)} />
+                    )}
+                </div>
+                <header className="plus-icon">
+                    <Button variant="contained" color="primary" onClick={handleOpen}>
+                        <img src={plusButtonImage} alt="Plus Button" />
+                    </Button>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <Box className="modalAddPin" sx={modalStyle}>
+                            <div className="description"></div>
+                            <div className="title-words"></div>
+                            <div className="make-public"></div>
+                            <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8"></meta>
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                                    <title>Your Page Title</title>
+                                </head>
+                                <body>
+                                    <form>
+                                        <textarea
+                                            className="title-box"
+                                            name="title"
+                                            rows="4"
+                                            cols="50">
+                                        </textarea>
+                                        <textarea
+                                            className="description-box"
+                                            name="description"
+                                            rows="4"
+                                            cols="50">
+                                        </textarea>
+                                    </form>
+                                </body>
+                            </html>
+                            <button className="leave-arrow" onClick={handleClose}>
+                                <ArrowBackIosNewIcon />
+                            </button>
+                            <button className="switch" onClick={handleToggleClick}>
+                                {isPublic ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
+                            </button>
+                            <Button sx={{
+                                bgcolor: "#354545",
+                                color: "#FFFFFF",
+                                fontSize: "large"
+                            }}
+                                className="add-pin-box"
+                                variant="contained"
+                                onClick={() => {
+                                    handleSubmit();
+                                    placeNewMarker();
+                                }}
+                                style={{ borderRadius: 10 }}>Add Pin</Button>
+                        </Box>
+                    </Modal>
+                </header>
                 <div>
-                  <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
-                      <img src={sharedPin} alt="Shared Pins" />
-                  </button>
-                  <SwipeableDrawer
-                      className='SharedPinsContainer'
-                      open={open2}
-                      onClose={handleClose2}
-                  >
-                      <Box className='SharedPins'>
-                          <button className="leave-arrow" onClick={handleClose2}>
-                              <ArrowBackIosNewIcon />
-                          </button>
-                          <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
+                    <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
+                        <img src={sharedPin} alt="Shared Pins" />
+                    </button>
+                    <SwipeableDrawer
+                        className='SharedPinsContainer'
+                        open={open2}
+                        onClose={handleClose2}
+                    >
+                        <Box className='SharedPins'>
+                            <button className="leave-arrow" onClick={handleClose2}>
+                                <ArrowBackIosNewIcon />
+                            </button>
+                            <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
 
-                              <ListItem alignItems="center">
-                                  <h2>Shared Pins</h2>
-                              </ListItem>
-                              <Divider />
+                                <ListItem alignItems="center">
+                                    <h2>Shared Pins</h2>
+                                </ListItem>
+                                <Divider />
 
-                              {matchedData.length > 0 ? (
-                                  matchedData.map((item) => (
-                                      <React.Fragment key={item.lat}>
-                                          <ListItem alignItems="flex-start">
-                                              <ListItemText
-                                                  primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
-                                                  secondary={
-                                                      <React.Fragment>
-                                                          <Typography
-                                                              sx={{ display: 'inline' }}
-                                                              component="span"
-                                                              variant="body2"
-                                                              color="text.primary"
-                                                          >
-                                                              Date: {item.date}
-                                                          </Typography>
-                                                          <Typography>
-                                                              {" Created by: " + item.first_name + " " + item.last_name}
-                                                          </Typography>
-                                                      </React.Fragment>
-                                                  }
-                                              />
-                                          </ListItem>
-                                          <Divider />
-                                      </React.Fragment>
-                                  ))
-                              ) : (
-                                  <ListItem alignItems="flex-start">
-                                      <ListItemText
-                                          primary="No Shared Pins"
-                                      />
-                                  </ListItem>
-                              )}
+                                {matchedData.length > 0 ? (
+                                    matchedData.map((item) => (
+                                        <React.Fragment key={item.lat}>
+                                            <ListItem alignItems="flex-start">
+                                                <ListItemText
+                                                    primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            <Typography
+                                                                sx={{ display: 'inline' }}
+                                                                component="span"
+                                                                variant="body2"
+                                                                color="text.primary"
+                                                            >
+                                                                Date: {item.date}
+                                                            </Typography>
+                                                            <Typography>
+                                                                {" Created by: " + item.first_name + " " + item.last_name}
+                                                            </Typography>
+                                                        </React.Fragment>
+                                                    }
+                                                />
+                                            </ListItem>
+                                            <Divider />
+                                        </React.Fragment>
+                                    ))
+                                ) : (
+                                    <ListItem alignItems="flex-start">
+                                        <ListItemText
+                                            primary="No Shared Pins"
+                                        />
+                                    </ListItem>
+                                )}
 
-                          </List>
-                      </Box>
-                  </SwipeableDrawer>
-              </div>
-      </GoogleMap>  
-      {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
-    </div>
-  );
+                            </List>
+                        </Box>
+                    </SwipeableDrawer>
+                </div>
+            </GoogleMap>
+            {error && <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'red', bgcolor: 'white' }}>{error}</div>}
+        </div>
+    );
 };
 
 export default App;
