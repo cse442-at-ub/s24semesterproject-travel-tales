@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
@@ -8,7 +8,6 @@ import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
-import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import UserProfile from '../UserProfile/UserProfile'
 import axios from 'axios';
@@ -18,6 +17,7 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
@@ -349,12 +349,17 @@ const App = () => {
     const [isPublic, setToggled] = useState(false);
     const [error, setError] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
-    const email = localStorage.getItem('email');
-    const [pinData, setPinData] = useState([]);
+    const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
     const handleOpen2 = () => setOpen2(true);
-    const handleClose2 = () => setOpen2(false);
+    const handleClose2 = () => setOpen2(false); 
+
+    const [open3, setOpen3] = useState(false);//Comment box
+    const handleOpen3 = () => setOpen3(true);
+    const handleClose3 = () => setOpen3(false);
+
+
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -633,7 +638,7 @@ const App = () => {
                                 {selectedMarker.title}
                             </Typography>
                             <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
-                                {selectedMarker.city}, {selectedMarker.state}
+                                {selectedMarker.city || selectedMarker.state} , {selectedMarker.state}
                             </Typography>
                             <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.lat}, {selectedMarker.lng}
@@ -642,9 +647,58 @@ const App = () => {
                                 on {selectedMarker.date}
                             </Typography>
                             <div style={{ display: 'flex' }}>
-                                <FavoriteBorderIcon fontSize='large' style={{ marginRight: '20px' }} />
-                                <ChatIcon fontSize='large' style={{ marginRight: '20px' }} />
-                                <MapIcon fontSize='large' />
+                            <IconButton>
+                                    <FavoriteBorderIcon fontSize='large'  />
+                                </IconButton>
+
+                                <IconButton onClick={handleOpen3}>
+                                    <ChatIcon fontSize='large'  />
+                                </IconButton>
+                                <Modal
+                                    open={open3}
+                                    onClose={handleClose3}
+                                >
+                                    <Box className="commentmodal" sx={modalStyle}>
+                                        <div className="comment"></div>
+                         
+                                        <html lang="en">
+                                            <head>
+                                                <meta charset="UTF-8"></meta>
+                                                <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                                                <title>Your Page Title</title>
+                                            </head>
+                                            <body>
+                                                <form>
+                                                    <textarea
+                                                        className="comment-box"
+                                                        name="comment"
+                                                        rows="4"
+                                                        cols="50">
+                                                    </textarea>
+                                                </form>
+                                            </body>
+                                        </html>
+                                        <button className="leave-arrow" onClick={handleClose3}>
+                                            <ArrowBackIosNewIcon />
+                                        </button>
+                                      
+                                        <Button sx={{
+                                            bgcolor: "#354545",
+                                            color: "#FFFFFF",
+                                            fontSize: "large"
+                                        }}
+                                            className="comment-box"
+                                            variant="contained"
+                                            onClick={() => {
+                                    
+                                            }}
+                                            style={{ borderRadius: 10 }}>Add Comment</Button>
+                                    </Box>
+                                </Modal>
+
+                                <IconButton>
+                                    <MapIcon fontSize='large' />
+                                </IconButton>
                             </div>
                             <Box
                                 sx={{
