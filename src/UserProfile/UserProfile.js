@@ -277,7 +277,6 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              borderRadius: '8px',
               padding: '20px',
               borderRadius: '30px',
               textAlign: 'center'
