@@ -83,7 +83,7 @@ const FriendsPin = ({ open, onClose }) => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriend.php`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
