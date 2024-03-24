@@ -5,7 +5,6 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
-
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
@@ -65,7 +64,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Fetch comments from the comments database
+$commentsQuery = $conn->prepare("SELECT pin_id, comment FROM Comments");
+$commentsQuery->execute();
+$commentsResult = $commentsQuery->get_result();
 
+// Store comments in an associative array with pin_id as key
+$comments = array();
+while ($commentRow = $commentsResult->fetch_assoc()) {
+    $pinId = $commentRow['pin_id'];
+    $comment = $commentRow['comment'];
+    $comments[$pinId][] = $comment;
+}
+
+$commentsQuery->close();
 
 // Assuming you receive the email from the frontend
 $requestEmail = $_GET['email'] ?? null;
@@ -85,26 +97,28 @@ if ($requestEmail) {
     $userResult = $userQuery->get_result();
     $userRow = $userResult->fetch_assoc();
 
-    // Array to store user's pins
-    $userPins = array();
+}
+    // Array to store user's pins with comments
+$userPinsWithComments = array();
 
     // Check if there are any user's pins
-    if ($userPinsResult->num_rows > 0) {
+   if ($userPinsResult->num_rows > 0) {
         while ($userPinRow = $userPinsResult->fetch_assoc()) {
-            // Check if the pin is public
-           
-                $userPins[] = array(
-                    "first_name" => $userRow['first_name'],
-                    "last_name" => $userRow['last_name'],
-                    "email" => $requestEmail,
-                    "lat" => $userPinRow['lat'],
-                    "lng" => $userPinRow['lng'],
-                    "date" => $userPinRow['date'],
-                    "title" => $userPinRow['title'],
-                    "description" => $userPinRow['description'],
-                    "pin_id" => $userPinRow['pin_id']
-                );
-            
+            $pinId = $userPinRow['pin_id'];
+            $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
+
+            $userPins[] = array(
+                "first_name" => $userRow['first_name'],
+                "last_name" => $userRow['last_name'],
+                "email" => $requestEmail,
+                "lat" => $userPinRow['lat'],
+                "lng" => $userPinRow['lng'],
+                "date" => $userPinRow['date'],
+                "title" => $userPinRow['title'],
+                "description" => $userPinRow['description'],
+                "pin_id" => $userPinRow['pin_id'],
+                "comments" => $commentsForPin
+            );
         }
     }
 
@@ -131,32 +145,35 @@ if ($requestEmail) {
             // Check if there are any pins
             if ($pinsResult->num_rows > 0) {
                 while ($pinRow = $pinsResult->fetch_assoc()) {
-                    // Check if the pin is public
-                    if ($pinRow['isPublic'] == 1) {
-                        // Fetch friend's first and last name
-                        $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
-                        $friendUserQuery->bind_param("s", $friendEmail);
-                        $friendUserQuery->execute();
-                        $friendUserResult = $friendUserQuery->get_result();
-                        $friendUserRow = $friendUserResult->fetch_assoc();
+                    $pinId = $pinRow['pin_id'];
+                    $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
 
-                        $friendsPins[] = array(
-                            "first_name" => $friendUserRow['first_name'],
-                            "last_name" => $friendUserRow['last_name'],
-                            "email" => $friendEmail,
-                            "lat" => $pinRow['lat'],
-                            "lng" => $pinRow['lng'],
-                            "date" => $pinRow['date'],
-                            "title" => $pinRow['title'],
-                            "description" => $pinRow['description'],
-                            "pin_id" => $pinRow['pin_id']
-                        );
-                    }
-                }
+    // Check if the pin is public
+    if ($pinRow['isPublic'] == 1) {
+        // Fetch friend's first and last name
+        $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+        $friendUserQuery->bind_param("s", $friendEmail);
+        $friendUserQuery->execute();
+        $friendUserResult = $friendUserQuery->get_result();
+        $friendUserRow = $friendUserResult->fetch_assoc();
+
+        $friendsPins[] = array(
+            "first_name" => $friendUserRow['first_name'],
+            "last_name" => $friendUserRow['last_name'],
+            "email" => $friendEmail,
+            "lat" => $pinRow['lat'],
+            "lng" => $pinRow['lng'],
+            "date" => $pinRow['date'],
+            "title" => $pinRow['title'],
+            "description" => $pinRow['description'],
+            "pin_id" => $pinRow['pin_id'],
+            "comments" => $commentsForPin
+        );
+    }
             }
         }
 
-        $friendsQuery->close();
+       // $friendsQuery->close();
         $pinsQuery->close();
         $friendUserQuery->close();
     }

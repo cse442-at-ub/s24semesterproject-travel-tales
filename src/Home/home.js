@@ -359,6 +359,10 @@ const App = () => {
     const handleOpen3 = () => setOpen3(true);
     const handleClose3 = () => setOpen3(false);
 
+    const [heart, setheart] = useState(false);
+    const like = () => setheart(true);
+    const unlike = () => setheart(false);
+
 
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -434,6 +438,7 @@ const App = () => {
                         }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
+                        console.log(coordinate.comments , coordinate.pin_id)
                     });
                 } else {
                     console.error('Error:', data.error);
@@ -485,6 +490,7 @@ const App = () => {
         getSharedPins();
     }, []);
 
+ 
     useEffect(() => {
         if (!markers.find(marker => marker.id === selectedMarker?.id)) {
             setSelectedMarker(null);
@@ -512,10 +518,22 @@ const App = () => {
             date: coordinates.date,
             first_name: coordinates.first_name,
             last_name: coordinates.last_name,
-            email: coordinates.email
+            email: coordinates.email,
+            comment: coordinates.comments
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
+
+    const sendcomment = () => { 
+        var comment = document.querySelector('.comment-box').value;
+        var pin_id = selectedMarker.id
+        console.log(comment, pin_id)
+        sendCommentToBackend({ pin_id, comment });
+
+    }
+
+
+
 
     const placeNewMarker = () => {
         var title = document.querySelector('.title-box').value;
@@ -542,6 +560,26 @@ const App = () => {
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
             sendCoordinatesToBackend({ email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+        }
+    };
+    const sendCommentToBackend = async (info) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sendComment.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(info),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send coordinates to the backend');
+            }
+
+            const data = await response.json();
+            console.log('Coordinates sent successfully:', data);
+        } catch (error) {
+            console.error('Error sending coordinates to the backend:', error.message);
         }
     };
 
@@ -676,6 +714,7 @@ const App = () => {
                                                         cols="50">
                                                     </textarea>
                                                 </form>
+
                                             </body>
                                         </html>
                                         <button className="leave-arrow" onClick={handleClose3}>
@@ -690,10 +729,13 @@ const App = () => {
                                             className="comment-box"
                                             variant="contained"
                                             onClick={() => {
-                                    
+                                              sendcomment()
+                                              handleClose3()
                                             }}
                                             style={{ borderRadius: 10 }}>Add Comment</Button>
+                                            
                                     </Box>
+                 
                                 </Modal>
 
                                 <IconButton>
