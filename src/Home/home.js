@@ -519,7 +519,8 @@ const App = () => {
             first_name: coordinates.first_name,
             last_name: coordinates.last_name,
             email: coordinates.email,
-            comment: coordinates.comments
+            comment: coordinates.comments,
+            like: coordinates.isLiked
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
@@ -604,7 +605,35 @@ const App = () => {
         }
     };
 
+    const likecheck = () => {
+        let valueToSend;
+        if (selectedMarker.like) {
+            valueToSend = -1; // Send -1 if checkbox is checked
+            unlike()
+            selectedMarker.like = false
+        } else {
+            valueToSend = 1; // Send 1 if checkbox is not checked
+            like()
+            selectedMarker.like = true
+        }
 
+            fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ value: valueToSend, pin_id : selectedMarker.id, email: email})
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from server:', data);
+                // Handle response from the server if needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle errors if any
+            });
+    };
 
     const fetchCityState = async (lat, lng, location) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
@@ -685,8 +714,11 @@ const App = () => {
                                 on {selectedMarker.date}
                             </Typography>
                             <div style={{ display: 'flex' }}>
-                            <IconButton>
-                                    <FavoriteBorderIcon fontSize='large'  />
+                                <IconButton onClick={() => {
+                                    likecheck()
+                                }}>
+                                    <FavoriteBorderIcon fontSize='large' style={{ color: selectedMarker.like === true ? "#F00" : "#000" }} />
+
                                 </IconButton>
 
                                 <IconButton onClick={handleOpen3}>

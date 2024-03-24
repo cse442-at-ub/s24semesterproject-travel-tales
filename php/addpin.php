@@ -107,6 +107,21 @@ $userPinsWithComments = array();
             $pinId = $userPinRow['pin_id'];
             $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
 
+            // Check if the pin is liked by the user
+            $likeQuery = $conn->prepare("SELECT * FROM likes WHERE pin_id = ?");
+            $likeQuery->bind_param("i", $pinId);
+            $likeQuery->execute();
+            $likeResult = $likeQuery->get_result();
+            $isLiked = false;
+             // Initially set to false
+            while ($likeRow = $likeResult->fetch_assoc()) {
+                 
+                if ($likeRow['user'] == $requestEmail) {
+                    $isLiked = true; // Set to true if user liked the pin
+                    break;
+                }
+            }
+
             $userPins[] = array(
                 "first_name" => $userRow['first_name'],
                 "last_name" => $userRow['last_name'],
@@ -117,8 +132,11 @@ $userPinsWithComments = array();
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
-                "comments" => $commentsForPin
+                "comments" => $commentsForPin,
+                "isLiked" => $isLiked // Adding isLiked flag
             );
+
+            $likeQuery->close();
         }
     }
 
@@ -143,38 +161,67 @@ $userPinsWithComments = array();
             $pinsResult = $pinsQuery->get_result();
 
             // Check if there are any pins
-            if ($pinsResult->num_rows > 0) {
-                while ($pinRow = $pinsResult->fetch_assoc()) {
-                    $pinId = $pinRow['pin_id'];
-                    $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
+            if ($friendsResult->num_rows > 0) {
+    while ($friendRow = $friendsResult->fetch_assoc()) {
+        $friendEmail = $friendRow['friends_with'];
 
-    // Check if the pin is public
-    if ($pinRow['isPublic'] == 1) {
-        // Fetch friend's first and last name
-        $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
-        $friendUserQuery->bind_param("s", $friendEmail);
-        $friendUserQuery->execute();
-        $friendUserResult = $friendUserQuery->get_result();
-        $friendUserRow = $friendUserResult->fetch_assoc();
+        // Fetch the friend's pins
+        $pinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, isPublic, pin_id FROM PinsInfo WHERE email = ?");
+        $pinsQuery->bind_param("s", $friendEmail);
+        $pinsQuery->execute();
+        $pinsResult = $pinsQuery->get_result();
 
-        $friendsPins[] = array(
-            "first_name" => $friendUserRow['first_name'],
-            "last_name" => $friendUserRow['last_name'],
-            "email" => $friendEmail,
-            "lat" => $pinRow['lat'],
-            "lng" => $pinRow['lng'],
-            "date" => $pinRow['date'],
-            "title" => $pinRow['title'],
-            "description" => $pinRow['description'],
-            "pin_id" => $pinRow['pin_id'],
-            "comments" => $commentsForPin
-        );
-    }
+        // Check if there are any pins
+        if ($pinsResult->num_rows > 0) {
+            while ($pinRow = $pinsResult->fetch_assoc()) {
+                $pinId = $pinRow['pin_id'];
+                $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
+
+                // Check if the pin is liked by the user
+                $likeQuery = $conn->prepare("SELECT * FROM likes WHERE pin_id = ? AND user = ?");
+                $likeQuery->bind_param("is", $pinId, $requestEmail);
+                $likeQuery->execute();
+                $likeResult = $likeQuery->get_result();
+
+               $isLiked = false; // Initially set to false
+        while ($likeRow = $likeResult->fetch_assoc()) {
+            if ($likeRow['user'] == $requestEmail) {
+                $isLiked = true; // Set to true if user liked the pin
+                break; // No need to continue checking once found
             }
         }
 
-       // $friendsQuery->close();
+                // Fetch friend's first and last name
+                $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+                $friendUserQuery->bind_param("s", $friendEmail);
+                $friendUserQuery->execute();
+                $friendUserResult = $friendUserQuery->get_result();
+                $friendUserRow = $friendUserResult->fetch_assoc();
+
+                // Check if the pin is public and add to the list if it is
+                if ($pinRow['isPublic'] == 1) {
+                    $friendsPins[] = array(
+                        "first_name" => $friendUserRow['first_name'],
+                        "last_name" => $friendUserRow['last_name'],
+                        "email" => $friendEmail,
+                        "lat" => $pinRow['lat'],
+                        "lng" => $pinRow['lng'],
+                        "date" => $pinRow['date'],
+                        "title" => $pinRow['title'],
+                        "description" => $pinRow['description'],
+                        "pin_id" => $pinRow['pin_id'],
+                        "comments" => $commentsForPin,
+                        "isLiked" => $isLiked // Adding isLiked flag
+                    );
+                }
+
+                $likeQuery->close();
+            }
+        }
+
         $pinsQuery->close();
+    }
+}
         $friendUserQuery->close();
     }
 
