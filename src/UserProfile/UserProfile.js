@@ -21,11 +21,20 @@ import {Dialog, DialogContent, DialogTitle} from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsDialog from '../Settings/SettingsDialog';
+import { Modal, Box } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Input from '@mui/material/Input';
+
+
+
 // import { useNavigate } from 'react-router-dom';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
+  const [openAddFriendModal, setOpenAddFriendModal] = useState(false);
+  const userEmail = localStorage.getItem('email');
+
 
   const toggleDrawer = (isopen) => () => {
     onClose(isopen);
@@ -45,6 +54,45 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const handleCloseSettings = () => {
     setOpenSettings(false);
   };
+
+  const handleOpenAddFriendModal = () => {
+    setOpenAddFriendModal(true);
+  };
+  
+  const handleCloseAddFriendModal = () => {
+    setOpenAddFriendModal(false);
+  };
+
+  const handleAddFriend = async (fromEmail, toEmail) => {
+    try {
+      // Data to send to the server
+      const data = {
+        from: fromEmail,
+        to: toEmail
+      };
+
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addFriend.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const responseData = await response.json();
+      // Handle successful response from the server
+      console.log('Friend added successfully:', responseData);
+    } catch (error) {
+      // Handle errors
+      console.error('There was a problem adding the friend:', error);
+    }
+  };
+
+
   // End: Settings dialog handlers
 
   const list = () => (
@@ -145,6 +193,8 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         </Typography>
       </div>
 
+      <Button onClick={handleOpenAddFriendModal}>Add Friend</Button>
+
       <ListItem disablePadding>
         <ButtonGroup style={{ width: '100%', justifyContent: 'center' }}>
           <Button
@@ -209,12 +259,47 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           {list()}
         </SwipeableDrawer>
         <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
+        <Modal
+          open={openAddFriendModal}
+          onClose={handleCloseAddFriendModal}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Box
+            sx={{
+              background: 'white',
+              height: '30%',
+              width: '25%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              borderRadius: '8px',
+              padding: '20px',
+              borderRadius: '30px',
+              textAlign: 'center'
+            }}
+          >
+            <h1>Add Friend</h1>
+            <div style={{ marginBottom: '20px' }}>
+              <h3>Test Friend 1         <Button onClick={() => handleAddFriend(userEmail, 'TestFriend1@email.com')}>Add Friend</Button></h3>
+              <h3>Test Friend 2         <Button onClick={() => handleAddFriend(userEmail, 'TestFriend2@email.com')}>Add Friend</Button></h3>
+              <h3>Test Friend 3         <Button onClick={() => handleAddFriend(userEmail, 'TestFriend3@email.com')}>Add Friend</Button></h3>
+            </div>          
+            <button className="leave-arrow" onClick={handleCloseAddFriendModal}>
+              <ArrowBackIosNewIcon />
+            </button>
+          </Box>
+        </Modal>
       </React.Fragment>
     </div>
   );
 };
 
-const UserProfile = ({ onClose }) => {
+  const UserProfile = ({ onClose }) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 
@@ -229,6 +314,8 @@ const UserProfile = ({ onClose }) => {
     <div>
       <SwipeableTemporaryDrawer open={drawerOpen} onClose={() => { setDrawerOpen(true); onClose(); }} />
     </div>
+
+  
   );
 };
 
