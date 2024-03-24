@@ -83,10 +83,18 @@ const FriendsPin = ({ open, onClose }) => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch('fetchFriend.php');
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriend.php`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+        });
+
         if (!response.ok) {
           throw new Error('Failed to fetch friends');
         }
+
         const data = await response.json();
         setFriends(data);
       } catch (error) {
