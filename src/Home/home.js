@@ -349,7 +349,7 @@ const App = () => {
     const [isPublic, setToggled] = useState(false);
     const [error, setError] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
-    const email = "TestUser1@buffalo.edu" //localStorage.getItem('email');
+    const email = localStorage.getItem('email');
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
     const handleOpen2 = () => setOpen2(true);
