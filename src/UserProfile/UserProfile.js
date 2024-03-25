@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MyPinsModal from '../Components/Modal/MyPinsModal';
 import FriendsPin from '../Components/Modal/FriendsModal';
+import AddFriendModal from '../Components/Modal/AddFriendsModal';
 import Photo1 from '../assets/photo1.png'
 import Photo2 from '../assets/photo2.jpeg'
 import Photo3 from '../assets/photo3.jpeg'
@@ -28,6 +29,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
   const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
+  const [AddFriendModalOpen, setAddFriendModalOpen] = useState(false);
 
   const toggleDrawer = (isopen) => () => {
     onClose(isopen);
@@ -40,6 +42,10 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const handleFriendsButtonClick = () => {
     setFriendsModalOpen(true);
   };
+
+  const handleAddFriendButtonClick = () => {
+    setAddFriendModalOpen(true);
+  }
 
   // Start: Settings dialog handlers
   const [openSettings, setOpenSettings] = useState(false);
@@ -127,6 +133,16 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
 
       <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+
+
+      <Button
+        onClick={handleAddFriendButtonClick}
+        variant="contained"
+        color="primary"
+        style={{ marginTop: 10 }}
+      >
+        Add Friend
+      </Button>
 
       <div
         style={{
@@ -217,6 +233,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         </SwipeableDrawer>
         <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
         <FriendsPin open={FriendsModalOpen} onClose={() => setFriendsModalOpen(false)} />
+        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} />
       </React.Fragment>
     </div>
   );
