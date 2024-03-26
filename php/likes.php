@@ -1,3 +1,4 @@
+
 <?php
 include_once('db.php');
 
@@ -51,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($value == -1) {
             // Delete user from the likes database
-            $deleteLikeQuery = $conn->prepare("DELETE FROM likes WHERE pin_id = ? AND user = ?");
+            $deleteLikeQuery = $conn->prepare("DELETE FROM likes WHERE pin_id = ? AND user_id = ?");
             $deleteLikeQuery->bind_param("is", $pinId, $email);
             $deleteLikeQuery->execute();
             $deleteLikeQuery->close();
         } else {
             // Insert or update the like in the Likes table
-            $insertLikeQuery = $conn->prepare("REPLACE INTO likes (pin_id, user) VALUES (?, ?)");
+            $insertLikeQuery = $conn->prepare("REPLACE INTO likes (pin_id, user_id) VALUES (?, ?)");
             $insertLikeQuery->bind_param("is", $pinId, $email);
             $insertLikeQuery->execute();
             $insertLikeQuery->close();
