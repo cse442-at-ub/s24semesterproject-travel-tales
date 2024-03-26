@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id'])) {
                     WHEN user_id1 = ? THEN user_id2 
                     ELSE user_id1 
                 END AS friend_id
-            FROM friends 
+            FROM friends_list 
             WHERE user_id1 = ? OR user_id2 = ?";
 
     $stmt = $conn->prepare($sql);
