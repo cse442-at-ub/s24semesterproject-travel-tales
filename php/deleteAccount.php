@@ -3,8 +3,18 @@
 session_start();
 
 require 'db.php';
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header('Access-Control-Allow-Credentials: true');
+//forces HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
+if (isset($_SERVER['HTTPS_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400'); // cache for 1 day
+}
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true'); 
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -17,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
     exit(0);
 }
-
 // Check if the request is POST for security
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get user ID from the session or request (adjust as necessary)
