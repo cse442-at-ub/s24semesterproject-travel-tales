@@ -6,7 +6,9 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MyPinsModal from '../Components/Modal/MyPinsModal'
+import MyPinsModal from '../Components/Modal/MyPinsModal';
+import FriendsPin from '../Components/Modal/FriendsModal';
+import AddFriendModal from '../Components/Modal/AddFriendsModal';
 import Photo1 from '../assets/photo1.png'
 import Photo2 from '../assets/photo2.jpeg'
 import Photo3 from '../assets/photo3.jpeg'
@@ -26,6 +28,7 @@ import SettingsDialog from '../Settings/SettingsDialog';
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const [drawerAnchor, setDrawerAnchor] = useState('right');
   const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
+  const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 
   const toggleDrawer = (isopen) => () => {
     onClose(isopen);
@@ -33,6 +36,10 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
   const handlePinsButtonClick = () => {
     setMyPinsModalOpen(true);
+  };
+
+  const handleFriendsButtonClick = () => {
+    setFriendsModalOpen(true);
   };
 
   // Start: Settings dialog handlers
@@ -45,43 +52,8 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
   const handleCloseSettings = () => {
     setOpenSettings(false);
   };
+
   // End: Settings dialog handlers
-
-  // Start: Fetch friends
-  const [openFriends, setOpenFriends] = useState(false);
-  const handleOpenFriends = () => {
-    setOpenFriends(true);
-    fetchFriends();
-  };
-
-  const handleCloseFriends = () => {
-    setOpenFriends(false);
-  };
-  const [friends, setFriends] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchFriends = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {      
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
-        method: 'GET',
-        credentials: 'include', 
-      });
-      if (!response.ok) {
-        throw new Error('Something went wrong');
-      }
-      const data = await response.json();
-      console.log(data);
-      setFriends(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  // End: Fetch friends
 
   const list = () => (
     <div
@@ -158,6 +130,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 
       <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
 
+
       <div
         style={{
           display: 'flex',
@@ -181,9 +154,11 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         </Typography>
       </div>
 
+
       <ListItem disablePadding>
         <ButtonGroup style={{ width: '100%', justifyContent: 'center' }}>
-          <Button onClick={handleOpenFriends}
+          <Button
+            onClick={handleFriendsButtonClick}
             style={{
               background: 'linear-gradient(45deg, #4CAF50 30%, #2E7D32 90%)',
               borderRadius: 3,
@@ -198,32 +173,6 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           >
             FRIENDS
           </Button>
-          <Dialog open={openFriends} onClose={handleCloseFriends} fullWidth maxWidth="sm">
-            <DialogTitle sx={{ m: 0, p: 2 }}>
-              Friends List
-              <IconButton
-                aria-label="close"
-                onClick={handleCloseFriends}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </DialogTitle>
-            <DialogContent dividers>
-              <ul>
-                {friends.map((friend) => (
-                  <li key={friend.id}>
-                    First Name: {friend.first_name} - Last Name: {friend.last_name} - Email: {friend.email}
-                  </li>
-                ))}
-              </ul>
-            </DialogContent>
-          </Dialog>
           <Button
             onClick={handlePinsButtonClick}
             style={{
@@ -271,6 +220,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
           {list()}
         </SwipeableDrawer>
         <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
+        <FriendsPin open={FriendsModalOpen} onClose={() => setFriendsModalOpen(false)} />
       </React.Fragment>
     </div>
   );
@@ -286,6 +236,9 @@ const UserProfile = ({ onClose }) => {
     setMyPinsModalOpen(false);
     onClose();
   };
+  
+
+
 
   return (
     <div>
