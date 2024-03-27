@@ -59,6 +59,12 @@ if ($user_exists->num_rows > 0) { // Username is already in the DB
     die(json_encode(['message' => 'An account with this username already exists.']));
 } 
 
+// Check if the username contains any whitespace
+if (preg_match('/\s/', $username)) {
+    http_response_code(400);
+    die(json_encode(['message' => 'The username cannot contain any spaces.']));
+}
+
 // check if passwords match
 if ($pass !== $confirmPass) {
     http_response_code(400);
@@ -68,7 +74,7 @@ if ($pass !== $confirmPass) {
 // check if password is at least 8 characters
 if (strlen($pass) < 8) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password must be at least 8 characters long.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long']));
 }
 
 // check if password contains at least one uppercase letter
