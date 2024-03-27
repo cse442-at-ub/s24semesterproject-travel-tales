@@ -674,6 +674,14 @@ const App = () => {
             console.error('Error fetching data:', error.message);
         }
     };
+    const [zoomLevel, setZoomLevel] = useState(12); // Initial zoom level
+
+    const handleMapIconClick = (Coordinates) => {    
+        handleClosePinModal();
+        setSelectedMarker(null);
+        setZoomLevel(14);
+        setCurrentLocation(Coordinates);
+    }
 
     if (loadError) {
         return <div>Error loading maps</div>;
@@ -689,7 +697,7 @@ const App = () => {
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={currentLocation}
-                zoom={currentLocation ? 12 : 12}
+                zoom={zoomLevel}
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
@@ -770,8 +778,13 @@ const App = () => {
                  
                                 </Modal>
 
-                                <IconButton>
-                                    <MapIcon fontSize='large' />
+                                <IconButton  
+                                    onClick={() => {
+                                        handleMapIconClick({ lat: selectedMarker.lat, lng: selectedMarker.lng })
+                                    }}>
+                                    <MapIcon 
+                                        style={{ color: "#000" }}
+                                        fontSize='large'/>
                                 </IconButton>
                             </div>
                             <Box
