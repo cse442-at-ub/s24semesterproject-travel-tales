@@ -12,6 +12,7 @@ export const Register = (props) => {
         firstName: '',
         lastName: '',
         email: '',
+        username: '',
         pass: '',
         confirmPass: '',
     });
@@ -131,6 +132,17 @@ export const Register = (props) => {
                     type="email"
                     name="email"
                     placeholder="Email"
+                    required
+                />
+                {/* <label className="errorLabel">{emailError}</label> */}
+
+                <label htmlFor="username"></label>
+                <input
+                    onChange={handleChange}
+                    id="username"
+                    type="username"
+                    name="username"
+                    placeholder="Username"
                     required
                 />
                 {/* <label className="errorLabel">{emailError}</label> */}
