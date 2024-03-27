@@ -60,39 +60,6 @@ export const Register = (props) => {
         }
     }
 
-    // const onButtonClick = () => {
-    //     setEmailError('')
-    //     setPasswordError('')
-    //     setFirstNameError('')
-    //     setLastNameError('')
-
-    //     if ('' === firstName && setFirstNameError !== '' ) {
-    //         setFirstNameError('Please enter your first name')
-       
-    //     }
-        
-    //     if ('' === lastName) {
-    //         setLastNameError('Please enter your last name')
-            
-    //     }
-
-    //     if ('' === email) {
-    //         setEmailError('Please enter your email')
-            
-    //     }
-
-    //     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    //         setEmailError('Please enter a valid email')
-            
-    //     }
-
-    //     if ('' === pass) {
-    //         setPasswordError('Please enter a password')
-            
-    //     }
-    //     return
-    // }
-
     return (
         <div className="Register">
 
