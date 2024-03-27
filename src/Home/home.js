@@ -680,10 +680,10 @@ const App = () => {
     const handleMapIconClick = (Coordinates) => {    
         handleClosePinModal();
         setSelectedMarker(null);
-        if (zoomLevel === 12) {
-            setZoomLevel(12.01);
+        if (zoomLevel === 14) {
+            setZoomLevel(14.01);
         } else {
-            setZoomLevel(12);
+            setZoomLevel(14);
         }
         setCurrentLocation(Coordinates);
     }
