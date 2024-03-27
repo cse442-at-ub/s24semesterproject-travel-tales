@@ -420,37 +420,33 @@ const App = () => {
                         'Content-Type': 'application/json',
                     }
                 });
-
+    
                 if (!response.ok) {
                     throw new Error(`HTTPSS error! Status: ${response.status}`);
                 }
-                const rawData = await response.text();
+    
+                const rawData = await response.json(); // Use response.json() to directly parse JSON
                 console.log('Raw Data:', rawData);
-
-                const data = JSON.parse(rawData);
-                console.log('Parsed Data:', data);
-
-                if (data.success) {
-                    data.data.forEach(coordinate => {
+    
+                if (rawData.success) {
+                    rawData.data.forEach(coordinate => {
                         if (coordinate.email === email) {
-                            coordinate.first_name = "You"
-                            coordinate.last_name = ""
+                            coordinate.first_name = "You";
+                            coordinate.last_name = "";
                         }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
-                        console.log(coordinate.comments , coordinate.pin_id)
+                        console.log(coordinate.comments, coordinate.pin_id);
                     });
                 } else {
-                    console.error('Error:', data.error);
+                    console.error('Error:', rawData.error);
                 }
-
-
             } catch (error) {
                 setError('Error fetching coordinates from backend');
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
-
+    
         fetchInfoFromBackend();
     }, []);
 
