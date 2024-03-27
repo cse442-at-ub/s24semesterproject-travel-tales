@@ -171,7 +171,7 @@ export const Register = (props) => {
                 {message && <p style={{ color: 'green' }}>{message}</p>}
 
                 <button type="submit" className="create-new-acc">Create New Account</button>
-                <Link className="link" to="/login" >Alread have an Account?</Link>
+                <Link className="link" to="/login" >Already have an Account?</Link>
             </form>
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
