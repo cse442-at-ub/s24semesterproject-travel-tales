@@ -675,21 +675,16 @@ const App = () => {
         }
     };
 
-    const getZoomLevel = () => {
-        // Define the range of zoom levels you want to allow
-        const minZoom = 13;
-        const maxZoom = 14;
-    
-        // Generate a random zoom level within the defined range
-        return Math.floor(Math.random() * (maxZoom - minZoom + 1)) + minZoom;
-    };
-
     const [zoomLevel, setZoomLevel] = useState(12); // Initial zoom level
 
     const handleMapIconClick = (Coordinates) => {    
         handleClosePinModal();
         setSelectedMarker(null);
-        setZoomLevel(getZoomLevel());
+        if (zoomLevel === 12) {
+            setZoomLevel(12.01);
+        } else {
+            setZoomLevel(12);
+        }
         setCurrentLocation(Coordinates);
     }
 
