@@ -1,13 +1,22 @@
-import React from 'react';
-import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
+import React, { useState } from 'react';
+import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider, TextField } from '@mui/material';
 
 const AddFriendModal = ({ open, onClose }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  
   const suggestedFriends = [
     { name: 'John Doe', mutualFriends: 10 },
     { name: 'Jane Smith', mutualFriends: 15 },
-    { name: 'Alice Johnson', mutualFriends: 8 },
-    // Add more suggested friends as needed
+    { name: 'Alice Johnson', mutualFriends: 8 }
   ];
+
+  const filteredFriends = suggestedFriends.filter(friend =>
+    friend.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -54,8 +63,17 @@ const AddFriendModal = ({ open, onClose }) => {
           Add Friends
         </Typography>
         
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          fullWidth
+          sx={{ mb: 2 }}
+        />
+        
         <List>
-          {suggestedFriends.map((friend, index) => (
+          {filteredFriends.map((friend, index) => (
             <React.Fragment key={index}>
               <ListItem disablePadding>
                 <ListItemButton>
@@ -65,7 +83,7 @@ const AddFriendModal = ({ open, onClose }) => {
                   </Typography>
                 </ListItemButton>
               </ListItem>
-              {index < suggestedFriends.length - 1 && <Divider />}
+              {index < filteredFriends.length - 1 && <Divider />}
             </React.Fragment>
           ))}
         </List>
