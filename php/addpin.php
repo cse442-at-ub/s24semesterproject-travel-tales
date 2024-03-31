@@ -1,46 +1,53 @@
 <?php
 include_once('db.php');
 
+// Redirect to HTTPS if not already
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
+
+// CORS Headers
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
 if (isset($_SERVER['HTTPS_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
+// CORS Preflight Handling
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    }
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
+    }
     exit(0);
 }
 
+// Database Connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Content-Type Header
+header("Content-Type: application/json");
+
+// Handling POST Requests
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (isset($data['email']) && isset($data['lat']) && isset($data['lng']) && isset($data['title']) && isset($data['description']) && isset($data['date']) && isset($data['isPublic'])) {
+    // Inserting Pin Information
+    if (
+        isset($data['email']) && isset($data['lat']) && isset($data['lng']) && 
+        isset($data['title']) && isset($data['description']) && isset($data['date']) && 
+        isset($data['isPublic'])
+    ) {
         $email = $data['email'];
         $latitude = $data['lat'];
         $longitude = $data['lng'];
@@ -64,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Fetch comments from the comments database
-$commentsQuery = $conn->prepare("SELECT pin_id, comment FROM comments");
+// Fetching comments from the comments database
+$commentsQuery = $conn->prepare("SELECT pin_id, comment, user FROM comments");
 $commentsQuery->execute();
 $commentsResult = $commentsQuery->get_result();
 
@@ -74,12 +81,15 @@ $comments = array();
 while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
     $comment = $commentRow['comment'];
-    $comments[$pinId][] = $comment;
+    $user = $commentRow['user'];
+    $comments[$pinId][] = array(
+        "comment" => $comment,
+        "user" => $user
+    );
 }
-
 $commentsQuery->close();
 
-// Assuming you receive the email from the frontend
+// Fetching user's email from the frontend
 $requestEmail = $_GET['email'] ?? null;
 
 // Check if the email is provided
@@ -97,12 +107,11 @@ if ($requestEmail) {
     $userResult = $userQuery->get_result();
     $userRow = $userResult->fetch_assoc();
 
-}
     // Array to store user's pins with comments
-$userPinsWithComments = array();
+    $userPinsWithComments = array();
 
     // Check if there are any user's pins
-   if ($userPinsResult->num_rows > 0) {
+    if ($userPinsResult->num_rows > 0) {
         while ($userPinRow = $userPinsResult->fetch_assoc()) {
             $pinId = $userPinRow['pin_id'];
             $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
@@ -113,16 +122,16 @@ $userPinsWithComments = array();
             $likeQuery->execute();
             $likeResult = $likeQuery->get_result();
             $isLiked = false;
-             // Initially set to false
+
+            // Initially set to false
             while ($likeRow = $likeResult->fetch_assoc()) {
-                 
                 if ($likeRow['user_id'] == $requestEmail) {
                     $isLiked = true; // Set to true if user liked the pin
                     break;
                 }
             }
 
-            $userPins[] = array(
+            $userPinsWithComments[] = array(
                 "first_name" => $userRow['first_name'],
                 "last_name" => $userRow['last_name'],
                 "email" => $requestEmail,
@@ -139,8 +148,9 @@ $userPinsWithComments = array();
             $likeQuery->close();
         }
     }
+    $userPinsQuery->close();
+    $userQuery->close();
 
-    // Fetch the user's friends from the friends_list table
     $friendsQuery = $conn->prepare("SELECT user_id2 FROM friends_list WHERE user_id1 = ?");
     $friendsQuery->bind_param("s", $requestEmail);
     $friendsQuery->execute();
@@ -149,19 +159,8 @@ $userPinsWithComments = array();
     // Array to store friends' pins
     $friendsPins = array();
 
-    // Check if there are any friends
-    if ($friendsResult->num_rows > 0) {
-        while ($friendRow = $friendsResult->fetch_assoc()) {
-            $friendEmail = $friendRow['user_id2'];
-
-            // Fetch the friend's pins
-            $pinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, isPublic, pin_id FROM PinsInfo WHERE email = ?");
-            $pinsQuery->bind_param("s", $friendEmail);
-            $pinsQuery->execute();
-            $pinsResult = $pinsQuery->get_result();
-
-            // Check if there are any pins
-            if ($friendsResult->num_rows > 0) {
+// Check if there are any friends
+if ($friendsResult->num_rows > 0) {
     while ($friendRow = $friendsResult->fetch_assoc()) {
         $friendEmail = $friendRow['user_id2'];
 
@@ -183,13 +182,13 @@ $userPinsWithComments = array();
                 $likeQuery->execute();
                 $likeResult = $likeQuery->get_result();
 
-               $isLiked = false; // Initially set to false
-        while ($likeRow = $likeResult->fetch_assoc()) {
-            if ($likeRow['user'] == $requestEmail) {
-                $isLiked = true; // Set to true if user liked the pin
-                break; // No need to continue checking once found
-            }
-        }
+                $isLiked = false; // Initially set to false
+                while ($likeRow = $likeResult->fetch_assoc()) {
+                    if ($likeRow['user_id'] == $requestEmail) {
+                        $isLiked = true; // Set to true if user liked the pin
+                        break; // No need to continue checking once found
+                    }
+                }
 
                 // Fetch friend's first and last name
                 $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
@@ -214,27 +213,21 @@ $userPinsWithComments = array();
                         "isLiked" => $isLiked // Adding isLiked flag
                     );
                 }
-
-                $likeQuery->close();
             }
+            $likeQuery->close(); // Close likeQuery after the loop
         }
-
-        $pinsQuery->close();
+        $pinsQuery->close(); // Close pinsQuery after the loop
+        $friendUserQuery->close(); // Close friendUserQuery after the loop
     }
 }
-        //$friendUserQuery->close();
-    }
 
-    // Combine user and friends' pins
-    $combinedPins = array_merge($userPins, $friendsPins);
-
-    // Return matched data as JSON
+    $combinedPins = array_merge($userPinsWithComments, $friendsPins);
+        // Return matched data as JSON
     echo json_encode(['success' => true, 'data' => $combinedPins]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
 }
 
-$userPinsQuery->close();
-$userQuery->close();
+// Close the database connection
 $conn->close();
 ?>
