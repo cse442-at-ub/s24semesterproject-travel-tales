@@ -22,6 +22,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 
+const email = localStorage.getItem('email');
+
+
 const libraries = ['places'];
 const mapContainerStyle = {
     position: 'relative',
@@ -366,8 +369,6 @@ const App = () => {
     });
 
     const [currentUser, setCurrentUser] = useState(null);
-    const email = localStorage.getItem('email');
-
     
     const fetchCurrentUser = async () => {
         try {
@@ -391,7 +392,6 @@ const App = () => {
         setOpen2(true);
         getSharedPins();
     }
-    
     const handleClose2 = () => setOpen2(false); 
     const [zoomLevel, setZoomLevel] = useState(12); 
     const [open3, setOpen3] = useState(false);//Comment box
@@ -499,11 +499,10 @@ const App = () => {
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
-
+        getSharedPins();
         fetchInfoFromBackend();
-    }, []);
+    }, [currentUser]);
 
-    
     const getSharedPins = async () => {
         try {
             if (currentUser && currentUser.id) {
@@ -518,16 +517,16 @@ const App = () => {
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    const filteredResult = result.filter(item => item.email != email);
+                    const filteredResult = result.filter(item => item.email !== email);
                     if (filteredResult.length > 0) {
                         setMatchedData(filteredResult);
                         for (let i = 0; i < filteredResult.length; i++) {
                             const item = filteredResult[i];
+                            updateMarker(item);
+                            await fetchCityState(item.lat, item.lng, setMarkers);
                             await fetchCityState(item.lat, item.lng, setMatchedData);
                         }
-                        console.log('matchedData:', matchedData); // Log matchedData here
                     } else {
-                        // Handle case when filteredResult is empty
                     }
                 }
             }
@@ -535,8 +534,8 @@ const App = () => {
             console.error('Error fetching data:', error.message);
         }
     };
+
         
-    // Call fetchCurrentUser when the component mounts
     useEffect(() => {
         fetchCurrentUser();
     }, []);
@@ -582,9 +581,6 @@ const App = () => {
         sendCommentToBackend({ pin_id, comment });
 
     }
-
-
-
 
     const placeNewMarker = () => {
         var title = document.querySelector('.title-box').value;
@@ -749,7 +745,7 @@ const App = () => {
                         <Box className="PinInfo" sx={pinModalStyle}>
                             <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                {selectedMarker.first_name} {selectedMarker.last_name}
+                                {selectedMarker.email}
                             </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
@@ -855,7 +851,10 @@ const App = () => {
                         <AccountCircleIcon className="accountcircle-icon" />
                     </button>
                     {userProfileOpen && (
-                        <UserProfile onClose={() => setUserProfileOpen(false)} />
+                        <UserProfile onClose={() => {
+                            setUserProfileOpen(false); // Close the UserProfile component
+                            getSharedPins(); // Call the getSharedPins function
+                        }} />
                     )}
                 </div>
                 <header className="plus-icon">
