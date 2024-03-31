@@ -357,6 +357,7 @@ const App = () => {
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false); 
     const [ignored, forceUpdate] = useReducer (x=> x + 1, 0)
+    const [zoomLevel, setZoomLevel] = useState(12); 
     const [open3, setOpen3] = useState(false);//Comment box
     const handleOpen3 = () => setOpen3(true);
     const handleClose3 = () => setOpen3(false);
@@ -394,6 +395,18 @@ const App = () => {
         setSelectedMarker(null);
         setOpenPinModal(false);
     };
+
+    const handleMapIconClick = (Coordinates) => {    
+        handleClosePinModal();
+        setSelectedMarker(null);
+        if (zoomLevel === 14) {
+            setZoomLevel(14.01);
+        } else {
+            setZoomLevel(14);
+        }
+        setCurrentLocation(Coordinates);
+    }
+
 
     useEffect(() => {
         const fetchLocation = async () => {
@@ -710,7 +723,7 @@ const App = () => {
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={currentLocation}
-                zoom={currentLocation ? 12 : 12}
+                zoom={zoomLevel}
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
@@ -812,8 +825,13 @@ const App = () => {
                  
                                 </Modal>
 
-                                <IconButton>
-                                    <MapIcon fontSize='large' />
+                                <IconButton  
+                                    onClick={() => {
+                                        handleMapIconClick({ lat: selectedMarker.lat, lng: selectedMarker.lng })
+                                    }}>
+                                    <MapIcon 
+                                        style={{ color: "#000" }}
+                                        fontSize='large'/>
                                 </IconButton>
                             </div>
                             <Box
