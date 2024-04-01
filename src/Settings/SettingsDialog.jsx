@@ -14,10 +14,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 const SettingsDialog = () => {
     const email = localStorage.getItem('email');
     const [color, setColor] = useState('black');
-
     const handleAlignment = (event, newColor) => {
-        setColor(newColor);
-        console.log(color)
+        setColor(newColor);  
     };
 
   const handleLogout = () => {
@@ -30,7 +28,7 @@ const SettingsDialog = () => {
 
     // Function to handle updating profile data
     const handleUpdateProfile = async () => {
-        console.log('color send', color)
+       console.log("sent color", color)
         try {
             await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
                 method: 'POST',
@@ -46,8 +44,8 @@ const SettingsDialog = () => {
     };
 
   return (
-    <>
-      <Accordion>
+    < >
+          <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -55,15 +53,15 @@ const SettingsDialog = () => {
         >
           <Typography>General</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Box sx={{
+              <AccordionDetails>
+          <Box  sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             p: 5,
           }}>
-                      <Accordion>
+                      <Accordion >
                           <AccordionSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1a-content"
@@ -72,15 +70,14 @@ const SettingsDialog = () => {
                               <Typography>Change Profile Icon</Typography>
                           </AccordionSummary>
                           <AccordionDetails >
-                              <Box sx={{
+                              <Box  sx={{
                                   width: '100%',
-                                  
                                   display: 'flex',
                                   flexDirection: 'row',
                                   alignItems: 'center',
                                   justifyContent: 'space-around',
                                   flexWrap: 'wrap',
-                                  
+                                  border: 0
                               }}>
                                   <ToggleButtonGroup
                                       
