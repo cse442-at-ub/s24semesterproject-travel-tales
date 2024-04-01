@@ -21,6 +21,8 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
+import { useReducer } from 'react';
+
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -390,6 +392,7 @@ const App = () => {
         getSharedPins();
     }
     const handleClose2 = () => setOpen2(false); 
+    const [ignored, forceUpdate] = useReducer (x=> x + 1, 0)
     const [zoomLevel, setZoomLevel] = useState(12); 
     const [open3, setOpen3] = useState(false);//Comment box
     const handleOpen3 = () => setOpen3(true);
@@ -572,11 +575,16 @@ const App = () => {
     };
 
     const sendcomment = () => { 
-        var comment = document.querySelector('.comment-box').value;
+        var comment = document.getElementById('myInput').value;
         var pin_id = selectedMarker.id
-        console.log(comment, pin_id)
-        sendCommentToBackend({ pin_id, comment });
-
+        console.log({ pin_id, comment, email})
+        if (comment !== "") {
+            sendCommentToBackend({ pin_id, comment, localStorage.getItem('email') });
+            selectedMarker.comment.push({comment: comment , user: localStorage.getItem('email')});
+            document.getElementById('myInput').value = ''
+            document.getElementById('myInput').placeholder = 'Comment Sent!'
+        }
+        else { document.getElementById('myInput').placeholder = 'Please Type Something' }
     }
 
     const placeNewMarker = () => {
@@ -599,7 +607,9 @@ const App = () => {
                 description: description,
                 date: date,
                 email: localStorage.getItem('email'),
-                first_name: "You"
+                first_name: "You",
+                like: false,
+                comment: []
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -650,32 +660,43 @@ const App = () => {
 
     const likecheck = () => {
         let valueToSend;
+
         if (selectedMarker.like) {
             valueToSend = -1; // Send -1 if checkbox is checked
             unlike()
             selectedMarker.like = false
+            console.log("unliked")
         } else {
             valueToSend = 1; // Send 1 if checkbox is not checked
             like()
             selectedMarker.like = true
+            console.log("liked")
+           
+           
         }
+        sendlike(valueToSend)
+    };
 
-            fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: valueToSend, pin_id : selectedMarker.id, email: localStorage.getItem('email')})
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response from server:', data);
-                // Handle response from the server if needed
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle errors if any
+    const sendlike = async (info) => {
+        console.log(info)
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ value: info, pin_id: selectedMarker.id, email: localStorage.getItem('email') })
             });
+
+            if (!response.ok) {
+                throw new Error('Failed to send likes to the backend');
+            }
+
+            const data = await response.json();
+            console.log('like sent successfully:', data);
+        } catch (error) {
+            console.error('Error sending likes to the backend:', error.message);
+        }
     };
 
     const fetchCityState = async (lat, lng, location) => {
@@ -767,31 +788,51 @@ const App = () => {
                                 <IconButton onClick={handleOpen3}>
                                     <ChatIcon fontSize='large'  />
                                 </IconButton>
+
                                 <Modal
                                     open={open3}
                                     onClose={handleClose3}
                                 >
-                                    <Box className="commentmodal" sx={modalStyle}>
-                                        <div className="comment"></div>
-                         
-                                        <html lang="en">
-                                            <head>
-                                                <meta charset="UTF-8"></meta>
-                                                <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-                                                <title>Your Page Title</title>
-                                            </head>
-                                            <body>
-                                                <form>
-                                                    <textarea
-                                                        className="comment-box"
-                                                        name="comment"
+                            
+                                    <Box className="PinInfo" sx={pinModalStyle} >
+                                        <button className="leave-arrow" onClick={handleClose3}>
+                                            <ArrowBackIosNewIcon />
+                                        </button>
+                                        <h1>Comments</h1>
+                                        <Divider/>
+
+                                                <List sx={{ width: '100%', maxWidth: 500, maxHeight: 400, bgcolor: 'background.paper', overflow: "scroll" }}>
+                                                    {selectedMarker.comment && selectedMarker.comment.length > 0 ? (
+                                                        selectedMarker.comment.map((comment, index) => (
+                                                            <div key={index}>
+                                                                <ListItem >
+                                                                    <ListItemText
+                                                                        primary={comment.comment}
+                                                                        secondary= {"Created by: " + comment.user }
+                                                                     />
+                                                                    
+                                                                </ListItem>
+                                                            <Divider/>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <ListItem>
+                                                            <ListItemText primary="No comments available" />
+                                                            </ListItem>
+
+                                                    )}
+                                                </List>
+
+                                                <form >
+                                            <textarea
+                                                className="comment-box"
                                                         rows="4"
-                                                        cols="50">
+                                                        cols="50"
+                                                        id="myInput"
+                                                        placeholder="Type Your Comment Here!">
                                                     </textarea>
                                                 </form>
 
-                                            </body>
-                                        </html>
                                         <button className="leave-arrow" onClick={handleClose3}>
                                             <ArrowBackIosNewIcon />
                                         </button>
@@ -801,11 +842,12 @@ const App = () => {
                                             color: "#FFFFFF",
                                             fontSize: "large"
                                         }}
-                                            className="comment-box"
+                                            
                                             variant="contained"
                                             onClick={() => {
-                                              sendcomment()
-                                              handleClose3()
+                                                sendcomment()
+                                              forceUpdate()
+                                              
                                             }}
                                             style={{ borderRadius: 10 }}>Add Comment</Button>
                                             
@@ -905,6 +947,7 @@ const App = () => {
                                 onClick={() => {
                                     handleSubmit();
                                     placeNewMarker();
+
                                 }}
                                 style={{ borderRadius: 10 }}>Add Pin</Button>
                         </Box>

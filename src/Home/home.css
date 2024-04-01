@@ -6,6 +6,31 @@
     border: none;
 }
 
+.comment-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 25%;
+    left: 20%;
+}
+
+.comment-box {
+    position: center;
+    top: 35%;
+    left: 5%;
+    width: 90%;
+    margin-top: 10px;
+    padding: 1rem;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 18px; /* Set font size to 16 pixels */
+}
+
 .shared-pins-icon {
     position: fixed;
     border: none;
