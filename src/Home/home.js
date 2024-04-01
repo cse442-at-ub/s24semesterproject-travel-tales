@@ -22,9 +22,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 
-const email = localStorage.getItem('email');
-
-
 const libraries = ['places'];
 const mapContainerStyle = {
     position: 'relative',
@@ -339,9 +336,9 @@ const modalStyle = {
     transition: 'bgcolor 0.3s ease',
 };
 
-const getCurrentUserInfo = async (email) => {
+const getCurrentUserInfo = async () => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php?email=${email}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php?email=${localStorage.getItem('email')}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -372,7 +369,7 @@ const App = () => {
     
     const fetchCurrentUser = async () => {
         try {
-            const userData = await getCurrentUserInfo(email);
+            const userData = await getCurrentUserInfo();
             setCurrentUser(userData);
         } catch (error) {
             console.log(error)
@@ -465,7 +462,7 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${localStorage.getItem('email')}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -483,7 +480,7 @@ const App = () => {
 
                 if (data.success) {
                     data.data.forEach(coordinate => {
-                        if (coordinate.email === email) {
+                        if (coordinate.email === localStorage.getItem('email')) {
                             coordinate.first_name = "You"
                             coordinate.last_name = ""
                         }
@@ -517,7 +514,7 @@ const App = () => {
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    const filteredResult = result.filter(item => item.email !== email);
+                    const filteredResult = result.filter(item => item.email !== localStorage.getItem('email'));
                     if (filteredResult.length > 0) {
                         setMatchedData(filteredResult);
                         for (let i = 0; i < filteredResult.length; i++) {
@@ -601,12 +598,12 @@ const App = () => {
                 title: title,
                 description: description,
                 date: date,
-                email: email,
+                email: localStorage.getItem('email'),
                 first_name: "You"
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+            sendCoordinatesToBackend({ email: localStorage.getItem('email'), lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -668,7 +665,7 @@ const App = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ value: valueToSend, pin_id : selectedMarker.id, email: email})
+            body: JSON.stringify({ value: valueToSend, pin_id : selectedMarker.id, email: localStorage.getItem('email')})
         })
             .then(response => response.json())
             .then(data => {
