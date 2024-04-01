@@ -2,9 +2,6 @@ import React, {useState} from 'react';
 import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const userEmail = localStorage.getItem('email');
-
-
 const AddFriendModal = ({ open, onClose }) => {
   const suggestedFriends = [
     { name: 'user@gmail.com', mutualFriends: 10 },
@@ -114,7 +111,7 @@ const AddFriendModal = ({ open, onClose }) => {
                 <ListItemButton>
                   {errorMessage && <p>{errorMessage}</p>}
                   <Button 
-                    onClick={() => handleAddFriend(userEmail, friend.name)}
+                    onClick={() => handleAddFriend(localStorage.getItem('email'), friend.name)}
                     disabled={buttonStates[friend.name] === 'Added'}
                     style={{ position: 'absolute', left: '75%', width: '20%', color: 'white', backgroundColor: buttonStates[friend.name] ? 'orange' : 'green' }}
                     >
