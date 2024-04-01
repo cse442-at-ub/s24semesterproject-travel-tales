@@ -338,11 +338,45 @@ const modalStyle = {
     transition: 'bgcolor 0.3s ease',
 };
 
+const getCurrentUserInfo = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php?email=${localStorage.getItem('email')}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user information');
+        }
+
+        const userData = await response.json();
+
+        // Assuming userData is an object with keys: first_name, last_name, email, and username
+        return userData;
+    } catch (error) {
+        console.error('Error fetching current user information:', error.message);
+        throw error;
+    }
+};
+
 const App = () => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_API_KEY,
         libraries,
     });
+
+    const [currentUser, setCurrentUser] = useState(null);
+    
+    const fetchCurrentUser = async () => {
+        try {
+            const userData = await getCurrentUserInfo();
+            setCurrentUser(userData);
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     const [markers, setMarkers] = useState([]);
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -351,10 +385,12 @@ const App = () => {
     const [isPublic, setToggled] = useState(false);
     const [error, setError] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
-    const email = localStorage.getItem('email');
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
-    const handleOpen2 = () => setOpen2(true);
+    const handleOpen2 = () => {
+        setOpen2(true);
+        getSharedPins();
+    }
     const handleClose2 = () => setOpen2(false); 
     const [ignored, forceUpdate] = useReducer (x=> x + 1, 0)
     const [zoomLevel, setZoomLevel] = useState(12); 
@@ -429,7 +465,7 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${localStorage.getItem('email')}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -447,7 +483,7 @@ const App = () => {
 
                 if (data.success) {
                     data.data.forEach(coordinate => {
-                        if (coordinate.email === email) {
+                        if (coordinate.email === localStorage.getItem('email')) {
                             coordinate.first_name = "You"
                             coordinate.last_name = ""
                         }
@@ -458,54 +494,52 @@ const App = () => {
                 } else {
                     console.error('Error:', data.error);
                 }
-
-
             } catch (error) {
                 setError('Error fetching coordinates from backend');
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
-
+        getSharedPins();
         fetchInfoFromBackend();
-    }, []);
+    }, [currentUser]);
 
-    useEffect(() => {
-        const getSharedPins = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+    const getSharedPins = async () => {
+        try {
+            if (currentUser && currentUser.id) {
+                const user_id1 = currentUser.id;
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php?user_id1=${user_id1}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 });
-
                 const result = await response.json();
-
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    const filteredResult = result.filter(item => item.email === email);
-
+                    const filteredResult = result.filter(item => item.email !== localStorage.getItem('email'));
                     if (filteredResult.length > 0) {
-                        await setMatchedData(filteredResult);
-
+                        setMatchedData(filteredResult);
                         for (let i = 0; i < filteredResult.length; i++) {
                             const item = filteredResult[i];
+                            updateMarker(item);
+                            await fetchCityState(item.lat, item.lng, setMarkers);
                             await fetchCityState(item.lat, item.lng, setMatchedData);
                         }
                     } else {
-
                     }
                 }
-            } catch (error) {
-                console.error('Error fetching data:', error.message);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    };
 
-        getSharedPins();
+        
+    useEffect(() => {
+        fetchCurrentUser();
     }, []);
-
- 
+    
     useEffect(() => {
         if (!markers.find(marker => marker.id === selectedMarker?.id)) {
             setSelectedMarker(null);
@@ -545,16 +579,13 @@ const App = () => {
         var pin_id = selectedMarker.id
         console.log({ pin_id, comment, email})
         if (comment !== "") {
-            sendCommentToBackend({ pin_id, comment, email });
-            selectedMarker.comment.push({comment: comment , user: email});
+            sendCommentToBackend({ pin_id, comment, localStorage.getItem('email') });
+            selectedMarker.comment.push({comment: comment , user: localStorage.getItem('email')});
             document.getElementById('myInput').value = ''
             document.getElementById('myInput').placeholder = 'Comment Sent!'
         }
         else { document.getElementById('myInput').placeholder = 'Please Type Something' }
     }
-
-
-
 
     const placeNewMarker = () => {
         var title = document.querySelector('.title-box').value;
@@ -575,14 +606,14 @@ const App = () => {
                 title: title,
                 description: description,
                 date: date,
-                email: email,
+                email: localStorage.getItem('email'),
                 first_name: "You",
                 like: false,
                 comment: []
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+            sendCoordinatesToBackend({ email: localStorage.getItem('email'), lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -654,8 +685,7 @@ const App = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ value: info, pin_id: selectedMarker.id, email: email })
-
+                body: JSON.stringify({ value: info, pin_id: selectedMarker.id, email: localStorage.getItem('email') })
             });
 
             if (!response.ok) {
@@ -733,7 +763,7 @@ const App = () => {
                         <Box className="PinInfo" sx={pinModalStyle}>
                             <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                {selectedMarker.first_name} {selectedMarker.last_name}
+                                {selectedMarker.email}
                             </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
@@ -860,7 +890,10 @@ const App = () => {
                         <AccountCircleIcon className="accountcircle-icon" />
                     </button>
                     {userProfileOpen && (
-                        <UserProfile onClose={() => setUserProfileOpen(false)} />
+                        <UserProfile onClose={() => {
+                            setUserProfileOpen(false); // Close the UserProfile component
+                            getSharedPins(); // Call the getSharedPins function
+                        }} />
                     )}
                 </div>
                 <header className="plus-icon">
@@ -945,7 +978,16 @@ const App = () => {
                                         <React.Fragment key={item.lat}>
                                             <ListItem alignItems="flex-start">
                                                 <ListItemText
-                                                    primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                    primary={
+                                                        <React.Fragment>
+                                                            <Typography variant="subtitle1">
+                                                                {`${item.title}`}
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                {`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                            </Typography>
+                                                        </React.Fragment>
+                                                    }
                                                     secondary={
                                                         <React.Fragment>
                                                             <Typography
@@ -956,8 +998,8 @@ const App = () => {
                                                             >
                                                                 Date: {item.date}
                                                             </Typography>
-                                                            <Typography>
-                                                                {" Created by: " + item.first_name + " " + item.last_name}
+                                                            <Typography variant='body2'>
+                                                                {" Created by: " + item.email}
                                                             </Typography>
                                                         </React.Fragment>
                                                     }

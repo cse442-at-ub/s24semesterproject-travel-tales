@@ -17,52 +17,79 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
     exit(0);
 }
 
+// Current user ID
+$user_id1 = $_GET['user_id1']; // Assuming you're passing this as a GET parameter
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Prepare and execute SQL statement to select friend emails
+$sql_friends = "SELECT 
+                    CASE 
+                        WHEN user_id1 = ? THEN user_id2 
+                        ELSE user_id1 
+                    END AS friend_id
+                FROM friends_list 
+                WHERE user_id1 = ? OR user_id2 = ?";
+$stmt_friends = $conn->prepare($sql_friends);
+$stmt_friends->bind_param("iii", $user_id1, $user_id1, $user_id1);
+$stmt_friends->execute();
+$result_friends = $stmt_friends->get_result();
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Array to store friend emails
+$friend_emails = array();
+
+// Fetch friend emails
+while ($row_friends = $result_friends->fetch_assoc()) {
+    $friend_id = $row_friends['friend_id'];
+    
+    // Query the users table to get email of the friend
+    $sql_email = "SELECT email FROM users WHERE id = ?";
+    $stmt_email = $conn->prepare($sql_email);
+    $stmt_email->bind_param("i", $friend_id);
+    $stmt_email->execute();
+    $result_email = $stmt_email->get_result();
+    
+    // Fetch email
+    if ($row_email = $result_email->fetch_assoc()) {
+        $friend_emails[] = $row_email['email'];
+    }
+
+    // Close email statement
+    $stmt_email->close();
 }
 
+// Close friends statement
+$stmt_friends->close();
+
+// Array to store matched data
 $matchedData = array();
 
-$sql = "SELECT sp1.pin_id, sp1.shared_with, sp2.lat, sp2.lng, sp2.date, sp3.first_name, sp3.last_name
-        FROM SharedPins sp1
-        JOIN PinsInfo sp2 ON sp1.pin_id = sp2.pin_id
-        JOIN users sp3 ON sp2.email = sp3.email";
+// Fetch pins for friend emails
+foreach ($friend_emails as $email) {
+    // Query the PinsInfo table to get pins of the friend using their email
+    $sql_pins = "SELECT email, lat, lng, title, description, date, isPublic, pin_id FROM PinsInfo WHERE email = ? AND isPublic = 1";
+    $stmt_pins = $conn->prepare($sql_pins);
+    $stmt_pins->bind_param("s", $email);
+    $stmt_pins->execute();
+    $result_pins = $stmt_pins->get_result();
 
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $matchedData[] = array(
-            "first_name" => $row["first_name"],
-            "last_name" => $row["last_name"],
-            "email" => $row["shared_with"],
-            "lat" => $row["lat"],
-            "lng" => $row["lng"],
-            "date" => $row["date"]
-        );
+    // Fetch pins data
+    while ($row_pins = $result_pins->fetch_assoc()) {
+        $matchedData[] = $row_pins;
     }
-} else {
-    // No matches, set a message or specific value
-    $matchedData = array("message" => "No matching records found");
-}
 
-// Close the database connection
+    // Close pins statement
+    $stmt_pins->close();
+}
 
 // Return matched data as JSON
 echo json_encode($matchedData);
 
+// Close the connection
 $conn->close();
 ?>
