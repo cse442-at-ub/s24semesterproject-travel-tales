@@ -577,9 +577,9 @@ const App = () => {
     const sendcomment = () => { 
         var comment = document.getElementById('myInput').value;
         var pin_id = selectedMarker.id
-        console.log({ pin_id, comment, email})
+        console.log({ pin_id, comment, email: localStorage.getItem('email') })
         if (comment !== "") {
-            sendCommentToBackend({ pin_id, comment, localStorage.getItem('email') });
+            sendCommentToBackend({ pin_id, comment, email: localStorage.getItem('email') });
             selectedMarker.comment.push({comment: comment , user: localStorage.getItem('email')});
             document.getElementById('myInput').value = ''
             document.getElementById('myInput').placeholder = 'Comment Sent!'
