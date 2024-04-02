@@ -14,7 +14,7 @@ import Avatar from 'react-avatar-edit';
 
 const SettingsDialog = () => {
     const email = localStorage.getItem('email');
-    const [color, setColor] = useState('black');
+    const [color, setColor] = useState(null);
     const handleAlignment = (event, newColor) => {
         setColor(newColor);  
     };
@@ -24,11 +24,16 @@ const SettingsDialog = () => {
     const [buttonText, setButtonText] = useState("Confirm");
 
     const handleClick = () => {
-        if (buttonText === "Confirm") {
-            setButtonText("Profile Set!");
-        } else {
-            setButtonText("Confirm");
-        }
+        
+            if (color === null) {
+                setButtonText("Please a select profile picture")
+            }
+            else {
+                setButtonText("Profile Set!");
+                handleUpdateProfile()
+                setColor(null)
+            }
+        
     };
 
     const onCLose = () => {
@@ -176,7 +181,7 @@ const SettingsDialog = () => {
                                   </Box>
 
                                   <Button variant="contained" color="primary" onClick={() => {
-                                      handleUpdateProfile()
+                                      
                                       handleClick()
                                   }} sx={{ mt: 2 }}>
                                       {buttonText}
