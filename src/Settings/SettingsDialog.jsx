@@ -39,9 +39,9 @@ const SettingsDialog = () => {
         setPreview(view);
     }
 
-    useEffect(() => {
-        console.log(preview)
-    }, [preview])
+   // useEffect(() => {
+    //    console.log(preview)
+    //}, [preview])
 
 
   const handleLogout = () => {
