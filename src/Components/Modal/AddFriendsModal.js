@@ -1,17 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider, TextField } from '@mui/material';
 
 const AddFriendModal = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const suggestedFriends = [
-    { name: 'John Doe', mutualFriends: 10 },
-    { name: 'Jane Smith', mutualFriends: 15 },
-    { name: 'Alice Johnson', mutualFriends: 8 }
-  ];
+  const [usernames, setUsers] = useState([]);
 
-  const filteredFriends = suggestedFriends.filter(friend =>
-    friend.name.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchUsers.php`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+
+        const data = await response.json();
+        setUsers(data.users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    if (open) {
+      fetchUsers();
+    }
+  }, [open]);
+
+  const filteredUsernames = usernames.filter(username =>
+    username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSearchChange = (event) => {
@@ -19,7 +41,7 @@ const AddFriendModal = ({ open, onClose }) => {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} >
       <Box
         sx={{
           position: 'absolute',
@@ -47,7 +69,7 @@ const AddFriendModal = ({ open, onClose }) => {
             position: 'absolute',
             top: 0,
             left: 0,
-            margin: '15px', // Adjust the margin as needed
+            margin: '10px', // Adjust the margin as needed
             padding: '8px', // Adjust the padding as needed
             transition: 'background-color 0.3s', // Adjust the margin as needed
             '&:hover': {
@@ -59,8 +81,8 @@ const AddFriendModal = ({ open, onClose }) => {
         <Button onClick={onClose} variant="contained" color="primary">
           Back
         </Button>
-        <Typography variant="h3" gutterBottom>
-          Add Friends
+        <Typography variant="h5" gutterBottom fontWeight="bold">
+          ADD FRIEND
         </Typography>
         
         <TextField
@@ -73,19 +95,16 @@ const AddFriendModal = ({ open, onClose }) => {
         />
         
         <List>
-          {filteredFriends.map((friend, index) => (
-            <React.Fragment key={index}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <Typography variant="h6" padding={1}>{friend.name}</Typography>
-                  <Typography sx={{ fontFamily: '"Segoe UI"', fontSize: '0.8em', mt: 1 }}>
-                    {friend.mutualFriends} mutual friends
-                  </Typography>
-                </ListItemButton>
-              </ListItem>
-              {index < filteredFriends.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
+            {filteredUsernames.map((username, index) => (
+        <React.Fragment key={index}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <Typography variant="h6" padding={1}>{username}</Typography>
+            </ListItemButton>
+          </ListItem>
+          {index < filteredUsernames.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
         </List>
       </Box>
     </Modal>

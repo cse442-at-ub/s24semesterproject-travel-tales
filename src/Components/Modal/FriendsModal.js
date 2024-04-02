@@ -108,7 +108,7 @@ const FriendsPin = ({ open, onClose }) => {
   }, [open]);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open}>
       <Box
         sx={{
           position: 'absolute',
@@ -136,7 +136,7 @@ const FriendsPin = ({ open, onClose }) => {
             position: 'absolute',
             top: 0,
             left: 0,
-            margin: '15px', // Adjust the margin as needed
+            margin: '12px', // Adjust the margin as needed
             padding: '8px', // Adjust the padding as needed
             transition: 'background-color 0.3s', // Adjust the margin as needed
             '&:hover': {
@@ -148,7 +148,7 @@ const FriendsPin = ({ open, onClose }) => {
         <Button onClick={onClose} variant="contained" color="primary">
           Back
         </Button>
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           FRIENDS
         </Typography>
         
