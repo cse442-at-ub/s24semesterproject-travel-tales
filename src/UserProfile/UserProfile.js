@@ -31,20 +31,32 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const [profileData, setProfileData] = useState('black')
     const email = localStorage.getItem('email');
 
+
     useEffect(() => {
         const handleFetchProfile = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php?email=${email}`);
-            const data = await response.json();
-            setProfileData(data.profile);
-            
-        } catch (error) {
-            console.error('Error fetching profile:', error);
-            }
-        }; 
-        handleFetchProfile();
-    }, [email]);
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php?email=${email}`);
+                const data = await response.json();
+                setProfileData(data.profile)
 
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+        handleFetchProfile();
+
+    }, [email]);
+ 
+
+    const renderContent = () => {
+        if (/^data:image\/[a-z]+;base64,/.test(profileData)) {
+
+            return (<img style={{ width:"100%", maxWidth: '150px', maxHeight:'150px', margin: '2px 0'  }}  width="50px" height="50px" src={profileData} alt="Base64" />);
+
+        } else {
+            return(<AccountCircleIcon style={{ fontSize: 150, color: profileData, margin: '2px 0' }} />);
+        }
+    };
 
 
     const toggleDrawer = (isopen) => () => {
@@ -139,8 +151,9 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 </DialogContent>
             </Dialog>
 
-            <AccountCircleIcon style={{ fontSize: 150, color: profileData, margin: '2px 0' }} /> 
-
+            
+                {renderContent()}
+            
             <div
                 style={{
                     display: 'flex',

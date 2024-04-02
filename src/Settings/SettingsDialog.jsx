@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Box} from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -9,6 +9,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { red } from '@mui/material/colors';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Avatar from 'react-avatar-edit';
 
 
 const SettingsDialog = () => {
@@ -17,6 +18,31 @@ const SettingsDialog = () => {
     const handleAlignment = (event, newColor) => {
         setColor(newColor);  
     };
+
+    const [src, setsrc] = useState(null);
+    const [preview, setPreview] = useState('');
+    const [buttonText, setButtonText] = useState("Confirm");
+
+    const handleClick = () => {
+        if (buttonText === "Confirm") {
+            setButtonText("Profile Set!");
+        } else {
+            setButtonText("Confirm");
+        }
+    };
+
+    const onCLose = () => {
+        setPreview(null);
+    }
+
+    const onCrop = view => {
+        setPreview(view);
+    }
+
+    useEffect(() => {
+        console.log(preview)
+    }, [preview])
+
 
   const handleLogout = () => {
     //fetch logout.php
@@ -128,14 +154,32 @@ const SettingsDialog = () => {
                                   </ToggleButton>
                                       <ToggleButton value="Indigo">
                                           <AccountCircleIcon style={{ fontSize: 70, color: 'Indigo' }} />
-                                  </ToggleButton>
-                                      <ToggleButton value="Lime">
-                                          <AccountCircleIcon style={{ fontSize: 70, color: 'Lime' }} />
+                                      </ToggleButton>
+
+                                      <ToggleButton value= {preview} sx={{ width: 92, height: 92 }} >
+                                          < img src={preview}/>
                                   </ToggleButton>
                                   </ToggleButtonGroup>
 
-                                  <Button variant="contained" color="primary" onClick={handleUpdateProfile} sx={{ mt: 2 }}>
-                                      Confirm
+                                  <Box maxWidth={310}
+                                      maxHeight={310}
+                                      overflow="hidden"
+                                      >
+                                      <Avatar
+                                          width={300}
+                                          height={300}
+                                          onCrop={onCrop}
+                                          onClose={onCLose}
+                                          src={src}
+                                      />
+                                      
+                                  </Box>
+
+                                  <Button variant="contained" color="primary" onClick={() => {
+                                      handleUpdateProfile()
+                                      handleClick()
+                                  }} sx={{ mt: 2 }}>
+                                      {buttonText}
                                   </Button>
 
 
