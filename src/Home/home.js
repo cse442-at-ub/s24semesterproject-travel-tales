@@ -397,7 +397,6 @@ const App = () => {
     const [open3, setOpen3] = useState(false);//Comment box
     const handleOpen3 = () => setOpen3(true);
     const handleClose3 = () => setOpen3(false);
-
     const [heart, setheart] = useState(false);
     const like = () => setheart(true);
     const unlike = () => setheart(false);
