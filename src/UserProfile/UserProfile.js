@@ -46,6 +46,8 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
         handleFetchProfile();
 
     }, [email]);
+
+
  
 
     const renderContent = () => {
@@ -96,7 +98,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
             onClick={(e) => {
                 e.stopPropagation();
             }}
-            onKeyDown={toggleDrawer(false)}
+            //onKeyDown={toggleDrawer(false)}
         >
             <Typography variant="h5" gutterBottom>
                 PROFILE
