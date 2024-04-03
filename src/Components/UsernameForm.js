@@ -53,7 +53,7 @@ function UsernameForm() {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/updateUsername.php`, {
         method: 'POST',
-        credentials: 'include', // For session-based authentication
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -63,9 +63,8 @@ function UsernameForm() {
 
       if (data.code === 200) {
         setFetchedUsername(newUsername);
-        setError(''); // Clear any existing error
+        setError('');
       } else {
-        // Handle known error types based on code
         setError(data.error);
         setUsername(fetchedUsername);
       }
