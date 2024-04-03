@@ -75,24 +75,6 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
       <Typography variant="h5" gutterBottom>
         PROFILE
       </Typography>
-      <Button
-        onClick={onClose}
-        variant="contained"
-        color="primary"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          margin: '10px',
-          padding: '8px',
-          transition: 'background-color 0.3s',
-          '&:hover': {
-            backgroundColor: '#2196F3',
-          },
-        }}
-      >
-        Log Out
-      </Button>
       
 
       {/* Start: Settings Dialog */}
