@@ -262,9 +262,19 @@ const SettingsDialog = () => {
 
 
 
-    const handleLogout = () => {
-        //fetch logout.php
-    }
+    const handleLogout = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout.php`, {
+          method: 'POST', // Or 'GET', depending on your backend setup
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (data.success) {
+          navigate('/login');
+        }
+      } catch (error) {
+      }
+    };
 
     const handleDeleteAccount = () => {
         //fetch deleteAccount.php
