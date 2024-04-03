@@ -3,7 +3,7 @@ import { TextField, IconButton } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 
 function UsernameForm() {
-  const [username, setUsername] = useState('YourUsername'); // TODO: Update this to show real username from BE
+  const [username, setUsername] = useState('Username Here'); // TODO: Update this to show real username from BE
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
@@ -17,7 +17,7 @@ function UsernameForm() {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setIsEditing(false);
-      event.preventDefault(); // Prevents form submission and other unwanted behaviors
+      event.preventDefault();
     } else if (event.key === 'Escape') {
       setIsEditing(false);
       event.preventDefault();
