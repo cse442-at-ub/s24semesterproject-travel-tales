@@ -62,6 +62,7 @@ function UsernameForm() {
       const data = await response.json();
 
       if (data.code === 200) {
+        setFetchedUsername(newUsername);
         setError(''); // Clear any existing error
       } else {
         // Handle known error types based on code
