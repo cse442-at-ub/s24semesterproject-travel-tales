@@ -33,19 +33,29 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Fetch usernames from the database
-$usersQuery = "SELECT username FROM users";
+// Fetch the logged-in user's username from the database
+$user_id = $_SESSION['user_id'];
+$loggedInUserQuery = "SELECT username FROM users WHERE id = $user_id";
+$loggedInUserResult = $conn->query($loggedInUserQuery);
 
-$result = $conn->query($usersQuery);
+if ($loggedInUserResult->num_rows == 1) {
+    $loggedInUser = $loggedInUserResult->fetch_assoc()['username'];
 
-if ($result->num_rows > 0) {
-    $usernames = [];
-    while ($row = $result->fetch_assoc()) {
-        $usernames[] = $row['username'];
+    // Fetch usernames from the database excluding the username of the logged-in user
+    $usersQuery = "SELECT username FROM users WHERE username != '$loggedInUser'";
+    $result = $conn->query($usersQuery);
+
+    if ($result->num_rows > 0) {
+        $usernames = [];
+        while ($row = $result->fetch_assoc()) {
+            $usernames[] = $row['username'];
+        }
+        echo json_encode(["success" => true, "usernames" => $usernames]);
+    } else {
+        echo json_encode(["success" => false, "message" => "No users found in the database"]);
     }
-    echo json_encode(["success" => true, "usernames" => $usernames]);
 } else {
-    echo json_encode(["success" => false, "message" => "No users found in the database"]);
+    echo json_encode(["success" => false, "message" => "Failed to fetch logged-in user's username"]);
 }
 
 $conn->close();
