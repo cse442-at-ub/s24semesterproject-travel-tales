@@ -100,7 +100,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
                   </div>
                   <div>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
-                    <Typography>{pin.isPublic === 1 ? 'Yes' : 'No'}</Typography>
+                    <Typography>{pin.isPublic == 1 ? 'Yes' : 'No'}</Typography>
                   </div>
                 </Box>
               </AccordionDetails>
