@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -70,7 +69,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
         sx={{
           position: 'absolute',
           top: '50%',
-          left: '50%',
+          left: '30%',
           transform: 'translate(-50%, -50%)',
           borderRadius: 5,
           bgcolor: 'rgba(255, 255, 255, 1.0)',
@@ -78,7 +77,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
           boxShadow: 24,
           p: 3,
           width: '80vw',
-          maxWidth: '600px', 
+          maxWidth: '450px', 
           maxHeight: '80vh', 
           overflowY: 'auto', 
           textAlign: 'center', 
