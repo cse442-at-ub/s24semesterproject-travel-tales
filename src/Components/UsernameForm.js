@@ -4,6 +4,7 @@ import { Edit } from '@mui/icons-material';
 
 function UsernameForm() {
   const [username, setUsername] = useState('');
+  const [fetchedUsername, setFetchedUsername] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,6 +19,7 @@ function UsernameForm() {
 
         if (data.code === 200 && data.username) {
           setUsername(data.username);
+          setFetchedUsername(data.username);
         } else {
           console.error('Error fetching username:', data.error);
         }
@@ -64,9 +66,11 @@ function UsernameForm() {
       } else {
         // Handle known error types based on code
         setError(data.error);
+        setUsername(fetchedUsername);
       }
     } catch (error) {
       setError('Failed to update username due to a network error');
+      setUsername(fetchedUsername);
     }
   };
 
@@ -74,13 +78,16 @@ function UsernameForm() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       {/* TextField and Edit Icon */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center'}}>
         {isEditing ? (
           <TextField
             value={username}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            onBlur={() => setIsEditing(false)}
+            onBlur={() => {
+              setIsEditing(false);
+              setUsername(fetchedUsername);
+            }}
             autoFocus
           />
         ) : (
