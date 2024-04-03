@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { Button, Box } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -11,6 +11,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Avatar from 'react-avatar-edit';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from "react-router-dom";
+
 
 const getCurrentUserInfo = async () => {
     try {
@@ -39,7 +41,7 @@ const getCurrentUserInfo = async () => {
 const SettingsDialog = () => {
     const email = localStorage.getItem('email');
     const [color, setColor] = useState(null);
-    const [userInfo, setUserInfo] = useState([]);
+    const [userInfo, setUserInfo] = useState('');
 
     const handleAlignment = (event, newColor) => {
         setColor(newColor);
@@ -51,15 +53,25 @@ const SettingsDialog = () => {
     const [infoButton, setInfoButton] = useState("Confirm")
     const [passButton, setPassButton] = useState("Confirm")
     const [emailButton, setEmailButton] = useState("Confirm")
-    const [accordionOpen, setAccordionOpen] = useState(false);
+    const [error, setError] = useState('');
+    const [error2, setError2] = useState('');
+    const [error3, setError3] = useState('');
+    const navigate = useNavigate();
 
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        confirmEmail: '',
+        pass: '',
+        confirmPass: '',
+    });
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
                 const userData = await getCurrentUserInfo();
-                setUserInfo(userData);
-                //console.log(userData)
+                setUserInfo(userData.id);
             } catch (error) {
                 console.log(error)
             }
@@ -67,6 +79,14 @@ const SettingsDialog = () => {
         fetchCurrentUser();
     }, []);
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        //console.log(name)
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
 
     const handleClick = () => {
 
@@ -95,32 +115,151 @@ const SettingsDialog = () => {
     //    console.log(preview)
     //}, [preview])
 
-    const handleinfo = () => {
-        if (infoButton === "Confirm") {
+    const handleinfo = async (e) => {
+        setError('');
+        e.preventDefault();
+        if (infoButton === "Confirm" || infoButton === "Changes have been made") {
+
             setInfoButton("Are You Sure?")
         }
         else {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangeInfo.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({ firstName: formData.firstName, lastName: formData.lastName, user_id: userInfo }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setError(data.message);
+                    // Redirect to login page
+                    //navigate('/login');
+                } else {
+                    const errorData = await response.json();
+                    setError(errorData.message);
+                    setInfoButton('Confirm')
+                    return;
+                }
+            } catch (error) {
+                console.log(error)
+                setError('An error occurred. Please try again later.');
+                setInfoButton('Confirm')
+                return;
+            }
             setInfoButton("Changes have been made")
         }
     }
 
-    const handlepass = () => {
-        if (passButton === "Confirm") {
+    const handlepass = async (e) => {
+        e.preventDefault();
+        setError2('');
+        
+        if (passButton === "Confirm" || passButton === "Changes have been made") {
+            if (formData.pass !== formData.confirmPass) {
+                setError2('Passwords do not match.');
+                setFormData.pass = '';
+                setFormData.confirmPass = '';
+                return;
+            }
             setPassButton("Are You Sure?")
         }
         else {
+          
+        if (formData.pass !== formData.confirmPass) {
+            setError2('Passwords do not match.');
+            setFormData.pass = '';
+            setFormData.confirmPass = '';
+            return;
+            }
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangePass.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({pass: formData.pass, confirmPass: formData.confirmPass, user_id: userInfo }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setError2(data.message);
+                    // Redirect to login page
+                    //navigate('/login');
+                } else {
+                    const errorData = await response.json();
+                    setError2(errorData.message);
+                    setPassButton('Confirm')
+                    return;
+                }
+            } catch (error) {
+                console.log(error)
+                setError2('An error occurred. Please try again later.');
+                setPassButton('Confirm')
+                return;
+            }
             setPassButton("Changes have been made")
+            setFormData.pass = '';
+            setFormData.confirmPass = '';
         }
     }
 
-    const handleemail = () => {
-        if (emailButton === "Confirm") {
+    const handleemail = async (e) => {
+        e.preventDefault();
+        setError3('');
+        if (emailButton === "Confirm" || emailButton === "Changes have been made") {
+            if (formData.email !== formData.confirmEmail) {
+                setError3('Emails do not match.');
+                formData.Email = '';
+                formData.confirmEmail = '';
+                return;
+            }
             setEmailButton("Are You Sure?")
         }
         else {
+            if (formData.email !== formData.confirmEmail) {
+                setError3('Emails do not match.');
+                formData.Email = '';
+                formData.confirmEmail = '';
+                return;
+            }
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangeEmail.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+
+                    body: JSON.stringify({ email: formData.email, confirmEmail: formData.confirmEmail, user_id: userInfo }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setError3(data.message);
+                    // Redirect to login page
+                    navigate('/login');
+                } else {
+                    const errorData = await response.json();
+                    setError3(errorData.message);
+                    setEmailButton('Confirm')
+                    return;
+                }
+            } catch (error) {
+                console.log(error)
+                setError3('An error occurred. Please try again later.');
+                setEmailButton('Confirm')
+                return;
+            }
             setEmailButton("Changes have been made")
+            formData.Email = '';
+            formData.confirmEmail = '';
         }
     }
+
 
 
     const handleLogout = () => {
@@ -286,6 +425,7 @@ const SettingsDialog = () => {
                             <Typography>Change Info</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
+                            <form onSubmit={handleinfo}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -294,22 +434,20 @@ const SettingsDialog = () => {
                             }}>
 
                                 <label htmlFor="name"></label>
-                                <TextField required type="name" id="namechange1" label="First Name" variant="outlined"
+                                    <TextField onChange={handleChange}  name="firstName" required type="name" id="namechange1" label="First Name" variant="outlined"
                                     sx={{
                                         width: '100%', maxWidth: 300, margin: 0
                                     }}
                                 />
 
-                                <TextField required type="name" id="namechange2" label="Last Name" variant="outlined"
+                                    <TextField onChange={handleChange} required type="name" name="lastName" id="namechange2" label="Last Name" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
-
-                                <Button variant="contained" color="primary" onClick={() => {
-                                    handleinfo()
-                                    //handleClick()
-                                }} sx={{ mt: 2, margin: 1 }}>
+                                {error && <p style={{ color: 'red' }}>{error}</p>}
+                                <Button variant="contained" color="primary" type="submit"  sx={{ mt: 2, margin: 1 }}>
                                     {infoButton}
                                 </Button>
-                            </Box>
+                                </Box>
+                            </form>
                         </AccordionDetails>
                     </Accordion>
 
@@ -320,6 +458,7 @@ const SettingsDialog = () => {
                             <Typography>Change Email</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
+                            <form onSubmit={handleemail}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -328,21 +467,19 @@ const SettingsDialog = () => {
 
                             }}>
                                 <label htmlFor="email"></label>
-                                <TextField required type="email" id="emailchange1" label="New Email" variant="outlined"
+                                    <TextField onChange={handleChange} required type="email" name="email" id="emailchange1" label="New Email" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 0 }}
                                 />
 
-                                <TextField required type="email" id="emailchange2" label="Confirm New Email" variant="outlined"
+                                    <TextField onChange={handleChange} required type="email" name="confirmEmail" id="emailchange2" label="Confirm New Email" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
-
-                                <Button variant="contained" color="primary" onClick={() => {
-                                    handleemail()
-                                    //handleClick()
-                                }} sx={{ mt: 2, margin: 1 }}>
+                                {error3 && <p style={{ color: 'red' }}>{error3}</p>}
+                                <Button variant="contained" color="primary" type="submit" sx={{ mt: 2, margin: 1 }}>
                                     {emailButton}
                                 </Button>
 
-                            </Box>
+                                </Box>
+                            </form>
                         </AccordionDetails>
                     </Accordion>
 
@@ -353,6 +490,7 @@ const SettingsDialog = () => {
                             <Typography>Change Password</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
+                            <form onSubmit={handlepass}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -360,22 +498,21 @@ const SettingsDialog = () => {
                                 justifyContent: 'center',
 
                             }}>
+                              
                                 <label htmlFor="password"></label>
-                                <TextField required type="password" id="passchange1" label="New Password" variant="outlined"
+                                    <TextField onChange={handleChange} required type="password" name="pass" id="passchange1" label="New Password" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 0 }}
                                 />
 
-                                <TextField required type="password" id="passchange2" label="Confirm New Password" variant="outlined"
+                                    <TextField onChange={handleChange} required type="password" id="passchange2" name="confirmPass" label="Confirm New Password" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
-
-                                <Button variant="contained" color="primary" onClick={() => {
-                                    handlepass()
-                                    //handleClick()
-                                }} sx={{ mt: 2, margin: 1 }}>
+                                {error2 && <p style={{ color: 'red' }}>{error2}</p>}
+                                    <Button type="submit" variant="contained" color="primary" sx={{ mt: 2, margin: 1 }}>
                                     {passButton}
                                 </Button>
-
-                            </Box>
+                                
+                                </Box>
+                            </form>
                         </AccordionDetails>
                     </Accordion>
                     <Box sx={{
