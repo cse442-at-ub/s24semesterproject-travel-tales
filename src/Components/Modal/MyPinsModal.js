@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, Divider } from '@mui/material';
+import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import "./MyPinsModal.css";
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const MyPinsModal = ({ open, onClose, username }) => {
   const [pinsData, setPinsData] = useState([]);
   const [error, setError] = useState(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [deletedPinIndex, setDeletedPinIndex] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,11 +32,40 @@ const MyPinsModal = ({ open, onClose, username }) => {
     }
   }, [open, username]);
 
-  const handleAccordionClick =  (index) => {
-  }
+  const handleDeletePin = async (pin) => {
+    setDeletedPinIndex(pin);
+    console.log(pin.pin_id); // Access pin_id directly
+    setDeleteConfirmationOpen(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/deletePin.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pin_id: pin.pin_id, // Access pin_id directly
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete pin');
+      }
+  
+      console.log('Pin deleted successfully');
+    } catch (error) {
+      console.error('Error deleting pin:', error);
+    }
+  };
+  
+
+  const handleCloseDeleteConfirmation = () => {
+    setDeletedPinIndex(null);
+    setDeleteConfirmationOpen(false);
+    onClose();
+  };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={() => { onClose(); handleCloseDeleteConfirmation(); }}>
       <Box
         sx={{
           position: 'absolute',
@@ -48,28 +78,10 @@ const MyPinsModal = ({ open, onClose, username }) => {
           boxShadow: 24,
           p: 3,
           width: '80vw',
-          maxWidth: '600px', // Adjust the maximum width as needed
-          maxHeight: '80vh', // Set a maximum height for scrollability
-          overflowY: 'auto', // Enable vertical scrolling if content overflows
-          textAlign: 'center', // Center align the content
-          '& h4': {
-            color: 'black', // Change the title color
-            marginBottom: 2, // Add some space below the title
-          },
-          '& h5': {
-            color: 'black', // Change the pin label color
-          },
-          '& button': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            margin: '15px', // Adjust the margin as needed
-            padding: '8px', // Adjust the padding as needed
-            transition: 'background-color 0.3s', // Adjust the margin as needed
-            '&:hover': {
-              backgroundColor: '#2196F3', // Change the background color on hover
-            },
-          },
+          maxWidth: '600px', 
+          maxHeight: '80vh', 
+          overflowY: 'auto', 
+          textAlign: 'center', 
         }}
       >
         <ArrowBackIosNewIcon 
@@ -81,11 +93,12 @@ const MyPinsModal = ({ open, onClose, username }) => {
           MY PINS
         </Typography>
         <List>
-          {pinsData.map((pin, index) => (
+        {Array.isArray(pinsData) && pinsData.map((pin, index) => (
             <Accordion key={index}>
               <AccordionSummary
                 aria-controls={`panel${index + 1}-content`}
                 id={`panel${index + 1}-header`}
+                style={{ position: 'relative' }}
               >
                 <Typography variant="h6">
                   {pin.title}
@@ -93,7 +106,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
                 </Typography>   
               </AccordionSummary>
               <AccordionDetails sx={{ textAlign: 'left', position: 'relative' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Box sx={{ border: '1px solid black', display: 'flex', flexDirection: 'column', gap: '5px', p: 2 }}>
                   <div>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Likes:</Typography>
                     <Typography>{pin.likes}</Typography>
@@ -102,11 +115,37 @@ const MyPinsModal = ({ open, onClose, username }) => {
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
                     <Typography>{pin.isPublic == 1 ? 'Yes' : 'No'}</Typography>
                   </div>
+                  <DeleteIcon onClick={() => handleDeletePin(pin)} style={{ color: 'red', position: 'absolute', right: '25px', top: '20%', transform: 'translateY(-50%)' }} />
                 </Box>
               </AccordionDetails>
             </Accordion>
           ))}
         </List>
+        {deleteConfirmationOpen && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              borderRadius: 2,
+              bgcolor: 'rgba(255, 255, 255, 1.0)',
+              border: '2px solid #000',
+              boxShadow: 20,
+              p: 1,
+              width: '40vw',
+              maxWidth: '300px', 
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Pin has been deleted
+            </Typography>
+            <Button onClick={() => {
+              handleCloseDeleteConfirmation();     
+            }}>OK</Button>
+          </Box>
+        )}
       </Box>
     </Modal>
   );
