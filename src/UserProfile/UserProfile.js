@@ -101,7 +101,6 @@ const list = () => (
         <Typography variant="h5" gutterBottom>
             PROFILE
         </Typography>
-        <UsernameForm />
         <Button onClick={handleOpenSettings} sx={{
             position: 'absolute',
             top: 0,
@@ -133,8 +132,8 @@ const list = () => (
             </DialogContent>
         </Dialog>
 
-        
-            {renderContent()}
+        {renderContent()}
+        <UsernameForm />
         
         <div
             style={{
