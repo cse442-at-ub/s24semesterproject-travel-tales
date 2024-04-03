@@ -1,24 +1,38 @@
-import React from 'react';
-import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
-const MyPinsModal = ({ open, onClose }) => {
-  const pinsData = [
-    { label: 'New York City', info:'NY 10001' },
-    { label: 'Los Angeles', info: 'CA 90001' },
-    { label: 'Chicago', info: 'IL 60601' },
-    { label: 'Houston', info: 'TX 77001' },
-    { label: 'Phoenix', info: 'AZ 85001' },
-    { label: 'Philadelphia', info:'PA 19101' },
-    { label: 'San Antonio', info: 'TX 78201' },
-    { label: 'San Diego', info: 'CA 92101' },
-    { label: 'Dallas', info: 'TX 75201' },
-    { label: 'San Jose', info: 'CA 95101' },
-    { label: 'Austin', info: 'TX 73301' },
-    { label: 'Jacksonville', info: 'FL 32201' },
-    { label: 'Indianapolis', info: 'IN 46201' },
-    { label: 'San Francisco', info: 'CA 94101' },
-    { label: 'Columbus', info: 'OH 43201' },
-    // Add more pins as needed
-  ];
+import React, { useState, useEffect } from 'react';
+import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, Divider } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import "./MyPinsModal.css";
+
+
+
+const MyPinsModal = ({ open, onClose, username }) => {
+  const [pinsData, setPinsData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php?email=${localStorage.getItem('email')}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch pins data');
+        }
+        const pins = await response.json();
+        console.log(pins)
+        setPinsData(pins);
+      } catch (error) {
+        console.error('Error fetching pins data:', error);
+        setError(error.message || 'Failed to fetch pins data');
+      }
+    };
+
+    if (open) {
+      fetchData();
+    }
+  }, [open, username]);
+
+  const handleAccordionClick =  (index) => {
+  }
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -28,7 +42,7 @@ const MyPinsModal = ({ open, onClose }) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          borderRadius: 10,
+          borderRadius: 5,
           bgcolor: 'rgba(255, 255, 255, 1.0)',
           border: '2px solid #000',
           boxShadow: 24,
@@ -58,27 +72,39 @@ const MyPinsModal = ({ open, onClose }) => {
           },
         }}
       >
-        <Button 
-        onClick={onClose} variant="contained" color="primary">
-          Back
-        </Button>
+        <ArrowBackIosNewIcon 
+            className="leave-arrow" 
+            onClick={onClose} 
+            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+        ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
           MY PINS
         </Typography>
-        
         <List>
           {pinsData.map((pin, index) => (
-            <React.Fragment key={index}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <Typography variant="h6" padding={1}>{pin.label}</Typography>
-                  <Typography sx={{ fontFamily: '"Segoe UI"', fontSize: '0.8em', mt: 1 }}>
-                    {pin.info.replace(/State: (\w+), Zipcode: (\d+)/, 'State: $1, Zipcode: $2')}
-                  </Typography>
-                  </ListItemButton>
-              </ListItem>
-              {index < pinsData.length - 1 && <Divider />}
-            </React.Fragment>
+            <Accordion key={index}>
+              <AccordionSummary
+                aria-controls={`panel${index + 1}-content`}
+                id={`panel${index + 1}-header`}
+              >
+                <Typography variant="h6">
+                  {pin.title}
+                  <span style={{ marginLeft: '30px', fontSize: '0.8em' }}>{pin.date}</span>
+                </Typography>   
+              </AccordionSummary>
+              <AccordionDetails sx={{ textAlign: 'left', position: 'relative' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Likes:</Typography>
+                    <Typography>{pin.likes}</Typography>
+                  </div>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
+                    <Typography>{pin.isPublic === 1 ? 'Yes' : 'No'}</Typography>
+                  </div>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           ))}
         </List>
       </Box>
