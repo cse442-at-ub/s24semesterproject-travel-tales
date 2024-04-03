@@ -145,9 +145,7 @@ const list = () => (
                 gap: '0',
                 margin: '0px 0',
             }}
-
-            //onKeyDown={toggleDrawer(false)}
-
+        >
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
                 200 PINS |
             </Typography>
