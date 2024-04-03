@@ -3,7 +3,7 @@ import { TextField, IconButton } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 
 function UsernameForm() {
-  const [username, setUsername] = useState('YourUsername');
+  const [username, setUsername] = useState('YourUsername'); // TODO: Update this to show real username from BE
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
@@ -14,15 +14,13 @@ function UsernameForm() {
     setUsername(event.target.value);
   };
 
-  // Updated to handleKeyDown to reflect the use of onKeyDown event
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setIsEditing(false);
       event.preventDefault(); // Prevents form submission and other unwanted behaviors
     } else if (event.key === 'Escape') {
       setIsEditing(false);
-      // Optionally reset the username or handle escape specifically
-      event.preventDefault(); // Optional based on your use case
+      event.preventDefault();
     }
   };
 
@@ -32,7 +30,7 @@ function UsernameForm() {
         <TextField
           value={username}
           onChange={handleChange}
-          onKeyDown={handleKeyDown} // Use onKeyDown instead of onKeyPress
+          onKeyDown={handleKeyDown}
           onBlur={() => setIsEditing(false)}
           autoFocus
         />
