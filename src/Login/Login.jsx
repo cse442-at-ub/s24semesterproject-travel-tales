@@ -35,8 +35,6 @@ export const Login = (props) => {
             });
             const data = await response.json();
             if (data.code === 200) {
-                // TODO: Remove this, write a utils function for getting email
-                localStorage.setItem('email', data.email);
                 navigate('/');
             } else {
                 setError(data.error || 'Login failed');
