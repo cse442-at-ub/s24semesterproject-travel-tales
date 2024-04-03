@@ -60,37 +60,43 @@ function UsernameForm() {
       const data = await response.json();
 
       if (data.code === 200) {
-        console.log("Username updated successfully");
         setError(''); // Clear any existing error
-        // Optionally, refresh username display or confirm update to user
       } else {
         // Handle known error types based on code
         setError(data.error);
       }
     } catch (error) {
-      console.error('Error updating username:', error);
       setError('Failed to update username due to a network error');
     }
   };
 
 
   return (
-    <div>
-      {error && <div style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
-      {isEditing ? (
-        <TextField
-          value={username}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onBlur={() => setIsEditing(false)}
-          autoFocus
-        />
-      ) : (
-        <div>
-          {username}
-          <IconButton onClick={handleEdit}>
-            <Edit />
-          </IconButton>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      {/* TextField and Edit Icon */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {isEditing ? (
+          <TextField
+            value={username}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onBlur={() => setIsEditing(false)}
+            autoFocus
+          />
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {username}
+            <IconButton onClick={handleEdit}>
+              <Edit />
+            </IconButton>
+          </div>
+        )}
+      </div>
+
+      {/* Error Message Container */}
+      {error && (
+        <div style={{ color: 'red', marginTop: '10px', textAlign: 'center', width: '100%' }}>
+          {error}
         </div>
       )}
     </div>
