@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import UsernameForm from '../Components/UsernameForm';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -96,12 +97,11 @@ const list = () => (
         onClick={(e) => {
             e.stopPropagation();
         }}
-        onKeyDown={toggleDrawer(false)}
     >
         <Typography variant="h5" gutterBottom>
             PROFILE
         </Typography>
-
+        <UsernameForm />
         <Button onClick={handleOpenSettings} sx={{
             position: 'absolute',
             top: 0,
