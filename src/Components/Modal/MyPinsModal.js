@@ -69,7 +69,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
         sx={{
           position: 'absolute',
           top: '50%',
-          left: '30%',
+          left: '50%',
           transform: 'translate(-50%, -50%)',
           borderRadius: 5,
           bgcolor: 'rgba(255, 255, 255, 1.0)',
@@ -114,7 +114,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
                     <Typography>{pin.isPublic == 1 ? 'Yes' : 'No'}</Typography>
                   </div>
-                  <DeleteIcon onClick={() => handleDeletePin(pin)} style={{ color: 'red', position: 'absolute', right: '25px', top: '20%', transform: 'translateY(-50%)' }} />
+                  <Button onClick={() => handleDeletePin(pin)} style={{ backgroundColor: 'red', color: 'white', position: 'absolute', right: '25px', top: '20%', transform: 'translateY(-50%)' }} >Delete</Button>
                 </Box>
               </AccordionDetails>
             </Accordion>
