@@ -10,16 +10,15 @@ import { useNavigate } from 'react-router-dom';
 const SettingsDialog = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
-    //fetch logout.php
+    
   }
   
   // Delete account functionality
   const [errorMessage, setErrorMessage] = useState('');
   const deleteAccount = () => {
-    //fetch deleteAccount.php
     fetch(`${process.env.REACT_APP_API_BASE_URL}/deleteAccount.php`, {
       method: 'POST',
-      credentials: 'include', // Needed to include session cookie
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
