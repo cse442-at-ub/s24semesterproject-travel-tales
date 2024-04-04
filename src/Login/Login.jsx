@@ -4,12 +4,11 @@ import "./Login.css";
 import BannerImage from "../assets/Login/Background.png"
 import Travel_Tales from "../assets/Login/Title Section.png"
 
-
 export const Login = (props) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        email: '',
+        identifier: '',
         pass: ''
     });
     const [error, setError] = useState('');
@@ -36,8 +35,7 @@ export const Login = (props) => {
             });
             const data = await response.json();
             if (data.code === 200) {
-                // Redirect user to homepage
-                navigate('/'); // Redirect to homepage route
+                navigate('/');
             } else {
                 setError(data.error || 'Login failed');
             }
@@ -45,34 +43,6 @@ export const Login = (props) => {
             setError('An error occurred. Please try again later.'); 
         }
     };
-
-    // const [email, setEmail] = useState('');
-    // const [pass, setPass] = useState('');
-    // const [emailError, setEmailError] = useState('')
-    // const [passwordError, setPasswordError] = useState('')
-
-    // old submit handler
-    // const onButtonClick = () => {
-    //     setEmailError('')
-    //     setPasswordError('')
-
-    //     // Check if the user has entered both fields correctly
-    //     if ('' === email) {
-    //         setEmailError('Please enter your email')
-            
-    //     }
-
-    //     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    //         setEmailError('Please enter a valid email')
-            
-    //     }
-
-    //     if ('' === pass) {
-    //         setPasswordError('Please enter a password')
-            
-    //     }
-    //     return
-    // }
 
     return (
         <div className='Login'>
@@ -83,16 +53,15 @@ export const Login = (props) => {
                         <img src={Travel_Tales} alt="Travel_Tales" />
                     </div>
 
-                    <label htmlFor="email"></label>
+                    <label htmlFor="identifier"></label>
                     <input
                         onChange={handleChange}
-                        id="email"
-                        type="email"
-                        name="email"
-                        placeholder="Email"
+                        id="identifier"
+                        type="text"
+                        name="identifier"
+                        placeholder="Email or Username"
                         required
                     />
-                    {/* <label className="errorLabel">{emailError}</label> */}
                     <label htmlFor="pass"></label>
                     <input 
                         onChange={handleChange}
@@ -102,7 +71,6 @@ export const Login = (props) => {
                         placeholder="Password"
                         required
                     />
-                    {/* <label className="errorLabel">{passwordError}</label> */}
                     <button type="submit" className="login-button">Log In</button>
                     <Link className="link" to="/Forgotpassword" >Forgot Password?</Link>
                     <Link className="link" to="/signUp" >Create an account</Link>
