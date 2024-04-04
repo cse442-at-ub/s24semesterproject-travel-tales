@@ -3,55 +3,56 @@
 session_start();
 
 require 'db.php';
-//forces HTTPS
-if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit();
-}
-if (isset($_SERVER['HTTPS_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400'); // cache for 1 day
-}
-header('Access-Control-Allow-Origin: http://localhost:3000');
-header('Access-Control-Allow-Credentials: true'); 
+
+// Default response headers
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
+if ($allowCORS) {
+    // Respond to preflight requests
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        }
+        header('Access-Control-Allow-Credentials: true');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+        header('Access-Control-Max-Age: 86400'); // cache for 1 day
+        exit(0);
+    } else if (isset($_SERVER['HTTP_ORIGIN'])) {
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header('Access-Control-Allow-Credentials: true');
+    }
+} else {
+    if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+        header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        exit();
+    }
 }
-// Check if the request is POST for security
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get user ID from the session or request (adjust as necessary)
-    // This is a placeholder - implement your authentication mechanism
     $userId = $_SESSION['user_id'] ?? null;
 
     if ($userId != null) {
-        // Prepare the SQL statement to avoid SQL injection
-        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->bind_param("i", $userId);
+        $stmtPins = $conn->prepare("DELETE FROM PinsInfo WHERE user_id = ?");
+        $stmtPins->bind_param("i", $userId);
+        $stmtPinsExecuted = $stmtPins->execute();
 
-        if ($stmt->execute()) {
-            // Successfully deleted the user
+        $stmtUser = $conn->prepare("DELETE FROM users WHERE id = ?"); // delete users pins
+        $stmtUser->bind_param("i", $userId);
+        $stmtUserExecuted = $stmtUser->execute();
+
+        if ($stmtPinsExecuted && $stmtUserExecuted) {
+            // Successfully deleted the user and their pins
             session_unset();
             session_destroy();
-            echo json_encode(["success" => true, "message" => "Account deleted successfully."]);
+            echo json_encode(["success" => true, "message" => "Account and related data deleted successfully."]);
         } else {
-            // Handle error, e.g., user not found or DB error
-            echo json_encode(["success" => false, "message" => "Account deletion failed."]);
+            echo json_encode(["success" => false, "message" => "Deletion failed."]);
         }
     } else {
         echo json_encode(["success" => false, "message" => "Authentication required."]);
     }
 } else {
-    // Invalid request method
     header("HTTP/1.1 405 Method Not Allowed");
     echo json_encode(["success" => false, "message" => "Method not allowed."]);
 }
