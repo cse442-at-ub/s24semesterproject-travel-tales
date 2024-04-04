@@ -35,7 +35,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
   }
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open}>
       <Box
         sx={{
           position: 'absolute',
@@ -63,7 +63,7 @@ const MyPinsModal = ({ open, onClose, username }) => {
             position: 'absolute',
             top: 0,
             left: 0,
-            margin: '15px', // Adjust the margin as needed
+            margin: '10px', // Adjust the margin as needed
             padding: '8px', // Adjust the padding as needed
             transition: 'background-color 0.3s', // Adjust the margin as needed
             '&:hover': {
@@ -72,12 +72,11 @@ const MyPinsModal = ({ open, onClose, username }) => {
           },
         }}
       >
-        <ArrowBackIosNewIcon 
-            className="leave-arrow" 
-            onClick={onClose} 
-            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
-        ></ArrowBackIosNewIcon>
-        <Typography variant="h3" gutterBottom>
+        <Button 
+        onClick={onClose} variant="contained" color="primary">
+          Back
+        </Button>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           MY PINS
         </Typography>
         <List>
