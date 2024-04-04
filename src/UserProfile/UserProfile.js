@@ -234,7 +234,6 @@ const UserProfile = ({ onClose }) => {
     const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 
     const handlePinsButtonClick = () => {
-        // Close the drawer and trigger the callback to open the MyPins modal
         setDrawerOpen(true);
         setMyPinsModalOpen(false);
         onClose();

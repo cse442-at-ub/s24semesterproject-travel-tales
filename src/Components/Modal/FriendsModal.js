@@ -76,19 +76,9 @@
 // export default FriendsPin;
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
-import AddFriendModal from './AddFriendsModal';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
-
-
 
 const FriendsPin = ({ open, onClose }) => {
-const [friends, setFriends] = useState([]);
-const [AddFriendModalOpen, setAddFriendModalOpen] = useState(false);
-
-const handleAddFriendButtonClick = () => {
-    setAddFriendModalOpen(true);
-  }
+  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -118,7 +108,7 @@ const handleAddFriendButtonClick = () => {
   }, [open]);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open}>
       <Box
         sx={{
           position: 'absolute',
@@ -146,7 +136,7 @@ const handleAddFriendButtonClick = () => {
             position: 'absolute',
             top: 0,
             left: 0,
-            margin: '15px', // Adjust the margin as needed
+            margin: '12px', // Adjust the margin as needed
             padding: '8px', // Adjust the padding as needed
             transition: 'background-color 0.3s', // Adjust the margin as needed
             '&:hover': {
@@ -155,23 +145,10 @@ const handleAddFriendButtonClick = () => {
           },
         }}
       >
-        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} />
-
-        <Button
-            onClick={handleAddFriendButtonClick}
-            variant="contained"
-            color="primary"
-            style={{ position: 'absolute', top: '5%', left: '73%', width: '20%', backgroundColor: 'green'}}
-            >
-            Add Friends
+        <Button onClick={onClose} variant="contained" color="primary">
+          Back
         </Button>
-        <ArrowBackIosNewIcon 
-            className="leave-arrow" 
-            onClick={onClose} 
-            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
-        ></ArrowBackIosNewIcon>
-        
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           FRIENDS
         </Typography>
         
