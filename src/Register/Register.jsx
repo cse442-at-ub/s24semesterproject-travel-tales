@@ -12,6 +12,7 @@ export const Register = (props) => {
         firstName: '',
         lastName: '',
         email: '',
+        username: '',
         pass: '',
         confirmPass: '',
     });
@@ -59,39 +60,6 @@ export const Register = (props) => {
         }
     }
 
-    // const onButtonClick = () => {
-    //     setEmailError('')
-    //     setPasswordError('')
-    //     setFirstNameError('')
-    //     setLastNameError('')
-
-    //     if ('' === firstName && setFirstNameError !== '' ) {
-    //         setFirstNameError('Please enter your first name')
-       
-    //     }
-        
-    //     if ('' === lastName) {
-    //         setLastNameError('Please enter your last name')
-            
-    //     }
-
-    //     if ('' === email) {
-    //         setEmailError('Please enter your email')
-            
-    //     }
-
-    //     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-    //         setEmailError('Please enter a valid email')
-            
-    //     }
-
-    //     if ('' === pass) {
-    //         setPasswordError('Please enter a password')
-            
-    //     }
-    //     return
-    // }
-
     return (
         <div className="Register">
 
@@ -135,6 +103,17 @@ export const Register = (props) => {
                 />
                 {/* <label className="errorLabel">{emailError}</label> */}
 
+                <label htmlFor="username"></label>
+                <input
+                    onChange={handleChange}
+                    id="username"
+                    type="username"
+                    name="username"
+                    placeholder="Username"
+                    required
+                />
+                {/* <label className="errorLabel">{emailError}</label> */}
+
                 <label htmlFor="password"></label>
                 <input
                     onChange={handleChange}
@@ -159,7 +138,7 @@ export const Register = (props) => {
                 {message && <p style={{ color: 'green' }}>{message}</p>}
 
                 <button type="submit" className="create-new-acc">Create New Account</button>
-                <Link className="link" to="/login" >Alread have an Account?</Link>
+                <Link className="link" to="/login" >Already have an Account?</Link>
             </form>
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
