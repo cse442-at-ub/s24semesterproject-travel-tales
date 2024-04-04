@@ -76,7 +76,7 @@ function UsernameForm() {
 
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       {/* TextField and Edit Icon */}
       <div style={{ display: 'flex', alignItems: 'center'}}>
         {isEditing ? (

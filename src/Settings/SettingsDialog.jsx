@@ -276,8 +276,28 @@ const SettingsDialog = () => {
       }
     };
 
+    // Delete account functionality
+    const [errorMessage, setErrorMessage] = useState('');
     const handleDeleteAccount = () => {
-        //fetch deleteAccount.php
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/deleteAccount.php`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setErrorMessage('');
+          navigate('/login');
+        } else {
+          setErrorMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        setErrorMessage('An error occurred while trying to delete the account.')
+      });
     }
 
     // Function to handle updating profile data
@@ -538,6 +558,7 @@ const SettingsDialog = () => {
                         <Button variant="contained" color="error" onClick={handleDeleteAccount} sx={{ mt: 2 }}>
                             Delete Account
                         </Button>
+                        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
                     </Box>
                 </AccordionDetails>
             </Accordion>

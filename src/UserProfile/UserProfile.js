@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import UsernameForm from '../Components/UsernameForm';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -73,7 +74,6 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
       onClick={(e) => {
         e.stopPropagation();
       }}
-      onKeyDown={toggleDrawer(false)}
     >
       <Typography variant="h5" gutterBottom>
         PROFILE
@@ -111,7 +111,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
       {/* End: Settings Dialog */}
 
       <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
-
+      <UsernameForm />
       <Button onClick={handleAddFriendButtonClick} variant="contained" color="primary" style={{ marginTop: 10 }}>
         Add Friend
       </Button>
