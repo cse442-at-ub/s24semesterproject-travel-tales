@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include_once('db.php');
 
@@ -28,7 +29,7 @@ if($allowCORS) {
     if (isset($_SERVER['HTTP_ORIGIN'])) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
         header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Max-Age: 86400'); // cache for 1 day
+        header('Access-Control-Max-Age: 86400');
     }
     header('Access-Control-Allow-Origin: http://localhost:3000');
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
@@ -47,33 +48,22 @@ if($allowCORS) {
     }
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-$identifier = $data['identifier'];
-$pass = $data['pass'];
-
-if (isset($identifier) && isset($pass)) {
-    if ($identifier != "" && $pass != "") {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $identifier, $identifier);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 1) {
-            $user = $result->fetch_assoc();
-            if (password_verify($pass, $user['pass'])) {
-                $_SESSION['user_id'] = $user['id'];
-                echo json_encode(["code" => 200, "message" => "Login successful"]);
-            } else {
-                echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-            }
-        } else {
-            echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-        }
-    } else {
-        echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
-    }
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["code" => 401, "error" => "User not logged in"]);
 } else {
-    echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+    $user_id = $_SESSION['user_id'];
+    
+    $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        echo json_encode(["code" => 200, "username" => $user['username']]);
+    } else {
+        echo json_encode(["code" => 404, "error" => "User not found"]);
+    }
 }
 
 $conn->close();

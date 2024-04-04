@@ -1,14 +1,17 @@
 <?php
 include_once('db.php');
+
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
+
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -25,47 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
+function sendErrorResponse($code, $message) {
+    http_response_code($code);
+    echo json_encode(['message' => $message]);
+    exit();
+}
+
 $data = json_decode(file_get_contents("php://input"), true);
-$firstName = $data['firstName'];
-$lastName = $data['lastName'];
-$email = $data['email'];
-$username = $data['username'];
 $pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
+$user_id = $data['user_id'];
 
-// Check if a email already exists
-$check_if_exists = "SELECT email FROM users WHERE email = ?";
-$stmt = $conn->prepare($check_if_exists);
-
-$stmt->bind_param("s", $email);
-$stmt->execute();
-
-$user_exists = $stmt->get_result();
-if ($user_exists->num_rows > 0) { // Email is already in the DB
-    http_response_code(400);
-    die(json_encode(['message' => 'An account with this email already exists.']));
-}
-
-// Check if a username already exists
-$check_username = "SELECT username FROM users WHERE username = ?";
-$stmt = $conn->prepare($check_username);
-
-$stmt->bind_param("s", $username);
-$stmt->execute();
-
-$user_exists = $stmt->get_result();
-if ($user_exists->num_rows > 0) { // Username is already in the DB
-    http_response_code(400);
-    die(json_encode(['message' => 'An account with this username already exists.']));
-} 
-
-// Check if the username contains any whitespace
-if (preg_match('/\s/', $username)) {
-    http_response_code(400);
-    die(json_encode(['message' => 'The username cannot contain any spaces.']));
-}
-
-// check if passwords match
 if ($pass !== $confirmPass) {
     http_response_code(400);
     die(json_encode(['message' => 'Passwords do not match.']));
@@ -105,25 +78,35 @@ if (!preg_match($pattern, $pass)) {
     die(json_encode(['message' => 'Password requires at least one number.']));
 }
 
-// hash and salt password
 $pass = password_hash($pass, PASSWORD_DEFAULT);
 
-if(isset($email) && isset($pass)) {
-    if($email != "" and $pass != ""){
-        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, username, pass) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $firstName, $lastName, $email, $username, $pass);
-        
-        if($stmt->execute()) {
-            http_response_code(201);
-            echo json_encode(['message' => 'Record inserted successfully']);
+if(isset($user_id) && isset($pass)) {
+    if($user_id != "" and $pass != ""){s
+        // Check if user_id exists in the database
+        $stmt_check = $conn->prepare("SELECT id FROM users WHERE id = ?");
+        $stmt_check->bind_param("s", $user_id);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+
+        if($result_check->num_rows > 0) {
+            // Update the password for the user with the given user_id
+            $stmt_update = $conn->prepare("UPDATE users SET pass = ? WHERE id = ?");
+            $stmt_update->bind_param("si", $pass, $user_id);
+            if($stmt_update->execute()) {
+                http_response_code(200);
+                echo json_encode(['message' => 'Password updated successfully']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['message' => 'Failed to update password']);
+            }
         } else {
-            http_response_code(500);
-            echo json_encode(['message' => 'Failed to insert record']);
+            http_response_code(404);
+            echo json_encode(['message' => 'User not found']);
         }
     }
 } else {
     http_response_code(400);
-    echo json_encode(['message' => 'Please provide username and email']);
+    echo json_encode(['message' => 'Please provide user_id and password']);
 }
 
 $conn->close();

@@ -6,6 +6,31 @@
     border: none;
 }
 
+.comment-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 25%;
+    left: 20%;
+}
+
+.comment-box {
+    position: center;
+    top: 35%;
+    left: 5%;
+    width: 90%;
+    margin-top: 10px;
+    padding: 1rem;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 18px; /* Set font size to 16 pixels */
+}
+
 .shared-pins-icon {
     position: fixed;
     border: none;
@@ -104,7 +129,7 @@
     height: 13px;
     margin: 0.25rem 0;
     padding: 1rem;
-    border-radius: 10px; 
+    border-radius: 10px;
     overflow: hidden;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 18px; /* Set font size to 16 pixels */
@@ -112,21 +137,21 @@
 
 .description-box {
     position: absolute;
-    top: 35%; 
+    top: 35%;
     left: 5%;
     width: 85%;
     height: 30%;
     margin: 0.25rem 0;
     padding: 1rem;
     flex-wrap: wrap;
-    border-radius: 10px; 
+    border-radius: 10px;
     overflow-wrap: break-word;
     word-break: break-all;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 18px; /* Set font size to 16 pixels */
-  }
+}
 
-  .make-public {
+.make-public {
     position: absolute;
     top: 75%;
     left: 10%;
@@ -136,14 +161,14 @@
     height: 16px;
 }
 
-    .switch {
-        position: absolute;
-        top: 74%;
-        right: 10%;
-        transform: scale(2.0);
-        background: transparent;
-        border: none;
-    }
+.switch {
+    position: absolute;
+    top: 74%;
+    right: 10%;
+    transform: scale(2.0);
+    background: transparent;
+    border: none;
+}
 
 
 @media (max-width: 800px) {
@@ -154,10 +179,12 @@
         height: 15%;
         border: none;
     }
+
     .modal {
         height: 55%;
         width: 35%;
     }
+
     .title-words {
         position: absolute;
         top: 13%;
@@ -167,6 +194,7 @@
         width: 68px;
         height: 20px;
     }
+
     .description {
         position: absolute;
         top: 30%;
@@ -175,6 +203,7 @@
         width: 168px;
         height: 25px;
     }
+
     .leave-arrow {
         position: absolute;
         top: 2%;
@@ -185,6 +214,7 @@
         transform: scale(1.8);
         background-color: transparent;
     }
+
     .title-box {
         position: absolute;
         top: 18%;
@@ -194,26 +224,28 @@
         height: 13px;
         margin: 0.25rem 0;
         padding: 1rem;
-        border-radius: 10px; 
+        border-radius: 10px;
         overflow: hidden;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-size: 18px; /* Set font size to 16 pixels */
     }
+
     .description-box {
         position: absolute;
-        top: 35%; 
+        top: 35%;
         left: 2%;
         width: 85%;
         height: 30%;
         margin: 0.25rem 0;
         padding: 1rem;
         flex-wrap: wrap;
-        border-radius: 10px; 
+        border-radius: 10px;
         overflow-wrap: break-word;
         word-break: break-all;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-size: 18px; /* Set font size to 16 pixels */
     }
+
     .make-public {
         position: absolute;
         top: 75%;
@@ -223,6 +255,7 @@
         width: 165px;
         height: 16px;
     }
+
     .switch {
         position: absolute;
         top: 74%;
@@ -243,4 +276,11 @@
 
 }
 
-
+@media (max-width: 1000px) {
+    .PinInfo {
+        position: absolute;
+        height: 80%;
+        width: 75%;
+        left: 50%;
+    }
+}
