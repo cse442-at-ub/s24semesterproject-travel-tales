@@ -32,13 +32,13 @@
 }
 
 .shared-pins-icon {
-    position: fixed;
+    position: absolute;
     border: none;
     background-color: transparent;
-    height: 14vmin;
-    width: 14vmin;
-    bottom: 7vmin;
-    left: 10vmin;
+    bottom: 5vmin;
+    left: 5vmin;
+    height: 112px;
+    width: 112px;
 }
 
 .SharedPinsContainer {
@@ -169,6 +169,13 @@
     background: transparent;
     border: none;
 }
+
+@media (max-width: 767px) {
+    .shared-pins-icon {
+      height: 15vmin;
+      width: 15vmin;
+    }
+  }
 
 
 @media (max-width: 800px) {
