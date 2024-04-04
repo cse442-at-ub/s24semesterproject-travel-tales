@@ -202,9 +202,10 @@ const SettingsDialog = () => {
                 setPassButton('Confirm')
                 return;
             }
-            setPassButton("Changes have been made")
-            setFormData.pass = '';
-            setFormData.confirmPass = '';
+            handleLogout()
+            setEmailButton("Changes have been made")
+            formData.Email = '';
+            formData.confirmEmail = ''
         }
     }
 
@@ -240,8 +241,7 @@ const SettingsDialog = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setError3(data.message);
-                    // Redirect to login page
-                    navigate('/login');
+               
                 } else {
                     const errorData = await response.json();
                     setError3(errorData.message);
@@ -254,6 +254,7 @@ const SettingsDialog = () => {
                 setEmailButton('Confirm')
                 return;
             }
+            handleLogout()
             setEmailButton("Changes have been made")
             formData.Email = '';
             formData.confirmEmail = '';
@@ -264,6 +265,7 @@ const SettingsDialog = () => {
 
     const handleLogout = () => {
         //fetch logout.php
+ 
     }
 
     const handleDeleteAccount = () => {
@@ -304,9 +306,11 @@ const SettingsDialog = () => {
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        p: 5,
+                        //p: 5,
                     }}>
-                        <Accordion>
+                        <Accordion sx={{
+                            width: '100%', maxWidth: 400, margin: 0
+                        }}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
@@ -320,7 +324,7 @@ const SettingsDialog = () => {
                                     display: 'flex',
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    justifyContent: 'space-around',
+                                    justifyContent: 'center',
                                     flexWrap: 'wrap',
                                     border: 0
                                 }}>
@@ -334,7 +338,7 @@ const SettingsDialog = () => {
                                             display: 'flex',
                                             flexDirection: 'row',
                                             alignItems: 'center',
-                                            justifyContent: 'space-around',
+                                            justifyContent: 'center',
                                             flexWrap: 'wrap',
                                             border: 0
 
@@ -380,13 +384,17 @@ const SettingsDialog = () => {
                                         </ToggleButton>
                                     </ToggleButtonGroup>
 
-                                    <Box maxWidth={310}
-                                        maxHeight={310}
-                                        overflow="hidden"
+                                    <Box 
+                                        sx={{
+                                            width: '100%', maxWidth: 300, maxHeight: 400, margin: 0, objectfit: 'contain', overflow: 'hidden'
+                                        }}
+                                        //object-fit='contain'
+                                        
                                     >
                                         <Avatar
-                                            width={300}
-                                            height={300}
+                                            width= '200'
+                                            height= '200'
+                                            //object-fit='contain'
                                             onCrop={onCrop}
                                             onClose={onClose}
                                             src={src}
@@ -400,8 +408,6 @@ const SettingsDialog = () => {
                                     }} sx={{ mt: 2 }}>
                                         {buttonText}
                                     </Button>
-
-
                                 </Box>
                             </AccordionDetails>
                         </Accordion>
@@ -477,7 +483,6 @@ const SettingsDialog = () => {
                                 <Button variant="contained" color="primary" type="submit" sx={{ mt: 2, margin: 1 }}>
                                     {emailButton}
                                 </Button>
-
                                 </Box>
                             </form>
                         </AccordionDetails>

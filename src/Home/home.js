@@ -400,7 +400,7 @@ const App = () => {
     const [heart, setheart] = useState(false);
     const like = () => setheart(true);
     const unlike = () => setheart(false);
-
+    const [userProfile, setUserProfile] = useState(null)
 
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -482,9 +482,18 @@ const App = () => {
 
                 if (data.success) {
                     data.data.forEach(coordinate => {
+                        
+                        if (/^data:image\/[a-z]+;base64,/.test(coordinate.profile)) {
+
+                            coordinate.profile = (<img style={{ width: "100%", maxWidth: '150px', maxHeight: '150px', margin: '2px 0' }} width="50px" height="50px" src={coordinate.profile} alt="Base64" />);
+
+                        } else {
+                            coordinate.profile = (<AccountCircleIcon style={{ fontSize: 150, color: coordinate.profile, margin: '2px 0' }} />);
+                        }
                         if (coordinate.email === localStorage.getItem('email')) {
                             coordinate.first_name = "You"
                             coordinate.last_name = ""
+                            setUserProfile(coordinate.profile)
                         }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
@@ -568,7 +577,8 @@ const App = () => {
             last_name: coordinates.last_name,
             email: coordinates.email,
             comment: coordinates.comments,
-            like: coordinates.isLiked
+            like: coordinates.isLiked,
+            profile: coordinates.profile
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
@@ -608,7 +618,9 @@ const App = () => {
                 email: localStorage.getItem('email'),
                 first_name: "You",
                 like: false,
-                comment: []
+                comment: [],
+                profile: UserProfile
+                
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -760,7 +772,7 @@ const App = () => {
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
-                            <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+                            {UserProfile()}
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.email}
                             </Typography>

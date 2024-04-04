@@ -101,7 +101,7 @@ if ($requestEmail) {
     $userPinsResult = $userPinsQuery->get_result();
 
     // Fetch user's first and last name
-    $userQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+    $userQuery = $conn->prepare("SELECT first_name, last_name, profile FROM users WHERE email = ?");
     $userQuery->bind_param("s", $requestEmail);
     $userQuery->execute();
     $userResult = $userQuery->get_result();
@@ -142,7 +142,8 @@ if ($requestEmail) {
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
                 "comments" => $commentsForPin,
-                "isLiked" => $isLiked // Adding isLiked flag
+                "isLiked" => $isLiked, // Adding isLiked flag
+                "profile" => $userRow['profile']
             );
 
             $likeQuery->close();
@@ -191,7 +192,7 @@ if ($friendsResult->num_rows > 0) {
                 }
 
                 // Fetch friend's first and last name
-                $friendUserQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE email = ?");
+                $friendUserQuery = $conn->prepare("SELECT first_name, last_name, profile FROM users WHERE email = ?");
                 $friendUserQuery->bind_param("s", $friendEmail);
                 $friendUserQuery->execute();
                 $friendUserResult = $friendUserQuery->get_result();
@@ -210,7 +211,8 @@ if ($friendsResult->num_rows > 0) {
                         "description" => $pinRow['description'],
                         "pin_id" => $pinRow['pin_id'],
                         "comments" => $commentsForPin,
-                        "isLiked" => $isLiked // Adding isLiked flag
+                        "isLiked" => $isLiked, // Adding isLiked flag
+                        "profile" => $friendUserRow['profile']
                     );
                 }
             }
