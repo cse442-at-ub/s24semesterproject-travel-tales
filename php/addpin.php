@@ -1,6 +1,6 @@
 <?php
 include_once('db.php');
-
+session_start();
 // Redirect to HTTPS if not already
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -44,11 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Inserting Pin Information
     if (
-        isset($data['email']) && isset($data['lat']) && isset($data['lng']) && 
+        isset($data['lat']) && isset($data['lng']) && 
         isset($data['title']) && isset($data['description']) && isset($data['date']) && 
         isset($data['isPublic'])
     ) {
-        $email = $data['email'];
         $latitude = $data['lat'];
         $longitude = $data['lng'];
         $title = $data['title'];
@@ -56,13 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $date = $data['date'];
         $isPublic = $data['isPublic'];
 
-        $sql = "SELECT id FROM users WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt ->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $user_id = $row['id'];
+        $user_id = $_SESSION['user_id']
 
         $stmt = $conn->prepare("INSERT INTO PinsInfo (user_id, lat, lng, title, description, date, isPublic) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sddsssi", $user_id, $latitude, $longitude, $title, $description, $date, $isPublic);
@@ -92,9 +85,17 @@ while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
     $comment = $commentRow['comment'];
     $user = $commentRow['user_id'];
+    $sql = "SELECT username FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt ->bind_param("s", $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
     $comments[$pinId][] = array(
         "comment" => $comment,
         "user_id" => $user
+        "username" => $username
     );
 
 }
