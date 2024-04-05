@@ -45,6 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $value = $data['value'];
         $email = $data['email'];
 
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt ->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+
         // Connect to the database
         $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -58,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($value == -1) {
             // Delete user from the likes database
             $deleteLikeQuery = $conn->prepare("DELETE FROM likes WHERE pin_id = ? AND user_id = ?");
-            $deleteLikeQuery->bind_param("is", $pinId, $email);
+            $deleteLikeQuery->bind_param("is", $pinId, $user_id);
             $deleteLikeQuery->execute();
             $deleteLikeQuery->close();
         } else {
             // Insert or update the like in the Likes table
             $insertLikeQuery = $conn->prepare("REPLACE INTO likes (pin_id, user_id) VALUES (?, ?)");
-            $insertLikeQuery->bind_param("is", $pinId, $email);
+            $insertLikeQuery->bind_param("is", $pinId, $user_id);
             $insertLikeQuery->execute();
             $insertLikeQuery->close();
         }

@@ -57,7 +57,7 @@ const SettingsDialog = () => {
     const [error2, setError2] = useState('');
     const [error3, setError3] = useState('');
     const navigate = useNavigate();
-
+    
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',

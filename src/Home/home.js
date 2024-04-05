@@ -400,7 +400,7 @@ const App = () => {
     const [heart, setheart] = useState(false);
     const like = () => setheart(true);
     const unlike = () => setheart(false);
-    const [userProfile, setUserProfile] = useState(null)
+    const [userProfile1, setUserProfile1] = useState('')
 
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -478,7 +478,7 @@ const App = () => {
                 console.log('Raw Data:', rawData);
 
                 const data = JSON.parse(rawData);
-                console.log('Parsed Data:', data);
+                //console.log('Parsed Data:', data);
 
                 if (data.success) {
                     data.data.forEach(coordinate => {
@@ -489,15 +489,17 @@ const App = () => {
 
                         } else {
                             coordinate.profile = (<AccountCircleIcon style={{ fontSize: 150, color: coordinate.profile, margin: '2px 0' }} />);
+                            //console.log(coordinate.profile, "friend profile")
                         }
+
                         if (coordinate.email === localStorage.getItem('email')) {
                             coordinate.first_name = "You"
                             coordinate.last_name = ""
-                            setUserProfile(coordinate.profile)
+                            setUserProfile1(coordinate.profile)
                         }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
-                        console.log(coordinate.comments , coordinate.pin_id)
+                       // console.log(coordinate.comments , coordinate.pin_id)
                     });
                 } else {
                     console.error('Error:', data.error);
@@ -511,6 +513,7 @@ const App = () => {
         fetchInfoFromBackend();
     }, [currentUser]);
 
+
     const getSharedPins = async () => {
         try {
             if (currentUser && currentUser.id) {
@@ -522,14 +525,15 @@ const App = () => {
                     }
                 });
                 const result = await response.json();
+                console.log(result)
                 if (result.message) {
                     setError(result.message);
                 } else {
-                    const filteredResult = result.filter(item => item.email !== localStorage.getItem('email'));
-                    if (filteredResult.length > 0) {
-                        setMatchedData(filteredResult);
-                        for (let i = 0; i < filteredResult.length; i++) {
-                            const item = filteredResult[i];
+                   
+                    if (result.length > 0) {
+                        setMatchedData(result);
+                        for (let i = 0; i < result.length; i++) {
+                            const item = result[i];
                             updateMarker(item);
                             await fetchCityState(item.lat, item.lng, setMarkers);
                             await fetchCityState(item.lat, item.lng, setMatchedData);
@@ -578,7 +582,8 @@ const App = () => {
             email: coordinates.email,
             comment: coordinates.comments,
             like: coordinates.isLiked,
-            profile: coordinates.profile
+            profile: coordinates.profile,
+            username: coordinates.username
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
@@ -616,10 +621,10 @@ const App = () => {
                 description: description,
                 date: date,
                 email: localStorage.getItem('email'),
-                first_name: "You",
+                username: "You",
                 like: false,
                 comment: [],
-                profile: UserProfile
+                profile: userProfile1
                 
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
@@ -732,14 +737,19 @@ const App = () => {
 
                 location(prevData => {
                     return prevData.map(item => {
+                        
                         if (item.lat === lat && item.lng === lng) {
+                            //console.log(matchedData)
                             return {
                                 ...item,
                                 city: city,
                                 state: state
+
                             };
+
                         }
                         return item;
+
                     });
                 });
             } else {
@@ -772,9 +782,11 @@ const App = () => {
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
-                            {UserProfile()}
+
+                            {selectedMarker.profile}
+
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                {selectedMarker.email}
+                                {selectedMarker.username}
                             </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
@@ -1010,7 +1022,7 @@ const App = () => {
                                                                 Date: {item.date}
                                                             </Typography>
                                                             <Typography variant='body2'>
-                                                                {" Created by: " + item.email}
+                                                                {" Created by: " + item.username}
                                                             </Typography>
                                                         </React.Fragment>
                                                     }
