@@ -13,23 +13,30 @@ const MyPinsModal = ({ open, onClose, username }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php?email=${localStorage.getItem('email')}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch pins data');
         }
         const pins = await response.json();
-        console.log(pins)
+        console.log(pins);
         setPinsData(pins);
       } catch (error) {
         console.error('Error fetching pins data:', error);
         setError(error.message || 'Failed to fetch pins data');
       }
     };
-
+  
     if (open) {
       fetchData();
     }
   }, [open, username]);
+  
 
   const handleDeletePin = async (pin) => {
     setDeletedPinIndex(pin);
@@ -40,10 +47,12 @@ const MyPinsModal = ({ open, onClose, username }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
         body: JSON.stringify({
           pin_id: pin.pin_id, // Access pin_id directly
         }),
+        credentials: 'include',
       });
   
       if (!response.ok) {
