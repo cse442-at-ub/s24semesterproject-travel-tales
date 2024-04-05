@@ -40,13 +40,21 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (isset($data['pin_id']) && isset($data['comment']) && isset($data['email'])) {
+    if (isset($data['email']) && isset($data['comment']) && isset($data['pin_id'])) {
         $pin_id = $data['pin_id'];
         $comment = $data['comment'];
-        $email =$data['email']
+        $email =$data['email'];
 
-        $stmt = $conn->prepare("INSERT INTO comments (pin_id, comment, user) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $pin_id, $comment, $email);
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt ->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+
+        $stmt = $conn->prepare("INSERT INTO comments (pin_id, comment, user_id) VALUES (?, ?, ?)");
+        $stmt->bind_param("iss", $pin_id, $comment, $user_id);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
