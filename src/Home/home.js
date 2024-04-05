@@ -400,7 +400,6 @@ const App = () => {
     const [heart, setheart] = useState(false);
     const like = () => setheart(true);
     const unlike = () => setheart(false);
-    const [userProfile1, setUserProfile1] = useState('')
 
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -483,21 +482,6 @@ const App = () => {
                 if (data.success) { 
 
                     data.data.forEach(coordinate => {
-                        
-                        if (/^data:image\/[a-z]+;base64,/.test(coordinate.profile)) {
-
-                            coordinate.profile = (<img style={{ width: "100%", maxWidth: '150px', maxHeight: '150px', margin: '2px 0' }} width="50px" height="50px" src={coordinate.profile} alt="Base64" />);
-
-                        } else {
-                            coordinate.profile = (<AccountCircleIcon style={{ fontSize: 150, color: coordinate.profile, margin: '2px 0' }} />);
-                            //console.log(coordinate.profile, "friend profile")
-                        }
-
-                        if (coordinate.email === localStorage.getItem('email')) {
-                            coordinate.first_name = "You"
-                            coordinate.last_name = ""
-                            setUserProfile1(coordinate.profile)
-                        }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
                     });
@@ -564,6 +548,26 @@ const App = () => {
             />
         ));
     };
+    const renderProfile = (profile) => {
+        let renderedProfile;
+        if (/^data:image\/[a-z]+;base64,/.test(profile)) {
+            renderedProfile = (
+                <img
+                    style={{ width: "100%", maxWidth: '150px', maxHeight: '150px', margin: '2px 0' }}
+                    width="50px" height="50px"
+                    src={profile}
+                    alt="Base64"
+                />
+            );
+        } else {
+            renderedProfile = (
+                <AccountCircleIcon
+                    style={{ fontSize: 150, color: profile, margin: '2px 0' }}
+                />
+            );
+        }
+        return renderedProfile;
+    }
 
     const updateMarker = (coordinates) => {
         const newMarker = {
@@ -588,7 +592,6 @@ const App = () => {
     const sendcomment = () => { 
         var comment = document.getElementById('myInput').value;
         var pin_id = selectedMarker.id
-        console.log({ pin_id, comment, email: localStorage.getItem('email') })
         if (comment !== "") {
             sendCommentToBackend({ pin_id, comment, email: localStorage.getItem('email') });
             selectedMarker.comment.push({comment: comment , user: localStorage.getItem('email')});
@@ -610,6 +613,7 @@ const App = () => {
 
         if (currentLocation) {
             const newMarker = {
+                username: currentUser.username,
                 lat: currentLocation.lat,
                 lng: currentLocation.lng,
                 id: markers.length + 1,
@@ -617,16 +621,14 @@ const App = () => {
                 title: title,
                 description: description,
                 date: date,
-                email: localStorage.getItem('email'),
-                username: "You",
                 like: false,
                 comment: [],
-                profile: userProfile1
+                profile: currentUser.profile
                 
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ email: localStorage.getItem('email'), lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -693,7 +695,6 @@ const App = () => {
     };
 
     const sendlike = async (info) => {
-        console.log(info)
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
                 method: 'POST',
@@ -701,7 +702,7 @@ const App = () => {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ value: info, pin_id: selectedMarker.id, email: localStorage.getItem('email') })
+                body: JSON.stringify({ value: info, pin_id: selectedMarker.id })
             });
 
             if (!response.ok) {
@@ -739,7 +740,6 @@ const App = () => {
                     return prevData.map(item => {
                         
                         if (item.lat === lat && item.lng === lng) {
-                            //console.log(matchedData)
                             return {
                                 ...item,
                                 city: city,
@@ -782,9 +782,7 @@ const App = () => {
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
-
-                            {selectedMarker.profile}
-
+                                {renderProfile(selectedMarker.profile)}
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.username}
                             </Typography>

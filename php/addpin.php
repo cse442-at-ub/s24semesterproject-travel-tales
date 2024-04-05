@@ -17,7 +17,6 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
 }
 
 // CORS Headers
-header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
@@ -39,15 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header("Content-Type: application/json");
 
-// Handling POST Requests
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Inserting Pin Information
     if (
-        isset($data['lat']) && isset($data['lng']) && 
+        isset($data['lat']) && isset($data['username']) && isset($data['lng']) && 
         isset($data['title']) && isset($data['description']) && isset($data['date']) && 
-        isset($data['isPublic']) && isset($_SESSION['user_id'])
+        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile'])
     ) {
         $latitude = $data['lat'];
         $longitude = $data['lng'];
@@ -55,10 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = $data['description'];
         $date = $data['date'];
         $isPublic = $data['isPublic'];
+        $username = $data['username'];
         $user_id = $_SESSION['user_id'];
+        $profile = $data['profile'];
 
-        $stmt = $conn->prepare("INSERT INTO PinsInfo (lat, lng, title, description, date, isPublic, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ddsssii", $latitude, $longitude, $title, $description, $date, $isPublic, $user_id);
+
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssiis", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
@@ -92,13 +92,13 @@ $requestUserId = $_SESSION['user_id'] ?? null;
 // Check if the user_id is provided in the session
 if ($requestUserId) {
     // Fetch the user's pins
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE user_id = ?");
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, profile FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
 
     // Fetch user's first and last name
-    $userQuery = $conn->prepare("SELECT first_name, last_name FROM users WHERE id = ?");
+    $userQuery = $conn->prepare("SELECT first_name, last_name, username FROM users WHERE id = ?");
     $userQuery->bind_param("s", $requestUserId);
     $userQuery->execute();
     $userResult = $userQuery->get_result();
@@ -131,6 +131,7 @@ if ($requestUserId) {
             $userPinsWithComments[] = array(
                 "first_name" => $userRow['first_name'],
                 "last_name" => $userRow['last_name'],
+                "username" => $userRow['username'],
                 "user_id" => $requestUserId,
                 "lat" => $userPinRow['lat'],
                 "lng" => $userPinRow['lng'],
@@ -138,6 +139,7 @@ if ($requestUserId) {
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
+                "profile" => $userPinRow['profile'],
                 "comments" => $commentsForPin,
                 "isLiked" => $isLiked // Adding isLiked flag
             );

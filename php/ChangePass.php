@@ -1,43 +1,47 @@
 <?php
+session_start();
 include_once('db.php');
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit();
+}
 
+// Redirect to HTTPS if not already
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
 
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
+// CORS Headers
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("X-Content-Type-Options: nosniff");
+if (isset($_SERVER['HTTPS_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
-header('Access-Control-Allow-Origin: http://localhost:3000');
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
+// CORS Preflight Handling
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    }
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
+    }
     exit(0);
 }
 
-function sendErrorResponse($code, $message) {
-    http_response_code($code);
-    echo json_encode(['message' => $message]);
-    exit();
-}
+header("Content-Type: application/json");
 
 $data = json_decode(file_get_contents("php://input"), true);
 $pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
-$user_id = $data['user_id'];
+$user_id = $_SESSION['user_id'];
 
 if ($pass !== $confirmPass) {
     http_response_code(400);
@@ -81,7 +85,7 @@ if (!preg_match($pattern, $pass)) {
 $pass = password_hash($pass, PASSWORD_DEFAULT);
 
 if(isset($user_id) && isset($pass)) {
-    if($user_id != "" and $pass != ""){s
+    if($user_id != "" and $pass != "") { // <-- Remove the extra 's' here
         // Check if user_id exists in the database
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE id = ?");
         $stmt_check->bind_param("s", $user_id);
@@ -108,5 +112,6 @@ if(isset($user_id) && isset($pass)) {
     http_response_code(400);
     echo json_encode(['message' => 'Please provide user_id and password']);
 }
+
 
 $conn->close();
