@@ -104,6 +104,7 @@ while ($commentRow = $commentsResult->fetch_assoc()) {
         "user_id" => $user,
         "username" => $username
     );
+
 }
 $commentsQuery->close();
 

@@ -47,33 +47,47 @@ if($allowCORS) {
     }
 }
 
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["code" => 401, "error" => "User not logged in"]);
+    exit();
+}
+
 $data = json_decode(file_get_contents("php://input"), true);
-$identifier = $data['identifier'];
-$pass = $data['pass'];
+$newUsername = $data['username'];
 
-if (isset($identifier) && isset($pass)) {
-    if ($identifier != "" && $pass != "") {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $identifier, $identifier);
-        $stmt->execute();
-        $result = $stmt->get_result();
+// Check for username length
+if (strlen($newUsername) > 36) {
+    echo json_encode(["code" => 400, "error" => "Username must be 36 characters or fewer"]);
+    exit();
+}
 
-        if ($result->num_rows == 1) {
-            $user = $result->fetch_assoc();
-            if (password_verify($pass, $user['pass'])) {
-                $_SESSION['user_id'] = $user['id'];
-                echo json_encode(["code" => 200, "message" => "Login successful"]);
-            } else {
-                echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-            }
-        } else {
-            echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-        }
-    } else {
-        echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
-    }
+// Check for spaces in username
+if (preg_match('/\s/', $newUsername)) {
+    echo json_encode(["code" => 400, "error" => "Username cannot contain spaces"]);
+    exit();
+}
+
+// Check if username already exists
+$stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+$stmt->bind_param("s", $newUsername);
+$stmt->execute();
+$stmt->bind_result($count);
+$stmt->fetch();
+$stmt->close();
+
+if ($count > 0) {
+    echo json_encode(["code" => 409, "error" => "Username already exists"]);
+    exit();
+}
+
+// Proceed to update the username
+$stmt = $conn->prepare("UPDATE users SET username = ? WHERE id = ?");
+$stmt->bind_param("si", $newUsername, $_SESSION['user_id']);
+
+if ($stmt->execute()) {
+    echo json_encode(["code" => 200, "message" => "Username updated successfully"]);
 } else {
-    echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+    echo json_encode(["code" => 500, "error" => "Error updating username"]);
 }
 
 $conn->close();

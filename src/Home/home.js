@@ -478,9 +478,9 @@ const App = () => {
                 console.log('Raw Data:', rawData);
 
                 const data = JSON.parse(rawData);
-                //console.log('Parsed Data:', data);
+                console.log('Parsed Data:', data);
+                if (data.success) { 
 
-                if (data.success) {
                     data.data.forEach(coordinate => {
                         
                         if (/^data:image\/[a-z]+;base64,/.test(coordinate.profile)) {
@@ -511,7 +511,7 @@ const App = () => {
         };
         getSharedPins();
         fetchInfoFromBackend();
-    }, [currentUser]);
+    }, [currentUser, userProfileOpen]);
 
 
     const getSharedPins = async () => {
@@ -546,7 +546,6 @@ const App = () => {
             console.error('Error fetching data:', error.message);
         }
     };
-
         
     useEffect(() => {
         fetchCurrentUser();
@@ -627,7 +626,7 @@ const App = () => {
                 profile: userProfile1
                 
             };
-            fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
+            fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
             sendCoordinatesToBackend({ email: localStorage.getItem('email'), lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
         }
@@ -816,14 +815,12 @@ const App = () => {
                                     open={open3}
                                     onClose={handleClose3}
                                 >
-                            
                                     <Box className="PinInfo" sx={pinModalStyle} >
                                         <button className="leave-arrow" onClick={handleClose3}>
                                             <ArrowBackIosNewIcon />
                                         </button>
                                         <h1>Comments</h1>
                                         <Divider/>
-
                                                 <List sx={{ width: '100%', maxWidth: 500, maxHeight: 400, bgcolor: 'background.paper', overflow: "scroll" }}>
                                                     {selectedMarker.comment && selectedMarker.comment.length > 0 ? (
                                                         selectedMarker.comment.map((comment, index) => (
@@ -842,10 +839,8 @@ const App = () => {
                                                         <ListItem>
                                                             <ListItemText primary="No comments available" />
                                                             </ListItem>
-
                                                     )}
                                                 </List>
-
                                                 <form >
                                             <textarea
                                                 className="comment-box"
@@ -855,11 +850,9 @@ const App = () => {
                                                         placeholder="Type Your Comment Here!">
                                                     </textarea>
                                                 </form>
-
                                         <button className="leave-arrow" onClick={handleClose3}>
                                             <ArrowBackIosNewIcon />
                                         </button>
-                                      
                                         <Button sx={{
                                             bgcolor: "#354545",
                                             color: "#FFFFFF",
@@ -868,16 +861,12 @@ const App = () => {
                                             
                                             variant="contained"
                                             onClick={() => {
-                                                sendcomment()
-                                              forceUpdate()
-                                              
+                                                sendcomment();
+                                                forceUpdate();
                                             }}
                                             style={{ borderRadius: 10 }}>Add Comment</Button>
-                                            
                                     </Box>
-                 
                                 </Modal>
-
                                 <IconButton  
                                     onClick={() => {
                                         handleMapIconClick({ lat: selectedMarker.lat, lng: selectedMarker.lng })
@@ -914,9 +903,11 @@ const App = () => {
                     </button>
                     {userProfileOpen && (
                         <UserProfile onClose={() => {
-                            setUserProfileOpen(false); // Close the UserProfile component
-                            getSharedPins(); // Call the getSharedPins function
-                        }} />
+                            setUserProfileOpen(false); 
+                            getSharedPins();
+                            setMarkers([]); 
+                        }} 
+                        />
                     )}
                 </div>
                 <header className="plus-icon">
@@ -970,7 +961,6 @@ const App = () => {
                                 onClick={() => {
                                     handleSubmit();
                                     placeNewMarker();
-
                                 }}
                                 style={{ borderRadius: 10 }}>Add Pin</Button>
                         </Box>
@@ -995,7 +985,6 @@ const App = () => {
                                     <h2>Shared Pins</h2>
                                 </ListItem>
                                 <Divider />
-
                                 {matchedData.length > 0 ? (
                                     matchedData.map((item) => (
                                         <React.Fragment key={item.lat}>
@@ -1038,7 +1027,6 @@ const App = () => {
                                         />
                                     </ListItem>
                                 )}
-
                             </List>
                         </Box>
                     </SwipeableDrawer>
