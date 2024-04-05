@@ -80,7 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Fetching comments from the comments database
+
 $commentsQuery = $conn->prepare("SELECT pin_id, comment, user_id FROM comments");
+
 $commentsQuery->execute();
 $commentsResult = $commentsQuery->get_result();
 
@@ -90,9 +92,17 @@ while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
     $comment = $commentRow['comment'];
     $user = $commentRow['user_id'];
+    $sql = "SELECT username FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt ->bind_param("s", $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
     $comments[$pinId][] = array(
         "comment" => $comment,
-        "user_id" => $user
+        "user_id" => $user,
+        "username" => $username
     );
 }
 $commentsQuery->close();
@@ -170,6 +180,7 @@ if ($requestEmail) {
     $userPinsQuery->close();
     $userQuery->close();
 
+
     $friendsQuery = $conn->prepare("SELECT user_id2 FROM friends_list WHERE user_id1 = ?");
     $friendsQuery->bind_param("s", $requestId);
     $friendsQuery->execute();
@@ -245,6 +256,7 @@ if ($friendsResult->num_rows > 0) {
     $combinedPins = array_merge($userPinsWithComments, $friendsPins);
         // Return matched data as JSON
     echo json_encode(['success' => true, 'data' => $combinedPins]);
+
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
 }

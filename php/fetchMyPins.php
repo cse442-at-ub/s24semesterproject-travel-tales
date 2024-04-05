@@ -33,7 +33,15 @@ if (!isset($_GET['email'])) {
 
 $email = $_GET['email'];
 
-$sql = "SELECT * FROM PinsInfo WHERE email = '$email'";
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt ->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $user_id = $row['id'];
+
+$sql = "SELECT * FROM PinsInfo WHERE user_id = '$user_id'";
 
 $result = $conn->query($sql);
 
