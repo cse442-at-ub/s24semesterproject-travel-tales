@@ -340,11 +340,12 @@ const modalStyle = {
 
 const getCurrentUserInfo = async () => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php?email=${localStorage.getItem('email')}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -353,7 +354,6 @@ const getCurrentUserInfo = async () => {
 
         const userData = await response.json();
 
-        // Assuming userData is an object with keys: first_name, last_name, email, and username
         return userData;
     } catch (error) {
         console.error('Error fetching current user information:', error.message);
@@ -464,11 +464,12 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${localStorage.getItem('email')}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                    }
+                    },
+                    credentials: 'include',
                 });
 
                 if (!response.ok) {
@@ -499,7 +500,6 @@ const App = () => {
                         }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
-                       // console.log(coordinate.comments , coordinate.pin_id)
                     });
                 } else {
                     console.error('Error:', data.error);
@@ -516,30 +516,28 @@ const App = () => {
 
     const getSharedPins = async () => {
         try {
-            if (currentUser && currentUser.id) {
-                const user_id1 = currentUser.id;
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php?user_id1=${user_id1}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const result = await response.json();
+            console.log(result)
+            if (result.message) {
+                setError(result.message);
+            } else {
+                
+                if (result.length > 0) {
+                    setMatchedData(result);
+                    for (let i = 0; i < result.length; i++) {
+                        const item = result[i];
+                        updateMarker(item);
+                        await fetchCityState(item.lat, item.lng, setMarkers);
+                        await fetchCityState(item.lat, item.lng, setMatchedData);
                     }
-                });
-                const result = await response.json();
-                console.log(result)
-                if (result.message) {
-                    setError(result.message);
                 } else {
-                   
-                    if (result.length > 0) {
-                        setMatchedData(result);
-                        for (let i = 0; i < result.length; i++) {
-                            const item = result[i];
-                            updateMarker(item);
-                            await fetchCityState(item.lat, item.lng, setMarkers);
-                            await fetchCityState(item.lat, item.lng, setMatchedData);
-                        }
-                    } else {
-                    }
                 }
             }
         } catch (error) {
@@ -639,6 +637,7 @@ const App = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(info),
+                credentials: 'include',
             });
 
             if (!response.ok) {
@@ -660,6 +659,7 @@ const App = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(info),
+                credentials: 'include',
             });
 
             if (!response.ok) {
@@ -700,6 +700,7 @@ const App = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ value: info, pin_id: selectedMarker.id, email: localStorage.getItem('email') })
             });
 
