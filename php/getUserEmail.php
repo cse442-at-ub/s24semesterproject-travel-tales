@@ -47,33 +47,21 @@ if($allowCORS) {
     }
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-$identifier = $data['identifier'];
-$pass = $data['pass'];
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    
+    $stmt = $conn->prepare("SELECT email FROM users WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-if (isset($identifier) && isset($pass)) {
-    if ($identifier != "" && $pass != "") {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $identifier, $identifier);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 1) {
-            $user = $result->fetch_assoc();
-            if (password_verify($pass, $user['pass'])) {
-                $_SESSION['user_id'] = $user['id'];
-                echo json_encode(["code" => 200, "message" => "Login successful"]);
-            } else {
-                echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-            }
-        } else {
-            echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-        }
+    if ($row = $result->fetch_assoc()) {
+        echo json_encode(["email" => $row['email']]);
     } else {
-        echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+        echo json_encode(["error" => "User not found"]);
     }
 } else {
-    echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+    echo json_encode(["error" => "Not logged in"]);
 }
 
 $conn->close();

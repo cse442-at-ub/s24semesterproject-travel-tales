@@ -103,7 +103,7 @@ const AddFriendModal = ({ open, onClose }) => {
         <Typography variant="h3" gutterBottom>
           Add Friends
         </Typography>
-        
+
         <List>
           {suggestedFriends.map((friend, index) => (
             <React.Fragment key={index}>
@@ -131,5 +131,4 @@ const AddFriendModal = ({ open, onClose }) => {
     </Modal>
   );
 };
-
 export default AddFriendModal;
