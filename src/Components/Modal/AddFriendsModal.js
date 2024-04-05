@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider, TextField, CircularProgress } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 
 const AddFriendModal = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [usernames, setUsernames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');    
+  const [buttonStates, setButtonStates] = useState({});
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -37,6 +41,37 @@ const AddFriendModal = ({ open, onClose }) => {
     }
   }, [open]);
 
+  const handleAddFriend = async (user) => {
+    try {
+        const data = {
+            to: user
+        };
+
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addFriend.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        console.log('Friend added successfully:', responseData);
+
+        setButtonStates(prevState => ({
+            ...prevState,
+            [user]: 'Added!'
+        }));
+    } catch (error) {
+        console.error('There was a problem adding the friend:', error.message);
+    }
+  };
+
   const filteredUsernames = usernames.filter(username =>
     username.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -65,10 +100,12 @@ const AddFriendModal = ({ open, onClose }) => {
           textAlign: 'center',
         }}
       >
-        <Button onClick={onClose} variant="contained" color="primary" sx={{ position: 'absolute', top: 12, left: 12 }}>
-          Back
-        </Button>
-        <Typography variant="h5" gutterBottom fontWeight="bold">
+        <ArrowBackIosNewIcon 
+            className="leave-arrow" 
+            onClick={onClose} 
+            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+        ></ArrowBackIosNewIcon>
+        <Typography variant="h3" gutterBottom>
           ADD FRIEND
         </Typography>
         
@@ -83,14 +120,22 @@ const AddFriendModal = ({ open, onClose }) => {
 
         {loading && <CircularProgress />} {/* Show loading indicator while fetching data */}
         
-        {error && <Typography variant="body1" color="error">{error}</Typography>} {/* Show error message if there's an error */}
+        {error && <Typography variant="body1" color="error">{error}</Typography>}
 
         <List>
           {filteredUsernames.map((username, index) => (
             <React.Fragment key={index}>
               <ListItem disablePadding>
                 <ListItemButton>
-                  <Typography variant="h6" padding={1}>{username}</Typography>
+                  {errorMessage && <p>{errorMessage}</p>}
+                  <Button 
+                    onClick={() => handleAddFriend(username)}
+                    disabled={buttonStates[username] === 'Added'}
+                    style={{ position: 'absolute', left: '75%', width: '20%', color: 'white', backgroundColor: buttonStates[username] ? 'orange' : 'green' }}
+                    >
+                      {buttonStates[username] || 'Add Friend'}
+                    </Button>
+                    <Typography variant="h6" padding={1}>{username}</Typography>
                 </ListItemButton>
               </ListItem>
               {index < filteredUsernames.length - 1 && <Divider />}

@@ -17,22 +17,25 @@ const handleAddFriendButtonClick = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addFriend_Search.php`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
           },
           credentials: 'include',
         });
+
         if (!response.ok) {
           throw new Error('Failed to fetch friends');
         }
+
         const data = await response.json();
         setFriends(data);
       } catch (error) {
         console.error('Error fetching friends:', error);
       }
     };
+
     if (open) {
       fetchFriends();
     }
@@ -91,17 +94,17 @@ const handleAddFriendButtonClick = () => {
             onClick={onClose} 
             style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
         ></ArrowBackIosNewIcon>
-
+        
         <Typography variant="h3" gutterBottom>
           FRIENDS
         </Typography>
-
+        
         <List>
           {friends.map((friend, index) => (
             <React.Fragment key={index}>
               <ListItem disablePadding>
                 <ListItemButton>
-                  <Typography variant="h6" padding={1}>{friend.first_name} {friend.last_name}</Typography>
+                  <Typography variant="h6" padding={1}>{friend.username}</Typography>
                   </ListItemButton>
               </ListItem>
               {index < friends.length - 1 && <Divider />}

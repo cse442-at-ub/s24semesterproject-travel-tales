@@ -30,9 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 if (isset($_SESSION['user_id'])) {
     $currentUserId = (int)$_SESSION['user_id'];
-
-    // This SQL statement checks both user_id1 and user_id2 for the current user's ID,
-    // and returns the friend's ID from the opposite column
     $sql = "SELECT 
                 CASE 
                     WHEN user_id1 = ? THEN user_id2 
@@ -56,9 +53,8 @@ if (isset($_SESSION['user_id'])) {
     
     $stmt->close();
 
-    // Now, get user info for each friend ID
     foreach ($friends as $friendId) {
-        $sql = "SELECT first_name, last_name, email FROM users WHERE id = ?";
+        $sql = "SELECT first_name, last_name, username FROM users WHERE id = ?";
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("i", $friendId);
             $stmt->execute();

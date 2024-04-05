@@ -1,5 +1,14 @@
 <?php
+session_start();
 include_once('db.php');
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit();
+}
 
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -26,26 +35,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-if (!isset($_GET['email'])) {
-    echo json_encode(array('error' => 'Email parameter is missing'));
-    exit;
-}
+if (isset($_SESSION['user_id'])) {
+    $userID = $_SESSION['user_id'];
 
-$email = $_GET['email'];
+    $sql = "SELECT * FROM PinsInfo WHERE user_id = '$userID'";
 
-$sql = "SELECT * FROM PinsInfo WHERE email = '$email'";
+    $result = $conn->query($sql);
 
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $pinsData = array();
-    while ($row = $result->fetch_assoc()) {
-        $pinsData[] = $row;
+    if ($result->num_rows > 0) {
+        $pinsData = array();
+        while ($row = $result->fetch_assoc()) {
+            $pinsData[] = $row;
+        }
+        
+        echo json_encode($pinsData);
+    } else {
+        echo json_encode(array('message' => 'No pins found for the provided email'));
     }
-    
-    echo json_encode($pinsData);
-} else {
-    echo json_encode(array('message' => 'No pins found for the provided email'));
 }
 
 $conn->close();
