@@ -194,7 +194,7 @@ const list = () => (
                 </Button>
             </ButtonGroup>
         </ListItem>
-        <Divider style={{ width: '100%', margin: '20px 0' }} />
+        <Divider style={{ width: '100%', margin: '20px' }} />
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
             {/* Place your picture components here */}
             <img src={Photo1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
@@ -234,7 +234,6 @@ const [drawerOpen, setDrawerOpen] = useState(true);
 const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 
 const handlePinsButtonClick = () => {
-    // Close the drawer and trigger the callback to open the MyPins modal
     setDrawerOpen(true);
     setMyPinsModalOpen(false);
     onClose();

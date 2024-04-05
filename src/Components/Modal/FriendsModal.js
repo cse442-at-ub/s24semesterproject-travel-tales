@@ -93,7 +93,7 @@ const handleAddFriendButtonClick = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addFriend_Search.php`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
