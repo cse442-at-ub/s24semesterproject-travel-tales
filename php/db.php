@@ -7,10 +7,10 @@
 // Set to false for prod / true for local development
 $allowCORS = true;
 // Config - needs to be udpated for prod
-$servername = "localhost";
-$username = "root";
+$servername = "";
+$username = "";
 $password = "";
-$dbname = "test";
+$dbname = "";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
