@@ -56,6 +56,7 @@ const SettingsDialog = () => {
     const [error, setError] = useState('');
     const [error2, setError2] = useState('');
     const [error3, setError3] = useState('');
+    const [message, setmessage] = useState('');
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
@@ -135,7 +136,7 @@ const SettingsDialog = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setError(data.message);
+                    setmessage(data.message);
                     // Redirect to login page
                     //navigate('/login');
                 } else {
@@ -447,7 +448,8 @@ const SettingsDialog = () => {
                                 />
 
                                     <TextField onChange={handleChange} required type="name" name="lastName" id="namechange2" label="Last Name" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
+                                        sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
+                                {message && <p style={{ color: 'green' }}>{message}</p>}
                                 {error && <p style={{ color: 'red' }}>{error}</p>}
                                 <Button variant="contained" color="primary" type="submit"  sx={{ mt: 2, margin: 1 }}>
                                     {infoButton}
