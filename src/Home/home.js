@@ -827,7 +827,7 @@ const App = () => {
                                                                 <ListItem >
                                                                     <ListItemText
                                                                         primary={comment.comment}
-                                                                        secondary= {"Created by: " + comment.user }
+                                                                        secondary= {"Created by: " + comment.username }
                                                                      />
                                                                     
                                                                 </ListItem>

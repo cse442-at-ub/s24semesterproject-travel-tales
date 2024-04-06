@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (
         isset($data['lat']) && isset($data['username']) && isset($data['lng']) && 
         isset($data['title']) && isset($data['description']) && isset($data['date']) && 
-        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile'])
+        isset($data['isPublic']) && isset($_SESSION['user_id'])
     ) {
         $latitude = $data['lat'];
         $longitude = $data['lng'];
@@ -54,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $isPublic = $data['isPublic'];
         $username = $data['username'];
         $user_id = $_SESSION['user_id'];
-        $profile = $data['profile'];
+        
 
 
-        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sddsssiis", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile);
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssiis", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
@@ -73,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Fetching comments from the comments database
-$commentsQuery = $conn->prepare("SELECT pin_id, comment FROM comments");
+$commentsQuery = $conn->prepare("SELECT pin_id, comment, user_id FROM comments");
+
 $commentsQuery->execute();
 $commentsResult = $commentsQuery->get_result();
 
@@ -82,7 +83,20 @@ $comments = array();
 while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
     $comment = $commentRow['comment'];
-    $comments[$pinId][] = $comment;
+    $user = $commentRow['user_id'];
+    $sql = "SELECT username FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt ->bind_param("s", $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
+    $comments[$pinId][] = array(
+        "comment" => $comment,
+        "user_id" => $user,
+        "username" => $username
+    );
+
 }
 $commentsQuery->close();
 
@@ -92,13 +106,13 @@ $requestUserId = $_SESSION['user_id'] ?? null;
 // Check if the user_id is provided in the session
 if ($requestUserId) {
     // Fetch the user's pins
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, profile FROM PinsInfo WHERE user_id = ?");
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
 
     // Fetch user's first and last name
-    $userQuery = $conn->prepare("SELECT first_name, last_name, username FROM users WHERE id = ?");
+    $userQuery = $conn->prepare("SELECT first_name, last_name, username, profile FROM users WHERE id = ?");
     $userQuery->bind_param("s", $requestUserId);
     $userQuery->execute();
     $userResult = $userQuery->get_result();
@@ -139,7 +153,7 @@ if ($requestUserId) {
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
-                "profile" => $userPinRow['profile'],
+                "profile" => $userRow['profile'],
                 "comments" => $commentsForPin,
                 "isLiked" => $isLiked // Adding isLiked flag
             );
