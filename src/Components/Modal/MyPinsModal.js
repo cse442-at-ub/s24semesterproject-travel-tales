@@ -1,86 +1,160 @@
-import React from 'react';
-import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
-const MyPinsModal = ({ open, onClose }) => {
-  const pinsData = [
-    { label: 'New York City', info:'NY 10001' },
-    { label: 'Los Angeles', info: 'CA 90001' },
-    { label: 'Chicago', info: 'IL 60601' },
-    { label: 'Houston', info: 'TX 77001' },
-    { label: 'Phoenix', info: 'AZ 85001' },
-    { label: 'Philadelphia', info:'PA 19101' },
-    { label: 'San Antonio', info: 'TX 78201' },
-    { label: 'San Diego', info: 'CA 92101' },
-    { label: 'Dallas', info: 'TX 75201' },
-    { label: 'San Jose', info: 'CA 95101' },
-    { label: 'Austin', info: 'TX 73301' },
-    { label: 'Jacksonville', info: 'FL 32201' },
-    { label: 'Indianapolis', info: 'IN 46201' },
-    { label: 'San Francisco', info: 'CA 94101' },
-    { label: 'Columbus', info: 'OH 43201' },
-    // Add more pins as needed
-  ];
+import React, { useState, useEffect } from 'react';
+import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List, CircularProgress } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
+const MyPinsModal = ({ open, onClose, username }) => {
+  const [pinsData, setPinsData] = useState([]);
+  const [error, setError] = useState(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch pins data');
+        }
+        const pins = await response.json();
+        console.log(pins);
+        setPinsData(pins);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.error('Error fetching pins data:', error);
+        setError(error.message || 'Failed to fetch pins data');
+      }
+    };
+  
+    if (open) {
+      fetchData();
+    }
+  }, [open, username]);
+  
+
+  const handleDeletePin = async (pin) => {
+    setDeleteConfirmationOpen(true);
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/deletePin.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        body: JSON.stringify({
+          pin_id: pin.pin_id, // Access pin_id directly
+        }),
+        credentials: 'include',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete pin');
+      }
+  
+      console.log('Pin deleted successfully');
+    } catch (error) {
+      console.error('Error deleting pin:', error);
+    }
+  };
+  
+
+  const handleCloseDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(false);
+    onClose();
+  };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={() => { onClose(); handleCloseDeleteConfirmation(); }}>
       <Box
         sx={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          borderRadius: 10,
+          borderRadius: 5,
           bgcolor: 'rgba(255, 255, 255, 1.0)',
           border: '2px solid #000',
           boxShadow: 24,
           p: 3,
           width: '80vw',
-          maxWidth: '600px', // Adjust the maximum width as needed
-          maxHeight: '80vh', // Set a maximum height for scrollability
-          overflowY: 'auto', // Enable vertical scrolling if content overflows
-          textAlign: 'center', // Center align the content
-          '& h4': {
-            color: 'black', // Change the title color
-            marginBottom: 2, // Add some space below the title
-          },
-          '& h5': {
-            color: 'black', // Change the pin label color
-          },
-          '& button': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            margin: '15px', // Adjust the margin as needed
-            padding: '8px', // Adjust the padding as needed
-            transition: 'background-color 0.3s', // Adjust the margin as needed
-            '&:hover': {
-              backgroundColor: '#2196F3', // Change the background color on hover
-            },
-          },
+          maxWidth: '450px', 
+          maxHeight: '80vh', 
+          overflowY: 'auto', 
+          textAlign: 'center', 
         }}
       >
-        <Button 
-        onClick={onClose} variant="contained" color="primary">
-          Back
-        </Button>
+        <ArrowBackIosNewIcon 
+            className="leave-arrow" 
+            onClick={onClose} 
+            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+        ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
           MY PINS
-        </Typography>
-        
+        </Typography>       
+        {loading && <CircularProgress />}
+        {error && <Typography variant="body1" color="error">{error}</Typography>} 
         <List>
-          {pinsData.map((pin, index) => (
-            <React.Fragment key={index}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <Typography variant="h6" padding={1}>{pin.label}</Typography>
-                  <Typography sx={{ fontFamily: '"Segoe UI"', fontSize: '0.8em', mt: 1 }}>
-                    {pin.info.replace(/State: (\w+), Zipcode: (\d+)/, 'State: $1, Zipcode: $2')}
-                  </Typography>
-                  </ListItemButton>
-              </ListItem>
-              {index < pinsData.length - 1 && <Divider />}
-            </React.Fragment>
+        {Array.isArray(pinsData) && pinsData.map((pin, index) => (
+            <Accordion key={index}>
+              <AccordionSummary
+                aria-controls={`panel${index + 1}-content`}
+                id={`panel${index + 1}-header`}
+                style={{ position: 'relative' }}
+              >
+                <Typography variant="h6">
+                  {pin.title}
+                  <span style={{ marginLeft: '30px', fontSize: '0.8em' }}>{pin.date}</span>
+                </Typography>   
+              </AccordionSummary>
+              <AccordionDetails sx={{ textAlign: 'left', position: 'relative' }}>
+                <Box sx={{ border: '1px solid black', display: 'flex', flexDirection: 'column', gap: '5px', p: 2 }}>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Likes:</Typography>
+                    <Typography>{pin.likes}</Typography>
+                  </div>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
+                    <Typography>{pin.isPublic == 1 ? 'Yes' : 'No'}</Typography>
+                  </div>
+                  <Button onClick={() => handleDeletePin(pin)} style={{ backgroundColor: 'red', color: 'white', position: 'absolute', right: '25px', top: '20%', transform: 'translateY(-50%)' }} >Delete</Button>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           ))}
         </List>
+        {deleteConfirmationOpen && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              borderRadius: 2,
+              bgcolor: 'rgba(255, 255, 255, 1.0)',
+              border: '2px solid #000',
+              boxShadow: 20,
+              p: 1,
+              width: '40vw',
+              maxWidth: '300px', 
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Pin has been deleted
+            </Typography>
+            <Button onClick={() => {
+              handleCloseDeleteConfirmation();     
+            }}>OK</Button>
+          </Box>
+        )}
       </Box>
     </Modal>
   );

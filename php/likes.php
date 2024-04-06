@@ -1,65 +1,55 @@
-
 <?php
+session_start();
 include_once('db.php');
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit();
+}
 
 if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     exit();
 }
-header('Access-Control-Allow-Origin: http://localhost:3000');
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
-header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
-header("X-Content-Type-Options: nosniff");
-if (isset($_SERVER['HTTPS_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
     exit(0);
 }
 
+
+// Handle POST request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Decode the JSON data received from the frontend
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Check if 'pin_id' and 'value' are set in the received data
-    if (isset($data['pin_id']) && isset($data['value']) && isset($data['email'])) {
+    // Check if 'pin_id', 'value', and 'email' are set in the received data
+    if (isset($data['pin_id']) && isset($data['value']) && isset($_SESSION['user_id'])) {
         $pinId = $data['pin_id'];
         $value = $data['value'];
-        $email = $data['email'];
-
-        // Connect to the database
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        $user_id = $_SESSION['user_id'];
 
         if ($value == -1) {
             // Delete user from the likes database
             $deleteLikeQuery = $conn->prepare("DELETE FROM likes WHERE pin_id = ? AND user_id = ?");
-            $deleteLikeQuery->bind_param("is", $pinId, $email);
+            $deleteLikeQuery->bind_param("is", $pinId, $user_id);
             $deleteLikeQuery->execute();
             $deleteLikeQuery->close();
         } else {
             // Insert or update the like in the Likes table
             $insertLikeQuery = $conn->prepare("REPLACE INTO likes (pin_id, user_id) VALUES (?, ?)");
-            $insertLikeQuery->bind_param("is", $pinId, $email);
+            $insertLikeQuery->bind_param("is", $pinId, $user_id);
             $insertLikeQuery->execute();
             $insertLikeQuery->close();
         }
@@ -82,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn->close();
     } else {
         // Required parameters missing, send error response
-        echo json_encode(['success' => false, 'error' => 'Pin ID, value, or email is missing']);
+        echo json_encode(['success' => false, 'error' => 'Pin ID or value is missing']);
     }
 } else {
     // Invalid request method, send error response

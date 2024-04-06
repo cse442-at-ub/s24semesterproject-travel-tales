@@ -21,6 +21,8 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
+import { useReducer } from 'react';
+
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -336,11 +338,45 @@ const modalStyle = {
     transition: 'bgcolor 0.3s ease',
 };
 
+const getCurrentUserInfo = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user information');
+        }
+
+        const userData = await response.json();
+
+        return userData;
+    } catch (error) {
+        console.error('Error fetching current user information:', error.message);
+        throw error;
+    }
+};
+
 const App = () => {
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_API_KEY,
         libraries,
     });
+
+    const [currentUser, setCurrentUser] = useState(null);
+    
+    const fetchCurrentUser = async () => {
+        try {
+            const userData = await getCurrentUserInfo();
+            setCurrentUser(userData);
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     const [markers, setMarkers] = useState([]);
     const [selectedMarker, setSelectedMarker] = useState(null);
@@ -349,20 +385,21 @@ const App = () => {
     const [isPublic, setToggled] = useState(false);
     const [error, setError] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
-    const email = localStorage.getItem('email');
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
-    const handleOpen2 = () => setOpen2(true);
+    const handleOpen2 = () => {
+        setOpen2(true);
+        getSharedPins();
+    }
     const handleClose2 = () => setOpen2(false); 
-
+    const [ignored, forceUpdate] = useReducer (x=> x + 1, 0)
+    const [zoomLevel, setZoomLevel] = useState(12); 
     const [open3, setOpen3] = useState(false);//Comment box
     const handleOpen3 = () => setOpen3(true);
     const handleClose3 = () => setOpen3(false);
-
     const [heart, setheart] = useState(false);
     const like = () => setheart(true);
     const unlike = () => setheart(false);
-
 
     const [openModal, setOpenPinModal] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -393,6 +430,18 @@ const App = () => {
         setOpenPinModal(false);
     };
 
+    const handleMapIconClick = (Coordinates) => {    
+        handleClosePinModal();
+        setSelectedMarker(null);
+        if (zoomLevel === 14) {
+            setZoomLevel(14.01);
+        } else {
+            setZoomLevel(14);
+        }
+        setCurrentLocation(Coordinates);
+    }
+
+
     useEffect(() => {
         const fetchLocation = async () => {
             try {
@@ -414,11 +463,12 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php?email=${email}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                    }
+                    },
+                    credentials: 'include',
                 });
 
                 if (!response.ok) {
@@ -429,68 +479,59 @@ const App = () => {
 
                 const data = JSON.parse(rawData);
                 console.log('Parsed Data:', data);
+                if (data.success) { 
 
-                if (data.success) {
                     data.data.forEach(coordinate => {
-                        if (coordinate.email === email) {
-                            coordinate.first_name = "You"
-                            coordinate.last_name = ""
-                        }
                         updateMarker(coordinate);
                         fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
-                        console.log(coordinate.comments , coordinate.pin_id)
                     });
                 } else {
                     console.error('Error:', data.error);
                 }
-
-
             } catch (error) {
                 setError('Error fetching coordinates from backend');
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
-
-        fetchInfoFromBackend();
-    }, []);
-
-    useEffect(() => {
-        const getSharedPins = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                const result = await response.json();
-
-                if (result.message) {
-                    setError(result.message);
-                } else {
-                    const filteredResult = result.filter(item => item.email === email);
-
-                    if (filteredResult.length > 0) {
-                        await setMatchedData(filteredResult);
-
-                        for (let i = 0; i < filteredResult.length; i++) {
-                            const item = filteredResult[i];
-                            await fetchCityState(item.lat, item.lng, setMatchedData);
-                        }
-                    } else {
-
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error.message);
-            }
-        };
-
         getSharedPins();
-    }, []);
+        fetchInfoFromBackend();
+    }, [currentUser, userProfileOpen]);
 
- 
+
+    const getSharedPins = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sharedPinFetch.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const result = await response.json();
+            if (result.message) {
+                setError(result.message);
+            } else {
+                
+                if (result.length > 0) {
+                    setMatchedData(result);
+                    for (let i = 0; i < result.length; i++) {
+                        const item = result[i];
+                        updateMarker(item);
+                        await fetchCityState(item.lat, item.lng, setMarkers);
+                        await fetchCityState(item.lat, item.lng, setMatchedData);
+                    }
+                } else {
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    };
+        
+    useEffect(() => {
+        fetchCurrentUser();
+    }, []);
+    
     useEffect(() => {
         if (!markers.find(marker => marker.id === selectedMarker?.id)) {
             setSelectedMarker(null);
@@ -506,6 +547,26 @@ const App = () => {
             />
         ));
     };
+    const renderProfile = (profile) => {
+        let renderedProfile;
+        if (/^data:image\/[a-z]+;base64,/.test(profile)) {
+            renderedProfile = (
+                <img
+                    style={{ width: "100%", maxWidth: '150px', maxHeight: '150px', margin: '2px 0' }}
+                    width="50px" height="50px"
+                    src={profile}
+                    alt="Base64"
+                />
+            );
+        } else {
+            renderedProfile = (
+                <AccountCircleIcon
+                    style={{ fontSize: 150, color: profile, margin: '2px 0' }}
+                />
+            );
+        }
+        return renderedProfile;
+    }
 
     const updateMarker = (coordinates) => {
         const newMarker = {
@@ -520,21 +581,24 @@ const App = () => {
             last_name: coordinates.last_name,
             email: coordinates.email,
             comment: coordinates.comments,
-            like: coordinates.isLiked
+            like: coordinates.isLiked,
+            profile: coordinates.profile,
+            username: coordinates.username
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
 
     const sendcomment = () => { 
-        var comment = document.querySelector('.comment-box').value;
+        var comment = document.getElementById('myInput').value;
         var pin_id = selectedMarker.id
-        console.log(comment, pin_id)
-        sendCommentToBackend({ pin_id, comment });
-
+        if (comment !== "") {
+            sendCommentToBackend({ pin_id, comment });
+            selectedMarker.comment.push({comment: comment , user: "You"});
+            document.getElementById('myInput').value = ''
+            document.getElementById('myInput').placeholder = 'Comment Sent!'
+        }
+        else { document.getElementById('myInput').placeholder = 'Please Type Something' }
     }
-
-
-
 
     const placeNewMarker = () => {
         var title = document.querySelector('.title-box').value;
@@ -548,19 +612,22 @@ const App = () => {
 
         if (currentLocation) {
             const newMarker = {
+                username: currentUser.username,
                 lat: currentLocation.lat,
                 lng: currentLocation.lng,
                 id: markers.length + 1,
                 draggable: true,
                 title: title,
                 description: description,
-                date: date,
-                email: email,
-                first_name: "You"
+                date: date, 
+                like: false,
+                comment: [],
+                profile: currentUser.profile
+                
             };
-            fetchCityState(newMarker.lat, newMarker.lng, setMarkers)
+            fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ email, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic });
+            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -571,6 +638,7 @@ const App = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(info),
+                credentials: 'include',
             });
 
             if (!response.ok) {
@@ -592,6 +660,7 @@ const App = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(info),
+                credentials: 'include',
             });
 
             if (!response.ok) {
@@ -607,32 +676,43 @@ const App = () => {
 
     const likecheck = () => {
         let valueToSend;
+
         if (selectedMarker.like) {
             valueToSend = -1; // Send -1 if checkbox is checked
             unlike()
             selectedMarker.like = false
+            console.log("unliked")
         } else {
             valueToSend = 1; // Send 1 if checkbox is not checked
             like()
             selectedMarker.like = true
+            console.log("liked")
+           
+           
         }
+        sendlike(valueToSend)
+    };
 
-            fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ value: valueToSend, pin_id : selectedMarker.id, email: email})
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response from server:', data);
-                // Handle response from the server if needed
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle errors if any
+    const sendlike = async (info) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/likes.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ value: info, pin_id: selectedMarker.id })
             });
+
+            if (!response.ok) {
+                throw new Error('Failed to send likes to the backend');
+            }
+
+            const data = await response.json();
+            console.log('like sent successfully:', data);
+        } catch (error) {
+            console.error('Error sending likes to the backend:', error.message);
+        }
     };
 
     const fetchCityState = async (lat, lng, location) => {
@@ -657,14 +737,18 @@ const App = () => {
 
                 location(prevData => {
                     return prevData.map(item => {
+                        
                         if (item.lat === lat && item.lng === lng) {
                             return {
                                 ...item,
                                 city: city,
                                 state: state
+
                             };
+
                         }
                         return item;
+
                     });
                 });
             } else {
@@ -689,7 +773,7 @@ const App = () => {
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={currentLocation}
-                zoom={currentLocation ? 12 : 12}
+                zoom={zoomLevel}
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
@@ -697,9 +781,9 @@ const App = () => {
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
-                            <AccountCircleIcon style={{ fontSize: 150, color: 'black', margin: '2px 0' }} />
+                                {renderProfile(selectedMarker.profile)}
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                {selectedMarker.first_name} {selectedMarker.last_name}
+                                {selectedMarker.username}
                             </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
@@ -724,54 +808,70 @@ const App = () => {
                                 <IconButton onClick={handleOpen3}>
                                     <ChatIcon fontSize='large'  />
                                 </IconButton>
+
                                 <Modal
                                     open={open3}
                                     onClose={handleClose3}
                                 >
-                                    <Box className="commentmodal" sx={modalStyle}>
-                                        <div className="comment"></div>
-                         
-                                        <html lang="en">
-                                            <head>
-                                                <meta charset="UTF-8"></meta>
-                                                <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-                                                <title>Your Page Title</title>
-                                            </head>
-                                            <body>
-                                                <form>
-                                                    <textarea
-                                                        className="comment-box"
-                                                        name="comment"
-                                                        rows="4"
-                                                        cols="50">
-                                                    </textarea>
-                                                </form>
-
-                                            </body>
-                                        </html>
+                                    <Box className="PinInfo" sx={pinModalStyle} >
                                         <button className="leave-arrow" onClick={handleClose3}>
                                             <ArrowBackIosNewIcon />
                                         </button>
-                                      
+                                        <h1>Comments</h1>
+                                        <Divider/>
+                                                <List sx={{ width: '100%', maxWidth: 500, maxHeight: 400, bgcolor: 'background.paper', overflow: "scroll" }}>
+                                                    {selectedMarker.comment && selectedMarker.comment.length > 0 ? (
+                                                        selectedMarker.comment.map((comment, index) => (
+                                                            <div key={index}>
+                                                                <ListItem >
+                                                                    <ListItemText
+                                                                        primary={comment.comment}
+                                                                        secondary= {"Created by: " + comment.username }
+                                                                     />
+                                                                    
+                                                                </ListItem>
+                                                            <Divider/>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <ListItem>
+                                                            <ListItemText primary="No comments available" />
+                                                            </ListItem>
+                                                    )}
+                                                </List>
+                                                <form >
+                                            <textarea
+                                                className="comment-box"
+                                                        rows="4"
+                                                        cols="50"
+                                                        id="myInput"
+                                                        placeholder="Type Your Comment Here!">
+                                                    </textarea>
+                                                </form>
+                                        <button className="leave-arrow" onClick={handleClose3}>
+                                            <ArrowBackIosNewIcon />
+                                        </button>
                                         <Button sx={{
                                             bgcolor: "#354545",
                                             color: "#FFFFFF",
                                             fontSize: "large"
                                         }}
-                                            className="comment-box"
+                                            
                                             variant="contained"
                                             onClick={() => {
-                                              sendcomment()
-                                              handleClose3()
+                                                sendcomment();
+                                                forceUpdate();
                                             }}
                                             style={{ borderRadius: 10 }}>Add Comment</Button>
-                                            
                                     </Box>
-                 
                                 </Modal>
-
-                                <IconButton>
-                                    <MapIcon fontSize='large' />
+                                <IconButton  
+                                    onClick={() => {
+                                        handleMapIconClick({ lat: selectedMarker.lat, lng: selectedMarker.lng })
+                                    }}>
+                                    <MapIcon 
+                                        style={{ color: "#000" }}
+                                        fontSize='large'/>
                                 </IconButton>
                             </div>
                             <Box
@@ -800,7 +900,12 @@ const App = () => {
                         <AccountCircleIcon className="accountcircle-icon" />
                     </button>
                     {userProfileOpen && (
-                        <UserProfile onClose={() => setUserProfileOpen(false)} />
+                        <UserProfile onClose={() => {
+                            setUserProfileOpen(false); 
+                            getSharedPins();
+                            setMarkers([]); 
+                        }} 
+                        />
                     )}
                 </div>
                 <header className="plus-icon">
@@ -878,13 +983,21 @@ const App = () => {
                                     <h2>Shared Pins</h2>
                                 </ListItem>
                                 <Divider />
-
                                 {matchedData.length > 0 ? (
                                     matchedData.map((item) => (
                                         <React.Fragment key={item.lat}>
                                             <ListItem alignItems="flex-start">
                                                 <ListItemText
-                                                    primary={`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                    primary={
+                                                        <React.Fragment>
+                                                            <Typography variant="subtitle1">
+                                                                {`${item.title}`}
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                {`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                            </Typography>
+                                                        </React.Fragment>
+                                                    }
                                                     secondary={
                                                         <React.Fragment>
                                                             <Typography
@@ -895,8 +1008,8 @@ const App = () => {
                                                             >
                                                                 Date: {item.date}
                                                             </Typography>
-                                                            <Typography>
-                                                                {" Created by: " + item.first_name + " " + item.last_name}
+                                                            <Typography variant='body2'>
+                                                                {" Created by: " + item.username}
                                                             </Typography>
                                                         </React.Fragment>
                                                     }
@@ -912,7 +1025,6 @@ const App = () => {
                                         />
                                     </ListItem>
                                 )}
-
                             </List>
                         </Box>
                     </SwipeableDrawer>

@@ -9,15 +9,15 @@ if($allowCORS) {
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Max-Age: 86400'); // cache for 1 day
     }
-    
+
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        
+
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-    
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-    
+
         exit(0);
     }
 } else {
@@ -36,9 +36,9 @@ if($allowCORS) {
     header("Content-Type: application/json");
 
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-        
+
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -47,33 +47,35 @@ if($allowCORS) {
     }
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
-$identifier = $data['identifier'];
-$pass = $data['pass'];
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["success" => false, "message" => "User not logged in"]);
+    exit();
+}
 
-if (isset($identifier) && isset($pass)) {
-    if ($identifier != "" && $pass != "") {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
-        $stmt->bind_param("ss", $identifier, $identifier);
-        $stmt->execute();
-        $result = $stmt->get_result();
+// Fetch the logged-in user's username from the database
+$user_id = $_SESSION['user_id'];
+$loggedInUserQuery = "SELECT username FROM users WHERE id = $user_id";
+$loggedInUserResult = $conn->query($loggedInUserQuery);
 
-        if ($result->num_rows == 1) {
-            $user = $result->fetch_assoc();
-            if (password_verify($pass, $user['pass'])) {
-                $_SESSION['user_id'] = $user['id'];
-                echo json_encode(["code" => 200, "message" => "Login successful"]);
-            } else {
-                echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
-            }
-        } else {
-            echo json_encode(["code" => 401, "error" => "Invalid identifier or password"]);
+if ($loggedInUserResult->num_rows == 1) {
+    $loggedInUser = $loggedInUserResult->fetch_assoc()['username'];
+
+    // Fetch usernames from the database excluding the username of the logged-in user
+    $usersQuery = "SELECT username FROM users WHERE username != '$loggedInUser'";
+    $result = $conn->query($usersQuery);
+
+    if ($result->num_rows > 0) {
+        $usernames = [];
+        while ($row = $result->fetch_assoc()) {
+            $usernames[] = $row['username'];
         }
+        echo json_encode(["success" => true, "usernames" => $usernames]);
     } else {
-        echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+        echo json_encode(["success" => false, "message" => "No users found in the database"]);
     }
 } else {
-    echo json_encode(["code" => 401, "error" => "Please provide identifier and password"]);
+    echo json_encode(["success" => false, "message" => "Failed to fetch logged-in user's username"]);
 }
 
 $conn->close();

@@ -29,10 +29,12 @@ $data = json_decode(file_get_contents("php://input"), true);
 $firstName = $data['firstName'];
 $lastName = $data['lastName'];
 $email = $data['email'];
+$username = $data['username'];
 $pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
+$profile = 'Black'; // default user icon color to black
 
-// Check if a user already exists
+// Check if a email already exists
 $check_if_exists = "SELECT email FROM users WHERE email = ?";
 $stmt = $conn->prepare($check_if_exists);
 
@@ -43,7 +45,26 @@ $user_exists = $stmt->get_result();
 if ($user_exists->num_rows > 0) { // Email is already in the DB
     http_response_code(400);
     die(json_encode(['message' => 'An account with this email already exists.']));
+}
+
+// Check if a username already exists
+$check_username = "SELECT username FROM users WHERE username = ?";
+$stmt = $conn->prepare($check_username);
+
+$stmt->bind_param("s", $username);
+$stmt->execute();
+
+$user_exists = $stmt->get_result();
+if ($user_exists->num_rows > 0) { // Username is already in the DB
+    http_response_code(400);
+    die(json_encode(['message' => 'An account with this username already exists.']));
 } 
+
+// Check if the username contains any whitespace
+if (preg_match('/\s/', $username)) {
+    http_response_code(400);
+    die(json_encode(['message' => 'The username cannot contain any spaces.']));
+}
 
 // check if passwords match
 if ($pass !== $confirmPass) {
@@ -54,7 +75,7 @@ if ($pass !== $confirmPass) {
 // check if password is at least 8 characters
 if (strlen($pass) < 8) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password must be at least 8 characters long.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long']));
 }
 
 // check if password contains at least one uppercase letter
@@ -88,10 +109,10 @@ if (!preg_match($pattern, $pass)) {
 // hash and salt password
 $pass = password_hash($pass, PASSWORD_DEFAULT);
 
-if(isset($email) && isset($pass)) {
+if(isset($email) && isset($pass) && isset($username)) {
     if($email != "" and $pass != ""){
-        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, pass) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $firstName, $lastName, $email, $pass);
+        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, username, pass, profile) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $firstName, $lastName, $email, $username, $pass, $profile);
         
         if($stmt->execute()) {
             http_response_code(201);
