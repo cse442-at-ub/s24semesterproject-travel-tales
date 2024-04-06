@@ -61,7 +61,7 @@ $matchedData = array();
 // Fetch pins for friend IDs
 foreach ($friend_ids as $friend_id) {
     // Query the PinsInfo table to get pins of the friend using their ID
-    $sql_pins = "SELECT lat, lng, title, description, date, isPublic, pin_id, username FROM PinsInfo WHERE user_id = ?";
+    $sql_pins = "SELECT lat, lng, title, description, date, isPublic, pin_id, username, profile FROM PinsInfo WHERE user_id = ?";
     $stmt_pins = $conn->prepare($sql_pins);
     $stmt_pins->bind_param("i", $friend_id);
     $stmt_pins->execute();
