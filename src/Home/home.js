@@ -593,8 +593,8 @@ const App = () => {
         var comment = document.getElementById('myInput').value;
         var pin_id = selectedMarker.id
         if (comment !== "") {
-            sendCommentToBackend({ pin_id, comment, email: localStorage.getItem('email') });
-            selectedMarker.comment.push({comment: comment , user: localStorage.getItem('email')});
+            sendCommentToBackend({ pin_id, comment });
+            selectedMarker.comment.push({comment: comment , user: "You"});
             document.getElementById('myInput').value = ''
             document.getElementById('myInput').placeholder = 'Comment Sent!'
         }
@@ -628,7 +628,7 @@ const App = () => {
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
+            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
         }
     };
     const sendCommentToBackend = async (info) => {
