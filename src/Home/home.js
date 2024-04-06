@@ -620,15 +620,16 @@ const App = () => {
                 draggable: true,
                 title: title,
                 description: description,
-                date: date,
+                date: date, 
                 like: false,
                 comment: [],
                 profile: currentUser.profile
                 
             };
+            console.log(currentUser.username);
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic});
+            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
         }
     };
     const sendCommentToBackend = async (info) => {
