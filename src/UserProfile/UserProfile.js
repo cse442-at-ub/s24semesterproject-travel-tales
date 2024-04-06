@@ -23,20 +23,25 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsDialog from '../Settings/SettingsDialog';
-
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 const [drawerAnchor, setDrawerAnchor] = useState('right');
 const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 const [profileData, setProfileData] = useState('black')
-const email = localStorage.getItem('email');
 
 
 useEffect(() => {
     const handleFetchProfile = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php?email=${email}`);
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
             const data = await response.json();
             setProfileData(data.profile)
 
@@ -46,7 +51,7 @@ useEffect(() => {
     };
     handleFetchProfile();
 
-}, [email]);
+}, []);
 
 
 const renderContent = () => {
@@ -85,7 +90,9 @@ const handleCloseSettings = () => {
 const list = () => (
     <div
         style={{
-            width: '40vw',
+            width: '100%', 
+            maxWidth: 400,
+            minWidth: 350,
             padding: '12px',
             display: 'flex',
             flexDirection: 'column',
@@ -98,6 +105,11 @@ const list = () => (
             e.stopPropagation();
         }}
     >
+        <ArrowBackIosNewIcon 
+            className="leave-arrow" 
+            onClick={onClose} 
+            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+        ></ArrowBackIosNewIcon>
         <Typography variant="h5" gutterBottom>
             PROFILE
         </Typography>

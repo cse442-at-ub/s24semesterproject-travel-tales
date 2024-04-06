@@ -16,11 +16,12 @@ import { useNavigate } from "react-router-dom";
 
 const getCurrentUserInfo = async () => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php?email=${localStorage.getItem('email')}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getCurrentUser.php`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include',
 
         });
 
@@ -57,6 +58,8 @@ const SettingsDialog = () => {
     const [error2, setError2] = useState('');
     const [error3, setError3] = useState('');
     const [message, setmessage] = useState('');
+    const [message2, setmessage2] = useState('');
+    const [message3, setmessage3] = useState('');
     const navigate = useNavigate();
     
     const [formData, setFormData] = useState({
@@ -130,15 +133,14 @@ const SettingsDialog = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
 
-                    body: JSON.stringify({ firstName: formData.firstName, lastName: formData.lastName, user_id: userInfo }),
+                    body: JSON.stringify({ firstName: formData.firstName, lastName: formData.lastName}),
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     setmessage(data.message);
-                    // Redirect to login page
-                    //navigate('/login');
                 } else {
                     const errorData = await response.json();
                     setError(errorData.message);
@@ -182,15 +184,13 @@ const SettingsDialog = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-
-                    body: JSON.stringify({pass: formData.pass, confirmPass: formData.confirmPass, user_id: userInfo }),
+                    credentials: 'include',
+                    body: JSON.stringify({pass: formData.pass, confirmPass: formData.confirmPass}),
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    setError2(data.message);
-                    // Redirect to login page
-                    //navigate('/login');
+                    setmessage2(data.message);
                 } else {
                     const errorData = await response.json();
                     setError2(errorData.message);
@@ -213,54 +213,42 @@ const SettingsDialog = () => {
     const handleemail = async (e) => {
         e.preventDefault();
         setError3('');
-        if (emailButton === "Confirm" || emailButton === "Changes have been made") {
-            if (formData.email !== formData.confirmEmail) {
-                setError3('Emails do not match.');
-                formData.Email = '';
-                formData.confirmEmail = '';
-                return;
-            }
-            setEmailButton("Are You Sure?")
+        
+        // Validate if emails match
+        if (formData.email !== formData.confirmEmail) {
+            setError3('Emails do not match.');
+            setFormData(prevState => ({ ...prevState, email: '', confirmEmail: '' }));
+            return;
         }
-        else {
-            if (formData.email !== formData.confirmEmail) {
-                setError3('Emails do not match.');
-                formData.Email = '';
-                formData.confirmEmail = '';
-                return;
-            }
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangeEmail.php`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-
-                    body: JSON.stringify({ email: formData.email, confirmEmail: formData.confirmEmail, user_id: userInfo }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setError3(data.message);
-               
-                } else {
-                    const errorData = await response.json();
-                    setError3(errorData.message);
-                    setEmailButton('Confirm')
-                    return;
+    
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangeEmail.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ email: formData.email, confirmEmail: formData.confirmEmail }),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                setmessage3(data.message);
+                if (emailButton === "Confirm") {
+                    setEmailButton("Changes have been made");
                 }
-            } catch (error) {
-                console.log(error)
-                setError3('An error occurred. Please try again later.');
-                setEmailButton('Confirm')
-                return;
+            } else {
+                const errorData = await response.json();
+                setError3(errorData.message);
+                setEmailButton('Confirm');
             }
-            handleLogout()
-            setEmailButton("Changes have been made")
-            formData.Email = '';
-            formData.confirmEmail = '';
+        } catch (error) {
+            console.log(error);
+            setError3('An error occurred. Please try again later.');
+            setEmailButton('Confirm');
         }
-    }
+    };
+    
 
 
 
@@ -314,6 +302,7 @@ const SettingsDialog = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, profile: color }),
+                credentials: 'include',
             });
             // Optionally, you can fetch the updated profile data here again
         } catch (error) {
@@ -511,7 +500,8 @@ const SettingsDialog = () => {
                                 />
 
                                     <TextField onChange={handleChange} required type="email" name="confirmEmail" id="emailchange2" label="Confirm New Email" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
+                                    sx={{ width: '100%', maxWidth: 300, margin: 2 }} />    
+                                {message3 && <p style={{ color: 'green' }}>{message3}</p>}
                                 {error3 && <p style={{ color: 'red' }}>{error3}</p>}
                                 <Button variant="contained" color="primary" type="submit" sx={{ mt: 2, margin: 1 }}>
                                     {emailButton}
@@ -544,6 +534,7 @@ const SettingsDialog = () => {
 
                                     <TextField onChange={handleChange} required type="password" id="passchange2" name="confirmPass" label="Confirm New Password" variant="outlined"
                                     sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
+                                {message2 && <p style={{ color: 'green' }}>{message2}</p>}
                                 {error2 && <p style={{ color: 'red' }}>{error2}</p>}
                                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 2, margin: 1 }}>
                                     {passButton}

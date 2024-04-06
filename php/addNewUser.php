@@ -32,6 +32,7 @@ $email = $data['email'];
 $username = $data['username'];
 $pass = $data['pass'];
 $confirmPass = $data['confirmPass'];
+$profile = 'Black'; // default user icon color to black
 
 // Check if a email already exists
 $check_if_exists = "SELECT email FROM users WHERE email = ?";
@@ -108,10 +109,10 @@ if (!preg_match($pattern, $pass)) {
 // hash and salt password
 $pass = password_hash($pass, PASSWORD_DEFAULT);
 
-if(isset($email) && isset($pass)) {
+if(isset($email) && isset($pass) && isset($username)) {
     if($email != "" and $pass != ""){
-        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, username, pass) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $firstName, $lastName, $email, $username, $pass);
+        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, username, pass, profile) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $firstName, $lastName, $email, $username, $pass, $profile);
         
         if($stmt->execute()) {
             http_response_code(201);

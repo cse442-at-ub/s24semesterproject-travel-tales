@@ -1,49 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List } from '@mui/material';
+import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List, CircularProgress } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import DeleteIcon from '@mui/icons-material/Delete';
-
 
 const MyPinsModal = ({ open, onClose, username }) => {
   const [pinsData, setPinsData] = useState([]);
   const [error, setError] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [deletedPinIndex, setDeletedPinIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php?email=${localStorage.getItem('email')}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          credentials: 'include',
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch pins data');
         }
         const pins = await response.json();
-        console.log(pins)
+        console.log(pins);
         setPinsData(pins);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error('Error fetching pins data:', error);
         setError(error.message || 'Failed to fetch pins data');
       }
     };
-
+  
     if (open) {
       fetchData();
     }
   }, [open, username]);
+  
 
   const handleDeletePin = async (pin) => {
-    setDeletedPinIndex(pin);
-    console.log(pin.pin_id); // Access pin_id directly
     setDeleteConfirmationOpen(true);
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/deletePin.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
         body: JSON.stringify({
           pin_id: pin.pin_id, // Access pin_id directly
         }),
+        credentials: 'include',
       });
   
       if (!response.ok) {
@@ -58,7 +67,6 @@ const MyPinsModal = ({ open, onClose, username }) => {
   
 
   const handleCloseDeleteConfirmation = () => {
-    setDeletedPinIndex(null);
     setDeleteConfirmationOpen(false);
     onClose();
   };
@@ -90,7 +98,9 @@ const MyPinsModal = ({ open, onClose, username }) => {
         ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
           MY PINS
-        </Typography>
+        </Typography>       
+        {loading && <CircularProgress />}
+        {error && <Typography variant="body1" color="error">{error}</Typography>} 
         <List>
         {Array.isArray(pinsData) && pinsData.map((pin, index) => (
             <Accordion key={index}>
