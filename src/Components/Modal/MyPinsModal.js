@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List } from '@mui/material';
+import { Modal, Box, Typography, Button, Accordion, AccordionSummary, AccordionDetails, List, CircularProgress } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import DeleteIcon from '@mui/icons-material/Delete';
-
 
 const MyPinsModal = ({ open, onClose, username }) => {
   const [pinsData, setPinsData] = useState([]);
   const [error, setError] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [deletedPinIndex, setDeletedPinIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchMyPins.php`, {
@@ -26,7 +26,9 @@ const MyPinsModal = ({ open, onClose, username }) => {
         const pins = await response.json();
         console.log(pins);
         setPinsData(pins);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error('Error fetching pins data:', error);
         setError(error.message || 'Failed to fetch pins data');
       }
@@ -39,8 +41,6 @@ const MyPinsModal = ({ open, onClose, username }) => {
   
 
   const handleDeletePin = async (pin) => {
-    setDeletedPinIndex(pin);
-    console.log(pin.pin_id); // Access pin_id directly
     setDeleteConfirmationOpen(true);
     try {
       const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/deletePin.php`, {
@@ -67,7 +67,6 @@ const MyPinsModal = ({ open, onClose, username }) => {
   
 
   const handleCloseDeleteConfirmation = () => {
-    setDeletedPinIndex(null);
     setDeleteConfirmationOpen(false);
     onClose();
   };
@@ -99,7 +98,9 @@ const MyPinsModal = ({ open, onClose, username }) => {
         ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
           MY PINS
-        </Typography>
+        </Typography>       
+        {loading && <CircularProgress />}
+        {error && <Typography variant="body1" color="error">{error}</Typography>} 
         <List>
         {Array.isArray(pinsData) && pinsData.map((pin, index) => (
             <Accordion key={index}>

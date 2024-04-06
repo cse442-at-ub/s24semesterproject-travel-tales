@@ -508,7 +508,6 @@ const App = () => {
                 credentials: 'include',
             });
             const result = await response.json();
-            console.log(result)
             if (result.message) {
                 setError(result.message);
             } else {
@@ -626,7 +625,6 @@ const App = () => {
                 profile: currentUser.profile
                 
             };
-            console.log(currentUser.username);
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
             sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});

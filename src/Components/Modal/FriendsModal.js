@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider } from '@mui/material';
+import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider, CircularProgress } from '@mui/material';
 import AddFriendModal from './AddFriendsModal';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
-
-
 
 const FriendsPin = ({ open, onClose }) => {
 const [friends, setFriends] = useState([]);
 const [AddFriendModalOpen, setAddFriendModalOpen] = useState(false);
+const [loading, setLoading] = useState(false);
 
 const handleAddFriendButtonClick = () => {
     setAddFriendModalOpen(true);
   }
 
   useEffect(() => {
+    setLoading(true);
     const fetchFriends = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
@@ -30,8 +29,10 @@ const handleAddFriendButtonClick = () => {
         }
 
         const data = await response.json();
+        setLoading(false);
         setFriends(data);
       } catch (error) {
+        setLoading(false);
         console.error('Error fetching friends:', error);
       }
     };
@@ -98,7 +99,7 @@ const handleAddFriendButtonClick = () => {
         <Typography variant="h3" gutterBottom>
           FRIENDS
         </Typography>
-        
+        {loading && <CircularProgress />}
         <List>
           {friends.map((friend, index) => (
             <React.Fragment key={index}>

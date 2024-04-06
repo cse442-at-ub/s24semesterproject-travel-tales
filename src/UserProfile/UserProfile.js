@@ -23,7 +23,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsDialog from '../Settings/SettingsDialog';
-
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 const [drawerAnchor, setDrawerAnchor] = useState('right');
@@ -90,7 +90,9 @@ const handleCloseSettings = () => {
 const list = () => (
     <div
         style={{
-            width: '40vw',
+            width: '100%', 
+            maxWidth: 400,
+            minWidth: 350,
             padding: '12px',
             display: 'flex',
             flexDirection: 'column',
@@ -103,6 +105,11 @@ const list = () => (
             e.stopPropagation();
         }}
     >
+        <ArrowBackIosNewIcon 
+            className="leave-arrow" 
+            onClick={onClose} 
+            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+        ></ArrowBackIosNewIcon>
         <Typography variant="h5" gutterBottom>
             PROFILE
         </Typography>

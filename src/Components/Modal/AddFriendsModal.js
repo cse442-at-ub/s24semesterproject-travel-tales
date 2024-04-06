@@ -118,7 +118,7 @@ const AddFriendModal = ({ open, onClose }) => {
           sx={{ mb: 2 }}
         />
 
-        {loading && <CircularProgress />} {/* Show loading indicator while fetching data */}
+        {loading && <CircularProgress />}
         
         {error && <Typography variant="body1" color="error">{error}</Typography>}
 
