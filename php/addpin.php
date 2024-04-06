@@ -72,12 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Fetching comments from the comments database
 $commentsQuery = $conn->prepare("SELECT pin_id, comment, user_id FROM comments");
 $commentsQuery->execute();
 $commentsResult = $commentsQuery->get_result();
 
-// Store comments in an associative array with pin_id as key
 $comments = array();
 while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
@@ -89,7 +87,6 @@ while ($commentRow = $commentsResult->fetch_assoc()) {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    $username = $row['username'];
     $comments[$pinId][] = array(
         "comment" => $comment,
         "user_id" => $user,
@@ -99,44 +96,36 @@ while ($commentRow = $commentsResult->fetch_assoc()) {
 }
 $commentsQuery->close();
 
-// Fetching user's email from the session
 $requestUserId = $_SESSION['user_id'] ?? null;
 
-// Check if the user_id is provided in the session
-if ($requestUserId) {
-    // Fetch the user's pins
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, profile FROM PinsInfo WHERE user_id = ?");
+if ($requestUserId !== null) { 
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
 
-    // Fetch user's first and last name
-    $userQuery = $conn->prepare("SELECT first_name, last_name, username FROM users WHERE id = ?");
+    $userQuery = $conn->prepare("SELECT first_name, last_name, username, profile FROM users WHERE id = ?");
     $userQuery->bind_param("s", $requestUserId);
     $userQuery->execute();
     $userResult = $userQuery->get_result();
     $userRow = $userResult->fetch_assoc();
 
-    // Array to store user's pins with comments
     $userPinsWithComments = array();
 
-    // Check if there are any user's pins
     if ($userPinsResult->num_rows > 0) {
         while ($userPinRow = $userPinsResult->fetch_assoc()) {
             $pinId = $userPinRow['pin_id'];
             $commentsForPin = isset($comments[$pinId]) ? $comments[$pinId] : array();
 
-            // Check if the pin is liked by the user
             $likeQuery = $conn->prepare("SELECT * FROM likes WHERE pin_id = ?");
             $likeQuery->bind_param("i", $pinId);
             $likeQuery->execute();
             $likeResult = $likeQuery->get_result();
             $isLiked = false;
 
-            // Initially set to false
             while ($likeRow = $likeResult->fetch_assoc()) {
                 if ($likeRow['user_id'] == $requestUserId) {
-                    $isLiked = true; // Set to true if user liked the pin
+                    $isLiked = true; 
                     break;
                 }
             }
@@ -152,9 +141,9 @@ if ($requestUserId) {
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
-                "profile" => $userPinRow['profile'],
+                "profile" => $userRow['profile'],
                 "comments" => $commentsForPin,
-                "isLiked" => $isLiked // Adding isLiked flag
+                "isLiked" => $isLiked
             );
 
             $likeQuery->close();
@@ -163,11 +152,10 @@ if ($requestUserId) {
     $userPinsQuery->close();
     $userQuery->close();
 
-    // Return matched data as JSON
     echo json_encode(['success' => true, 'data' => $userPinsWithComments]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid or missing data']);
 }
 
-// Close the database connection
 $conn->close();
+?>
