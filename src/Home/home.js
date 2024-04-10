@@ -624,6 +624,7 @@ const App = () => {
                 comment: [],
                 profile: currentUser.profile
                 
+                
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
