@@ -9,27 +9,28 @@ import ListItem from '@mui/material/ListItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MyPinsModal from '../Components/Modal/MyPinsModal';
 import FriendsPin from '../Components/Modal/FriendsModal';
-import Photo1 from '../assets/photo1.png';
-import Photo2 from '../assets/photo2.jpeg';
-import Photo3 from '../assets/photo3.jpeg';
-import Photo4 from '../assets/photo4.jpeg';
-import Photo5 from '../assets/photo5.jpeg';
-import Photo6 from '../assets/photo6.jpeg';
-import Photo7 from '../assets/photo7.jpeg';
-import Photo8 from '../assets/photo8.jpeg';
-import Photo9 from '../assets/photo9.jpeg';
+import pin_1 from '../assets/Profile/1_pin.png'
+import pin_5 from '../assets/Profile/5_pin.png'
+import pin_10 from '../assets/Profile/10_pin.png'
+import pin_25 from '../assets/Profile/25_pin.png'
+import pin_50 from '../assets/Profile/50_pin.png'
+import pin_100 from '../assets/Profile/100_pin.png'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsDialog from '../Settings/SettingsDialog';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Tooltip from '@mui/material/Tooltip';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
 const [drawerAnchor, setDrawerAnchor] = useState('right');
 const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 const [profileData, setProfileData] = useState('black')
+const [pinCount, setPinCount] = useState('0')
+
+
 
 
 useEffect(() => {
@@ -158,7 +159,7 @@ const list = () => (
             }}
         >
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                200 PINS |
+                {pinCount} PINS |
             </Typography>
 
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
@@ -209,15 +210,25 @@ const list = () => (
         <Divider style={{ width: '100%', margin: '20px' }} />
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
             {/* Place your picture components here */}
-            <img src={Photo1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo2} alt="Post 2" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo3} alt="Post 3" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo4} alt="Post 4" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo5} alt="Post 5" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo6} alt="Post 6" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo7} alt="Post 7" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo8} alt="Post 8" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
-            <img src={Photo9} alt="Post 9" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />
+            <Tooltip title="Create your first pin">
+                {pinCount >= 1 && <img src={pin_1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+            <Tooltip title="Create 5 pins">
+                {pinCount >= 5 && <img src={pin_5} alt="Post 5" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+            <Tooltip title="Create 10 pins">
+                {pinCount >= 10 && <img src={pin_10} alt="Post 10" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+            <Tooltip title="Create 25 pins">
+                {pinCount >= 25 && <img src={pin_25} alt="Post 25" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+            <Tooltip title="Create 50 pins">
+                {pinCount >= 50 && <img src={pin_50} alt="Post 50" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+            <Tooltip title="Create 100 pins">
+                {pinCount >= 100 && <img src={pin_100} alt="Post 100" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+            </Tooltip>
+
             {/* Add more pictures as needed */}
         </div>
     </div>
