@@ -12,7 +12,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Avatar from 'react-avatar-edit';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
-
+import editIcon from '../assets/editIcon.png'
 
 const getCurrentUserInfo = async () => {
     try {
@@ -81,6 +81,34 @@ const SettingsDialog = () => {
             }
         };
         fetchCurrentUser();
+    }, []);
+
+    useEffect(() => {
+        const handleFetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                setPreview(data.profile)
+                
+                    if (/^data:image\/[a-z]+;base64,/.test(data.profile)) {
+
+                        setPreview(data.profile)
+
+                    } else {
+                        setPreview(editIcon)
+                    }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+        handleFetchProfile();
+
     }, []);
 
     const handleChange = (e) => {
