@@ -16,7 +16,7 @@ import pin_25 from '../assets/Profile/25_pin.png'
 import pin_50 from '../assets/Profile/50_pin.png'
 import pin_100 from '../assets/Profile/100_pin.png'
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material/';
+import { Dialog, DialogContent, DialogTitle, CircularProgress } from '@mui/material/';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsDialog from '../Settings/SettingsDialog';
@@ -29,8 +29,7 @@ const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 const [profileData, setProfileData] = useState('black')
 const [pinCount, setPinCount] = useState('0')
-
-
+const [loading, setLoading] = useState(false);
 
 
 useEffect(() => {
@@ -52,6 +51,34 @@ useEffect(() => {
     };
     handleFetchProfile();
 
+}, []);
+
+useEffect(() => {
+    setLoading(true);
+    const handleAchievements = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getAchievements.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+                const pinCount = data[0].count; 
+                setPinCount(pinCount);
+                setLoading(false);
+            } else {
+                setLoading(false);
+                console.error('Empty or invalid data received.');
+            }
+        } catch (error) {
+            setLoading(false);
+            console.error('Error fetching pin count:', error);
+        }
+    };
+    handleAchievements();
 }, []);
 
 
@@ -109,7 +136,7 @@ const list = () => (
         <ArrowBackIosNewIcon 
             className="leave-arrow" 
             onClick={onClose} 
-            style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
+            style={{ position: 'absolute', left: '5%', marginTop: '2%'}}
         ></ArrowBackIosNewIcon>
         <Typography variant="h5" gutterBottom>
             PROFILE
@@ -207,9 +234,11 @@ const list = () => (
                 </Button>
             </ButtonGroup>
         </ListItem>
-        <Divider style={{ width: '100%', margin: '20px' }} />
+        <Divider style={{ width: '110%', margin: '20px' }} />
+        <Typography variant="h5" style={{ marginBottom: '10px' }}>
+            Tale Achievements
+        </Typography>        {loading && <CircularProgress />}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
-            {/* Place your picture components here */}
             <Tooltip title="Create your first pin">
                 {pinCount >= 1 && <img src={pin_1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
             </Tooltip>
@@ -228,8 +257,6 @@ const list = () => (
             <Tooltip title="Create 100 pins">
                 {pinCount >= 100 && <img src={pin_100} alt="Post 100" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
             </Tooltip>
-
-            {/* Add more pictures as needed */}
         </div>
     </div>
 );
