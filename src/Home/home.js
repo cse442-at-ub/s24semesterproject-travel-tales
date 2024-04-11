@@ -22,6 +22,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
+import AddImageButton from '../Components/Buttons/AddImage';
 
 
 const libraries = ['places'];
@@ -961,6 +962,7 @@ const App = () => {
                                     placeNewMarker();
                                 }}
                                 style={{ borderRadius: 10 }}>Add Pin</Button>
+                                <AddImageButton />
                         </Box>
                     </Modal>
                 </header>
