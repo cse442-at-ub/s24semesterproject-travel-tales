@@ -30,6 +30,8 @@ const [drawerAnchor, setDrawerAnchor] = useState('right');
 const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 const [profileData, setProfileData] = useState('black')
+const [userStats, setUserStats] = useState('0');
+const [loading, setLoading] = useState(false);
 
 
 useEffect(() => {
@@ -51,6 +53,34 @@ useEffect(() => {
     };
     handleFetchProfile();
 
+}, []);
+
+useEffect(() => {
+    setLoading(true);
+    const handleAchievements = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/UserStats_Pins.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+                const pinCount = data[0].count; 
+                setUserStats(pinCount);
+                setLoading(false);
+            } else {
+                setLoading(false);
+                console.error('Empty or invalid data received.');
+            }
+        } catch (error) {
+            setLoading(false);
+            console.error('Error fetching pin count:', error);
+        }
+    };
+    handleAchievements();
 }, []);
 
 
@@ -158,7 +188,7 @@ const list = () => (
             }}
         >
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                200 PINS |
+                {userStats.num_entries} PINS |
             </Typography>
 
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
