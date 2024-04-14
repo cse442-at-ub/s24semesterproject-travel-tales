@@ -42,7 +42,7 @@ const getCurrentUserInfo = async () => {
 const SettingsDialog = () => {
     const email = localStorage.getItem('email');
     const [color, setColor] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState('');
     const handleAlignment = (event, newColor) => {
         setColor(newColor);
     };
@@ -76,7 +76,7 @@ const SettingsDialog = () => {
             try {
                 const userData = await getCurrentUserInfo();
                 setCurrentUser(userData)
-                console.log(userData)
+                //console.log(userData)
             } catch (error) {
                 console.log(error)
             }
@@ -109,7 +109,7 @@ const SettingsDialog = () => {
     const onClose = () => {
         setPreview(null);
         setButtonText("Confirm")
-        console.log("code ran")
+        
     }
 
     const onCrop = view => {
@@ -451,17 +451,17 @@ const SettingsDialog = () => {
                                     justifyContent: 'center',
                                 }}>
 
-                                    <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                        First Name: 
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        First Name: {currentUser.first_name }
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                        Last Name: 
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Last Name: {currentUser.last_name}
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                        Username: 
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Username: {currentUser.username}
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
-                                        Email: 
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Email: {currentUser.email}
                                     </Typography>
                                 </Box>
                             </AccordionDetails>
