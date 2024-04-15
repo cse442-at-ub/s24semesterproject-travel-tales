@@ -57,7 +57,7 @@ useEffect(() => {
     setLoading(true);
     const handleAchievements = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getAchievements.php`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Userstats.php`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
