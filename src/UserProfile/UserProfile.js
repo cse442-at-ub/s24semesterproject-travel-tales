@@ -28,8 +28,41 @@ const [drawerAnchor, setDrawerAnchor] = useState('right');
 const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
 const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
 const [profileData, setProfileData] = useState('black')
-const [pinCount, setPinCount] = useState('0')
+    const [pinCount, setPinCount] = useState('0')
+    const [likeCount, setLikeCount] = useState('0')
+    const [followCount, setFollowCount] = useState('0')
 const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        const handleUserStats = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userStats.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                if (data.length > 0) {
+                    console.log("Code ran");
+                    // Assuming data is an array with a single object
+                    const userData = data[0];
+                    setLikeCount(userData.likes_count);
+                    setFollowCount(userData.friend_count);
+                } else {
+                    setLoading(false);
+                    console.error('Empty or invalid data received.');
+                }
+            } catch (error) {
+                setLoading(false);
+                console.error('Error fetching user stats:', error);
+            }
+        };
+        handleUserStats();
+    }, []);
+
 
 
 useEffect(() => {
@@ -190,11 +223,11 @@ const list = () => (
             </Typography>
 
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                200 LIKES |
+                {likeCount} LIKES |
             </Typography>
 
             <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                2000 FRIENDS
+                {followCount} Followers
             </Typography>
         </div>
 
