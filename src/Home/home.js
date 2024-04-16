@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
 import '../App.css';
-import { Modal, Button, Box, TextField } from '@mui/material';
+import { Modal, Button, Box, TextField, Switch } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
 import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
@@ -920,33 +920,7 @@ const App = () => {
                         open={open}
                         onClose={handleClose}
                     >
-                        <Box className="modalAddPin" sx={modalStyle}>
-                            {/* <div className="description"></div>
-                            <div className="title-words"></div>
-                            <div className="make-public"></div>
-                            <html lang="en">
-                                <head>
-                                    <meta charset="UTF-8"></meta>
-                                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-                                    <title>Your Page Title</title>
-                                </head>
-                                <body>
-                                    <form>
-                                        <textarea
-                                            className="title-box"
-                                            name="title"
-                                            rows="4"
-                                            cols="50">
-                                        </textarea>
-                                        <textarea
-                                            className="description-box"
-                                            name="description"
-                                            rows="4"
-                                            cols="50">
-                                        </textarea>
-                                    </form>
-                                </body>
-                            </html> */}
+                        <Box sx={modalStyle}>
                             <TextField
                                 label="Title"
                                 fullWidth
@@ -971,19 +945,19 @@ const App = () => {
                             <button className="switch" onClick={handleToggleClick}>
                                 {isPublic ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
                             </button>
+                            <Typography variant='subtitle1'>Make Public? <Switch />
+                            </Typography>
                             <Button sx={{
                                 bgcolor: "#354545",
                                 color: "#FFFFFF",
                                 fontSize: "large"
                             }}
-                                className="add-pin-box"
                                 variant="contained"
                                 onClick={() => {
                                     handleSubmit();
                                     placeNewMarker();
                                 }}
                                 style={{ borderRadius: 10 }}>Add Pin</Button>
-                                <Button>Test</Button>
                         </Box>
                     </Modal>
                 </header>
