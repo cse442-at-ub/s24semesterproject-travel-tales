@@ -280,10 +280,12 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 </ButtonGroup>
             </ListItem>
             <Divider style={{ width: '110%', margin: '20px' }} />
+
             <Typography variant="h5" style={{ marginBottom: '10px' }}>
                 Tale Achievements
             </Typography>        {loading && <CircularProgress />}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
+
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
                 <Tooltip title="Create your first pin">
                     {pinCount >= 1 && <img src={pin_1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
@@ -302,43 +304,41 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 <Tooltip title="Create 100 pins">
                     {pinCount >= 100 && <img src={pin_100} alt="Post 100" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
-
                 <Tooltip title="Get your first like">
-                    {likeCount >= 1 && <img src={like_1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 1 && <img src={like_1} alt="Like 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 5 likes">
-                    {likeCount >= 5 && <img src={like_5} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 5 && <img src={like_5} alt="Like 5" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 10 likes">
-                    {likeCount >= 10 && <img src={like_10} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 10 && <img src={like_10} alt="Like 10" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 25 likes">
-                    {likeCount >= 25 && <img src={like_25} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 25 && <img src={like_25} alt="Like 25" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 50 likes">
-                    {likeCount >= 50 && <img src={like_50} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 50 && <img src={like_50} alt="Like 50" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 100 likes">
-                    {likeCount >= 100 && <img src={like_100} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {likeCount >= 100 && <img src={like_100} alt="Like 100" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
-
                 <Tooltip title="Get your first follower">
-                    {followCount >= 1 && <img src={follower_1} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 1 && <img src={follower_1} alt="Follower 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 5 followers">
-                    {followCount >= 5 && <img src={follower_5} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 5 && <img src={follower_5} alt="Follower 5" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 10 followers">
-                    {followCount >= 10 && <img src={follower_10} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 10 && <img src={follower_10} alt="Follower 10" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 25 followers">
-                    {followCount >= 25 && <img src={follower_25} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 25 && <img src={follower_25} alt="Follower 25" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 50 followers">
-                    {followCount >= 50 && <img src={follower_50} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 50 && <img src={follower_50} alt="Follower 50" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
                 <Tooltip title="Get 100 followers">
-                    {followCount >= 100 && <img src={follower_100} alt="Post 1" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
+                    {followCount >= 100 && <img src={follower_100} alt="Follower 100" style={{ width: '150px', height: '150px', borderRadius: '0px' }} />}
                 </Tooltip>
             </div>
         </div>
