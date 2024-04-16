@@ -36,6 +36,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Tooltip from '@mui/material/Tooltip';
 
 const SwipeableTemporaryDrawer = ({ open, onClose }) => {
+
     const [drawerAnchor, setDrawerAnchor] = useState('right');
     const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
     const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
@@ -44,6 +45,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const [likeCount, setLikeCount] = useState('0')
     const [followCount, setFollowCount] = useState('0')
     const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         setLoading(true);
@@ -68,6 +70,53 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     console.error('Empty or invalid data received.');
                 }
             } catch (error) {
+
+                setLoading(false);
+                console.error('Error fetching user stats:', error);
+            }
+        };
+        handleUserStats();
+    }, []);
+
+
+
+useEffect(() => {
+    const handleFetchProfile = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const data = await response.json();
+            setProfileData(data.profile)
+
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+        }
+    };
+    handleFetchProfile();
+
+}, []);
+
+useEffect(() => {
+    setLoading(true);
+    const handleAchievements = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/getAchievements.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+                const pinCount = data[0].count; 
+                setPinCount(pinCount);
+
                 setLoading(false);
                 console.error('Error fetching user stats:', error);
             }
