@@ -22,7 +22,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
-import AddImageButton from '../Components/Buttons/AddImage';
+import AddImageButton from '../Components/Buttons/AddImageButton';
 
 
 const libraries = ['places'];
@@ -892,7 +892,7 @@ const App = () => {
                             </Box>
                             <button className="leave-arrow" onClick={handleClosePinModal}>
                                 <ArrowBackIosNewIcon />
-                            </button>
+                            </button>``
                         </Box>
                     </Modal>
                 )}
@@ -962,7 +962,7 @@ const App = () => {
                                     placeNewMarker();
                                 }}
                                 style={{ borderRadius: 10 }}>Add Pin</Button>
-                                <AddImageButton />
+                                <Button>Test</Button>
                         </Box>
                     </Modal>
                 </header>
