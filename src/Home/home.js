@@ -418,10 +418,6 @@ const App = () => {
         handleClose()
     };
 
-    const handleToggleClick = () => {
-        setToggled(!isPublic);
-    };
-
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
         setOpenPinModal(true);
@@ -603,7 +599,7 @@ const App = () => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-
+    const handleIsPublic = () => setOpen(!isPublic);
     const placeNewMarker = () => {
         // var title = document.querySelector('.title-box').value;
         // var description = document.querySelector('.description-box').value;
@@ -942,10 +938,7 @@ const App = () => {
                             <button className="leave-arrow" onClick={handleClose}>
                                 <ArrowBackIosNewIcon />
                             </button>
-                            <button className="switch" onClick={handleToggleClick}>
-                                {isPublic ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
-                            </button>
-                            <Typography variant='subtitle1'>Make Public? <Switch />
+                            <Typography variant='subtitle1'>Make Public? <Switch onClick={handleIsPublic} />
                             </Typography>
                             <Button sx={{
                                 bgcolor: "#354545",
