@@ -22,7 +22,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import LanguageIcon from '@mui/icons-material/Language';
 
 const libraries = ['places'];
 const mapContainerStyle = {
@@ -778,6 +779,44 @@ const App = () => {
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
+            <Box
+                sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '5%',
+                    backgroundColor: '#333', 
+                    color: '#fff',
+                    padding: '10px',
+                    textAlign: 'center',
+                }}
+                >
+                    <div className="account-icon">
+                        <Button onClick={() => handleAccountCircleButtonClick()}>
+                            <AccountCircleIcon className="accountcircle-icon" />
+                        </Button>
+                        {userProfileOpen && (
+                            <UserProfile onClose={() => {
+                                setUserProfileOpen(false); 
+                                getSharedPins();
+                                setMarkers([]); 
+                            }} 
+                            />
+                        )}
+                    </div>
+                    <div className="plus-icon">
+                        <Button onClick={handleOpen}>
+                            <AddCircleOutlineIcon className="pluscircle-icon" />
+                        </Button>
+                    </div>
+                    <div className="shared-icon">
+                        <Button onClick={handleOpen2}>
+                            <LanguageIcon className="sharedcircle-icon" />
+                        </Button>
+                    </div>
+                </Box>
+                
                 {renderMarkers()}
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
@@ -896,23 +935,7 @@ const App = () => {
                         </Box>
                     </Modal>
                 )}
-                <div className="account-icon">
-                    <button className="white-button" onClick={() => handleAccountCircleButtonClick()}>
-                        <AccountCircleIcon className="accountcircle-icon" />
-                    </button>
-                    {userProfileOpen && (
-                        <UserProfile onClose={() => {
-                            setUserProfileOpen(false); 
-                            getSharedPins();
-                            setMarkers([]); 
-                        }} 
-                        />
-                    )}
-                </div>
                 <header className="plus-icon">
-                    <Button variant="contained" color="primary" onClick={handleOpen}>
-                        <img src={plusButtonImage} alt="Plus Button" />
-                    </Button>
                     <Modal
                         open={open}
                         onClose={handleClose}
@@ -966,9 +989,6 @@ const App = () => {
                     </Modal>
                 </header>
                 <div>
-                    <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
-                        <img src={sharedPin} alt="Shared Pins" />
-                    </button>
                     <SwipeableDrawer
                         className='SharedPinsContainer'
                         open={open2}
