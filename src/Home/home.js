@@ -842,6 +842,7 @@ const App = () => {
                                                 <form >
                                             <textarea
                                                 className="comment-box"
+                                                        maxLength={200}
                                                         rows="4"
                                                         cols="50"
                                                         id="myInput"
