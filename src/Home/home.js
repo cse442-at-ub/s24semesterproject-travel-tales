@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
 import '../App.css';
-import { Modal, Button, Box } from '@mui/material';
+import { Modal, Button, Box, TextField } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
 import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
@@ -601,9 +601,12 @@ const App = () => {
         else { document.getElementById('myInput').placeholder = 'Please Type Something' }
     }
 
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+
     const placeNewMarker = () => {
-        var title = document.querySelector('.title-box').value;
-        var description = document.querySelector('.description-box').value;
+        // var title = document.querySelector('.title-box').value;
+        // var description = document.querySelector('.description-box').value;
 
         var currentDate = new Date();
         var offset = currentDate.getTimezoneOffset();
@@ -918,7 +921,7 @@ const App = () => {
                         onClose={handleClose}
                     >
                         <Box className="modalAddPin" sx={modalStyle}>
-                            <div className="description"></div>
+                            {/* <div className="description"></div>
                             <div className="title-words"></div>
                             <div className="make-public"></div>
                             <html lang="en">
@@ -943,7 +946,25 @@ const App = () => {
                                         </textarea>
                                     </form>
                                 </body>
-                            </html>
+                            </html> */}
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                variant="outlined"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                sx={{ mt: 2 }}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                sx={{ mt: 2 }}
+                            />
                             <button className="leave-arrow" onClick={handleClose}>
                                 <ArrowBackIosNewIcon />
                             </button>
