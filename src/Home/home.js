@@ -422,6 +422,7 @@ const App = () => {
     };
 
     const handleMarkerClick = (marker) => {
+        console.log(marker);
         setSelectedMarker(marker);
         setOpenPinModal(true);
     };
@@ -986,35 +987,43 @@ const App = () => {
                                 {matchedData.length > 0 ? (
                                     matchedData.map((item) => (
                                         <React.Fragment key={item.lat}>
-                                            <ListItem alignItems="flex-start">
-                                                <ListItemText
-                                                    primary={
-                                                        <React.Fragment>
-                                                            <Typography variant="subtitle1">
-                                                                {`${item.title}`}
-                                                            </Typography>
-                                                            <Typography variant="body2">
-                                                                {`City/State: ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
-                                                            </Typography>
-                                                        </React.Fragment>
-                                                    }
-                                                    secondary={
-                                                        <React.Fragment>
-                                                            <Typography
-                                                                sx={{ display: 'inline' }}
-                                                                component="span"
-                                                                variant="body2"
-                                                                color="text.primary"
-                                                            >
-                                                                Date: {item.date}
-                                                            </Typography>
-                                                            <Typography variant='body2'>
-                                                                {" Created by: " + item.username}
-                                                            </Typography>
-                                                        </React.Fragment>
-                                                    }
-                                                />
-                                            </ListItem>
+                                            <Button 
+                                                onClick={() => {
+                                                    handleMarkerClick(markers.find(marker => marker.id === item.pin_id));
+                                                    handleClose2();
+                                                }}
+                                                sx={{ color: 'black' }}
+                                            >
+                                                <ListItem alignItems="flex-start">
+                                                    <ListItemText
+                                                        primary={
+                                                            <React.Fragment>
+                                                                <Typography variant="subtitle1">
+                                                                    {`${item.title}`}
+                                                                </Typography>
+                                                                <Typography variant="body2">
+                                                                    {` ${item.city || item.state || "NA"}, ${item.state || "NA"}`}
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        }
+                                                        secondary={
+                                                            <React.Fragment>
+                                                                <Typography
+                                                                    sx={{ display: 'inline' }}
+                                                                    component="span"
+                                                                    variant="body2"
+                                                                    color="text.primary"
+                                                                >
+                                                                    Date: {item.date}
+                                                                </Typography>
+                                                                <Typography variant='body2'>
+                                                                    {" Created by: " + item.username}
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        }
+                                                    />
+                                                </ListItem>
+                                            </Button>
                                             <Divider />
                                         </React.Fragment>
                                     ))
