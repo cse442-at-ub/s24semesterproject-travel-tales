@@ -929,12 +929,14 @@ const App = () => {
                                 <body>
                                     <form>
                                         <textarea
+                                            maxLength={30}
                                             className="title-box"
                                             name="title"
                                             rows="4"
                                             cols="50">
                                         </textarea>
                                         <textarea
+                                            maxLength={300}
                                             className="description-box"
                                             name="description"
                                             rows="4"
