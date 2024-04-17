@@ -418,14 +418,9 @@ const App = () => {
         setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
     };
 
-    const handleSubmit = (event) => {
-        handlePinImageSubmit();
-        handleClose();
-    };
-
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
-        //TODO:
+        //TODO: fetch and display pin image
         setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
@@ -606,10 +601,9 @@ const App = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const handleIsPublic = (event) => setIsPublicPin(event.target.checked);
-    const placeNewMarker = () => {
-        // var title = document.querySelector('.title-box').value;
-        // var description = document.querySelector('.description-box').value;
 
+    const placeNewMarker = async () => {
+        handleClose();
         var currentDate = new Date();
         var offset = currentDate.getTimezoneOffset();
         currentDate.setMinutes(currentDate.getMinutes() - offset);
@@ -633,34 +627,32 @@ const App = () => {
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
+            const info = { username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile}
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(info),
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to send coordinates to the backend');
+                }
+
+                const data = await response.json();
+                console.log('Coordinates sent successfully:', data);
+            } catch (error) {
+                console.error('Error sending coordinates to the backend:', error.message);
+            }
+            handlePinImageSubmit();
         }
     };
     const sendCommentToBackend = async (info) => {
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sendComment.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(info),
-                credentials: 'include',
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to send coordinates to the backend');
-            }
-
-            const data = await response.json();
-            console.log('Coordinates sent successfully:', data);
-        } catch (error) {
-            console.error('Error sending coordinates to the backend:', error.message);
-        }
-    };
-
-    const sendCoordinatesToBackend = async (info) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1015,7 +1007,6 @@ const App = () => {
                                 }}
                                 variant="contained"
                                 onClick={() => {
-                                    handleSubmit();
                                     placeNewMarker();
                                 }}
                                 style={{ borderRadius: 10 }}
