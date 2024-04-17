@@ -651,6 +651,10 @@ const App = () => {
                 console.error('Error sending coordinates to the backend:', error.message);
             }
             handlePinImageSubmit(image_id);
+            setTitle('');
+            setDescription('');
+            setFile(null);
+            setFileName('');
         }
     };
     const sendCommentToBackend = async (info) => {
