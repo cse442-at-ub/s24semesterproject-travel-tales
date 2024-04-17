@@ -65,7 +65,7 @@ const AddFriendModal = ({ open, onClose }) => {
 
         setButtonStates(prevState => ({
             ...prevState,
-            [user]: 'Added!'
+            [user]: 'Followed!'
         }));
     } catch (error) {
         console.error('There was a problem adding the friend:', error.message);
@@ -106,7 +106,7 @@ const AddFriendModal = ({ open, onClose }) => {
             style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
         ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
-          ADD FRIEND
+          ADD FOLLOWERS
         </Typography>
         
         <TextField
@@ -122,7 +122,7 @@ const AddFriendModal = ({ open, onClose }) => {
         
         {error && <Typography variant="body1" color="error">{error}</Typography>}
 
-        <List>
+        <List sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
           {filteredUsernames.map((username, index) => (
             <React.Fragment key={index}>
               <ListItem disablePadding>
@@ -130,10 +130,10 @@ const AddFriendModal = ({ open, onClose }) => {
                   {errorMessage && <p>{errorMessage}</p>}
                   <Button 
                     onClick={() => handleAddFriend(username)}
-                    disabled={buttonStates[username] === 'Added'}
+                    disabled={buttonStates[username] === 'Followed'}
                     style={{ position: 'absolute', left: '75%', width: '20%', color: 'white', backgroundColor: buttonStates[username] ? 'orange' : 'green' }}
                     >
-                      {buttonStates[username] || 'Add Friend'}
+                      {buttonStates[username] || 'Follow'}
                     </Button>
                     <Typography variant="h6" padding={1}>{username}</Typography>
                 </ListItemButton>
