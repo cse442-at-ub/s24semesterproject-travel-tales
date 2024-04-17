@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
 import '../App.css';
 import { Modal, Button, Box, TextField, Switch } from '@mui/material';
@@ -388,6 +388,7 @@ const App = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
+    const [isPublicPin, setIsPublicPin] = useState(false);
     const handleOpen2 = () => {
         setOpen2(true);
         getSharedPins();
@@ -599,7 +600,7 @@ const App = () => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const handleIsPublic = () => setOpen(!isPublic);
+    const handleIsPublic = (event) => setIsPublicPin(event.target.checked);
     const placeNewMarker = () => {
         // var title = document.querySelector('.title-box').value;
         // var description = document.querySelector('.description-box').value;
@@ -766,7 +767,6 @@ const App = () => {
     if (!isLoaded) {
         return <div>Loading maps</div>;
     }
-
 
     return (
         <div style={mapContainerStyle}>
@@ -940,6 +940,7 @@ const App = () => {
                             </button>
                             <Typography variant='subtitle1'>Make Public? <Switch onClick={handleIsPublic} />
                             </Typography>
+
                             <Button sx={{
                                 bgcolor: "#354545",
                                 color: "#FFFFFF",
