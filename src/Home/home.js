@@ -810,36 +810,6 @@ const App = () => {
         }
     };
 
-    // const handlePinImageSubmit = async (image_id) => {
-    //     if (!file) {
-    //         alert('No file selected');
-    //         return;
-    //     }
-
-    //     const formData = new FormData();
-    //     formData.append('image', file);
-
-    //     try {
-    //         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/AddPinImage.php`, {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    //         const data = await response.json();
-
-    //         if (response.ok) {
-    //             console.log('Upload successful:', data);
-    //             alert('Image uploaded successfully!');
-    //         } else {
-    //             throw new Error('Failed to upload image.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error uploading image:', error);
-    //         alert('Error uploading image.');
-    //     }
-    // };
-
-    // End: Add Image State/Methods
-
     return (
         <div style={mapContainerStyle}>
             <GoogleMap
