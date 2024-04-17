@@ -627,7 +627,10 @@ const App = () => {
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            const info = { username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile}
+            const min = 100000;
+            const max = 999999;
+            const image_id = Math.floor(Math.random() * (max - min + 1) + min);
+            const info = { username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile, image_id }
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                     method: 'POST',
@@ -647,7 +650,7 @@ const App = () => {
             } catch (error) {
                 console.error('Error sending coordinates to the backend:', error.message);
             }
-            handlePinImageSubmit();
+            handlePinImageSubmit(image_id);
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -774,7 +777,7 @@ const App = () => {
         }
     };
 
-    const handlePinImageSubmit = async () => {
+    const handlePinImageSubmit = async (image_id) => { 
         if (!file) {
             alert('No file selected');
             return;
@@ -782,6 +785,7 @@ const App = () => {
 
         const formData = new FormData();
         formData.append('image', file);
+        formData.append('image_id', image_id);
 
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/AddPinImage.php`, {
@@ -801,6 +805,34 @@ const App = () => {
             alert('Error uploading image.');
         }
     };
+
+    // const handlePinImageSubmit = async (image_id) => {
+    //     if (!file) {
+    //         alert('No file selected');
+    //         return;
+    //     }
+
+    //     const formData = new FormData();
+    //     formData.append('image', file);
+
+    //     try {
+    //         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/AddPinImage.php`, {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //         const data = await response.json();
+
+    //         if (response.ok) {
+    //             console.log('Upload successful:', data);
+    //             alert('Image uploaded successfully!');
+    //         } else {
+    //             throw new Error('Failed to upload image.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error uploading image:', error);
+    //         alert('Error uploading image.');
+    //     }
+    // };
 
     // End: Add Image State/Methods
 
