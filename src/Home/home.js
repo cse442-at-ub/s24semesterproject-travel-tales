@@ -22,7 +22,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
-import AddImageButton from '../Components/Buttons/AddImageButton';
 
 
 const libraries = ['places'];
@@ -389,6 +388,10 @@ const App = () => {
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
     const [isPublicPin, setIsPublicPin] = useState(false);
+    // start: Add Pin Image useStates
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    // end: Add Pin Image useStates
     const handleOpen2 = () => {
         setOpen2(true);
         getSharedPins();
@@ -416,11 +419,13 @@ const App = () => {
     };
 
     const handleSubmit = (event) => {
-        handleClose()
+        handlePinImageSubmit();
+        handleClose();
     };
 
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
+        //TODO:
         setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
@@ -767,6 +772,45 @@ const App = () => {
     if (!isLoaded) {
         return <div>Loading maps</div>;
     }
+    
+    // Start: Add Pin Image Methods
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            setFileName(selectedFile.name);
+        }
+    };
+
+    const handlePinImageSubmit = async () => {
+        if (!file) {
+            alert('No file selected');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/AddPinImage.php`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Upload successful:', data);
+                alert('Image uploaded successfully!');
+            } else {
+                throw new Error('Failed to upload image.');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            alert('Error uploading image.');
+        }
+    };
+
+    // End: Add Image State/Methods
 
     return (
         <div style={mapContainerStyle}>
@@ -782,6 +826,7 @@ const App = () => {
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
+                            <img></img>
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.username}
                             </Typography>
@@ -891,7 +936,7 @@ const App = () => {
                             </Box>
                             <button className="leave-arrow" onClick={handleClosePinModal}>
                                 <ArrowBackIosNewIcon />
-                            </button>``
+                            </button>
                         </Box>
                     </Modal>
                 )}
@@ -941,17 +986,42 @@ const App = () => {
                             <Typography variant='subtitle1'>Make Public? <Switch onClick={handleIsPublic} />
                             </Typography>
 
+                            {/* Add Image Button */}
+                            <div>
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    id="fileInput"
+                                    accept="image/*"
+                                />
+                                <label htmlFor="fileInput">
+                                    <Button 
+                                    component="span"
+                                    variant="contained"
+                                    color="primary"
+                                    >
+                                        Upload Image
+                                    </Button>
+                                </label>
+                                {fileName && <Typography>{fileName}</Typography>}
+                            </div>
+                            {/* Add Image Button */}
+
                             <Button sx={{
                                 bgcolor: "#354545",
                                 color: "#FFFFFF",
                                 fontSize: "large"
-                            }}
+                                }}
                                 variant="contained"
                                 onClick={() => {
                                     handleSubmit();
                                     placeNewMarker();
                                 }}
-                                style={{ borderRadius: 10 }}>Add Pin</Button>
+                                style={{ borderRadius: 10 }}
+                            >
+                                Add Pin
+                            </Button>
                         </Box>
                     </Modal>
                 </header>
