@@ -422,7 +422,6 @@ const App = () => {
     };
 
     const handleMarkerClick = (marker) => {
-        console.log(marker);
         setSelectedMarker(marker);
         setOpenPinModal(true);
     };

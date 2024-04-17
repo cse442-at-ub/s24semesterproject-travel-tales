@@ -117,6 +117,14 @@ const MyPinsModal = ({ open, onClose, username }) => {
               <AccordionDetails sx={{ textAlign: 'left', position: 'relative' }}>
                 <Box sx={{ border: '1px solid black', display: 'flex', flexDirection: 'column', gap: '5px', p: 2 }}>
                   <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Description:</Typography>
+                    <Typography>{pin.description}</Typography>
+                  </div>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Coordinates:</Typography>
+                    <Typography>{pin.lat}, {pin.lng}</Typography>
+                  </div>
+                  <div>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Likes:</Typography>
                     <Typography>{pin.likes}</Typography>
                   </div>
@@ -124,7 +132,13 @@ const MyPinsModal = ({ open, onClose, username }) => {
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Public:</Typography>
                     <Typography>{pin.isPublic == 1 ? 'Yes' : 'No'}</Typography>
                   </div>
-                  <Button onClick={() => handleDeletePin(pin)} style={{ backgroundColor: 'red', color: 'white', position: 'absolute', right: '25px', top: '20%', transform: 'translateY(-50%)' }} >Delete</Button>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Comments:</Typography>
+                    {pin.pin_comments && pin.pin_comments.split(',').map(comment => (
+                        <Typography key={comment}>{comment}</Typography>
+                    ))}
+                  </div>
+                  <Button onClick={() => handleDeletePin(pin)} style={{ backgroundColor: 'red', color: 'white', position: 'absolute', right: '25px', top: '10%', transform: 'translateY(-50%)' }} >Delete</Button>
                 </Box>
               </AccordionDetails>
             </Accordion>
