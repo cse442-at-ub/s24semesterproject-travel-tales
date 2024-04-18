@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Box } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -6,13 +6,13 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { red } from '@mui/material/colors';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Avatar from 'react-avatar-edit';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
 import editIcon from '../assets/editIcon.png'
+
 
 const getCurrentUserInfo = async () => {
     try {
@@ -59,6 +59,7 @@ const SettingsDialog = () => {
     const [message, setmessage] = useState('');
     const [message2, setmessage2] = useState('');
     const [message3, setmessage3] = useState('');
+    
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -77,6 +78,7 @@ const SettingsDialog = () => {
                 const userData = await getCurrentUserInfo();
                 setCurrentUser(userData)
                 //console.log(userData)
+
             } catch (error) {
                 console.log(error)
             }
@@ -114,7 +116,6 @@ const SettingsDialog = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        //console.log(name)
         setFormData(prevData => ({
             ...prevData,
             [name]: value
@@ -122,7 +123,6 @@ const SettingsDialog = () => {
     };
 
     const handleClick = () => {
-
         if (color === null) {
             setButtonText("Please a select profile picture")
         }
@@ -131,7 +131,6 @@ const SettingsDialog = () => {
             handleUpdateProfile()
             setColor(null)
         }
-
     };
 
     const onClose = () => {
@@ -144,15 +143,10 @@ const SettingsDialog = () => {
         setPreview(view);
     }
 
-    // useEffect(() => {
-    //    console.log(preview)
-    //}, [preview])
-
     const handleinfo = async (e) => {
         setError('');
         e.preventDefault();
         if (infoButton === "Confirm" || infoButton === "Changes have been made") {
-
             setInfoButton("Are You Sure?")
         }
         else {
@@ -163,7 +157,6 @@ const SettingsDialog = () => {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
-
                     body: JSON.stringify({ firstName: formData.firstName, lastName: formData.lastName}),
                 });
 
@@ -200,12 +193,11 @@ const SettingsDialog = () => {
             setPassButton("Are You Sure?")
         }
         else {
-          
-        if (formData.pass !== formData.confirmPass) {
-            setError2('Passwords do not match.');
-            setFormData.pass = '';
-            setFormData.confirmPass = '';
-            return;
+            if (formData.pass !== formData.confirmPass) {
+                setError2('Passwords do not match.');
+                setFormData.pass = '';
+                setFormData.confirmPass = '';
+                return;
             }
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/ChangePass.php`, {
@@ -277,7 +269,7 @@ const SettingsDialog = () => {
             setEmailButton('Confirm');
         }
     };
-    
+
     const handleLogout = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout.php`, {
@@ -291,7 +283,6 @@ const SettingsDialog = () => {
       } catch (error) {
       }
     };
-
 
     // Delete account functionality
     const [errorMessage, setErrorMessage] = useState('');
@@ -354,6 +345,45 @@ const SettingsDialog = () => {
                         justifyContent: 'center',
                         //p: 5,
                     }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>Account Information</Typography>
+                        <Box sx={{ 
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            maxWidth: 400,
+                            p: 4,
+                        }}>
+                            <TextField
+                                label="First Name"
+                                value={userInfo ? userInfo.first_name || '' : ''}
+                                disabled
+                                fullWidth
+                                sx={{ mb: 1 }}
+                            />
+                            <TextField
+                                label="Last Name"
+                                value={userInfo ? userInfo.last_name || '' : ''}
+                                disabled
+                                fullWidth
+                                sx={{ mb: 1 }}
+                            />
+                            <TextField
+                                label="Username"
+                                value={userInfo ? userInfo.username || '' : ''}
+                                disabled
+                                fullWidth
+                                sx={{ mb: 1 }}
+                            />
+                            <TextField
+                                label="Email"
+                                value={userInfo ? userInfo.email || '' : ''}
+                                disabled
+                                fullWidth
+                                sx={{ mb: 1 }}
+                            />
+                        </Box>
+                    
                         <Accordion sx={{
                             width: '100%', maxWidth: 400, margin: 0
                         }}>
@@ -428,28 +458,24 @@ const SettingsDialog = () => {
                                         <ToggleButton value={preview} sx={{ width: 92, height: 92 }} >
                                             < img src={preview} />
                                         </ToggleButton>
+
                                     </ToggleButtonGroup>
 
                                     <Box 
                                         sx={{
                                             width: '100%', maxWidth: 300, maxHeight: 400, margin: 0, objectfit: 'contain', overflow: 'hidden'
                                         }}
-                                        //object-fit='contain'
-                                        
                                     >
                                         <Avatar
                                             width= '200'
                                             height= '200'
-                                            //object-fit='contain'
                                             onCrop={onCrop}
                                             onClose={onClose}
                                             src={src}
                                         />
-
                                     </Box>
 
                                     <Button variant="contained" color="primary" onClick={() => {
-
                                         handleClick()
                                     }} sx={{ mt: 2 }}>
                                         {buttonText}
@@ -518,27 +544,27 @@ const SettingsDialog = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <form onSubmit={handleinfo}>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
 
-                                <label htmlFor="name"></label>
+                                    <label htmlFor="name"></label>
                                     <TextField onChange={handleChange}  name="firstName" required type="name" id="namechange1" label="First Name" variant="outlined"
-                                    sx={{
-                                        width: '100%', maxWidth: 300, margin: 0
-                                    }}
-                                />
+                                        sx={{
+                                            width: '100%', maxWidth: 300, margin: 0
+                                        }}
+                                    />
 
                                     <TextField onChange={handleChange} required type="name" name="lastName" id="namechange2" label="Last Name" variant="outlined"
                                         sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
-                                {message && <p style={{ color: 'green' }}>{message}</p>}
-                                {error && <p style={{ color: 'red' }}>{error}</p>}
-                                <Button variant="contained" color="primary" type="submit"  sx={{ mt: 2, margin: 1 }}>
-                                    {infoButton}
-                                </Button>
+                                    {message && <p style={{ color: 'green' }}>{message}</p>}
+                                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                                    <Button variant="contained" color="primary" type="submit"  sx={{ mt: 2, margin: 1 }}>
+                                        {infoButton}
+                                    </Button>
                                 </Box>
                             </form>
                         </AccordionDetails>
@@ -552,25 +578,25 @@ const SettingsDialog = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <form onSubmit={handleemail}>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
 
-                            }}>
-                                <label htmlFor="email"></label>
+                                }}>
+                                    <label htmlFor="email"></label>
                                     <TextField onChange={handleChange} required type="email" name="email" id="emailchange1" label="New Email" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 0 }}
-                                />
+                                        sx={{ width: '100%', maxWidth: 300, margin: 0 }}
+                                    />
 
                                     <TextField onChange={handleChange} required type="email" name="confirmEmail" id="emailchange2" label="Confirm New Email" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 2 }} />    
-                                {message3 && <p style={{ color: 'green' }}>{message3}</p>}
-                                {error3 && <p style={{ color: 'red' }}>{error3}</p>}
-                                <Button variant="contained" color="primary" type="submit" sx={{ mt: 2, margin: 1 }}>
-                                    {emailButton}
-                                </Button>
+                                        sx={{ width: '100%', maxWidth: 300, margin: 2 }} />    
+                                    {message3 && <p style={{ color: 'green' }}>{message3}</p>}
+                                    {error3 && <p style={{ color: 'red' }}>{error3}</p>}
+                                    <Button variant="contained" color="primary" type="submit" sx={{ mt: 2, margin: 1 }}>
+                                        {emailButton}
+                                    </Button>
                                 </Box>
                             </form>
                         </AccordionDetails>
@@ -584,27 +610,26 @@ const SettingsDialog = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <form onSubmit={handlepass}>
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
 
-                            }}>
-                              
-                                <label htmlFor="password"></label>
+                                }}>
+
+                                    <label htmlFor="password"></label>
                                     <TextField onChange={handleChange} required type="password" name="pass" id="passchange1" label="New Password" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 0 }}
-                                />
+                                        sx={{ width: '100%', maxWidth: 300, margin: 0 }}
+                                    />
 
                                     <TextField onChange={handleChange} required type="password" id="passchange2" name="confirmPass" label="Confirm New Password" variant="outlined"
-                                    sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
-                                {message2 && <p style={{ color: 'green' }}>{message2}</p>}
-                                {error2 && <p style={{ color: 'red' }}>{error2}</p>}
+                                        sx={{ width: '100%', maxWidth: 300, margin: 2 }} />
+                                    {message2 && <p style={{ color: 'green' }}>{message2}</p>}
+                                    {error2 && <p style={{ color: 'red' }}>{error2}</p>}
                                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 2, margin: 1 }}>
-                                    {passButton}
-                                </Button>
-                                
+                                        {passButton}
+                                    </Button>
                                 </Box>
                             </form>
                         </AccordionDetails>

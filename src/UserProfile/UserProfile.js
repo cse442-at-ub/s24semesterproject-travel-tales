@@ -68,6 +68,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     console.error('Empty or invalid data received.');
                 }
             } catch (error) {
+
                 setLoading(false);
                 console.error('Error fetching user stats:', error);
             }
