@@ -938,10 +938,6 @@ const App = () => {
                                         style={{ color: "#000" }}
                                         fontSize='large'/>
                                 </IconButton>
-                                {/* TODO: add image in a modal */}
-                                <IconButton>
-                                    <ImageIcon fontSize='large' />
-                                </IconButton>
                             </div>
                             <button className="leave-arrow" onClick={handleClosePinModal}>
                                 <ArrowBackIosNewIcon />
