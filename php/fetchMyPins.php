@@ -34,11 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     }
     exit(0);
 }
-
 if (isset($_SESSION['user_id'])) {
     $userID = $_SESSION['user_id'];
 
-    $sql = "SELECT * FROM PinsInfo WHERE user_id = '$userID'";
+    $sql = "SELECT PinsInfo.*, GROUP_CONCAT(comments.comment) AS pin_comments 
+            FROM PinsInfo 
+            LEFT JOIN comments ON PinsInfo.pin_id = comments.pin_id
+            WHERE PinsInfo.user_id = '$userID'
+            GROUP BY PinsInfo.pin_id";
 
     $result = $conn->query($sql);
 

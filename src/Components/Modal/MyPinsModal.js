@@ -24,7 +24,6 @@ const MyPinsModal = ({ open, onClose, username }) => {
           throw new Error('Failed to fetch pins data');
         }
         const pins = await response.json();
-        console.log(pins);
         setPinsData(pins);
         setLoading(false);
       } catch (error) {
@@ -119,6 +118,10 @@ const MyPinsModal = ({ open, onClose, username }) => {
                   <div>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Description:</Typography>
                     <Typography>{pin.description}</Typography>
+                  </div>
+                  <div>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>City, State:</Typography>
+                    <Typography>{pin.city}, {pin.state}</Typography>
                   </div>
                   <div>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Coordinates:</Typography>

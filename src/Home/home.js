@@ -483,7 +483,6 @@ const App = () => {
 
                     data.data.forEach(coordinate => {
                         updateMarker(coordinate);
-                        fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
                     });
                 } else {
                     console.error('Error:', data.error);
@@ -517,8 +516,6 @@ const App = () => {
                     for (let i = 0; i < result.length; i++) {
                         const item = result[i];
                         updateMarker(item);
-                        await fetchCityState(item.lat, item.lng, setMarkers);
-                        await fetchCityState(item.lat, item.lng, setMatchedData);
                     }
                 } else {
                 }
@@ -579,11 +576,12 @@ const App = () => {
             date: coordinates.date,
             first_name: coordinates.first_name,
             last_name: coordinates.last_name,
-            email: coordinates.email,
             comment: coordinates.comments,
             like: coordinates.isLiked,
             profile: coordinates.profile,
-            username: coordinates.username
+            username: coordinates.username,
+            city: coordinates.city,
+            state: coordinates.state
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
@@ -611,23 +609,27 @@ const App = () => {
         var date = currentDate.toISOString().split('T')[0];
 
         if (currentLocation) {
-            const newMarker = {
-                username: currentUser.username,
-                lat: currentLocation.lat,
-                lng: currentLocation.lng,
-                id: markers.length + 1,
-                draggable: true,
-                title: title,
-                description: description,
-                date: date, 
-                like: false,
-                comment: [],
-                profile: currentUser.profile
-                
-            };
-            fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
-            setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            sendCoordinatesToBackend({ username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile});
+            fetchCityState(currentLocation.lat, currentLocation.lng)
+            .then(cityState => {
+                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state});
+                const newMarker = {
+                    username: currentUser.username,
+                    lat: currentLocation.lat,
+                    lng: currentLocation.lng,
+                    id: markers.length + 1,
+                    draggable: true,
+                    title: title,
+                    description: description,
+                    date: date, 
+                    like: false,
+                    comment: [],
+                    profile: currentUser.profile,
+                    city: cityState.city,
+                    state: cityState.state
+                };
+                setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+            })
+
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -715,49 +717,36 @@ const App = () => {
         }
     };
 
-    const fetchCityState = async (lat, lng, location) => {
+    const fetchCityState = async (lat, lng) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
-
+    
         try {
             const response = await fetch(geocodingUrl);
-
+    
             if (!response.ok) {
                 throw new Error(`Failed to fetch data. Status: ${response.status}`);
             }
-
+    
             const data = await response.json();
-
+    
             if (data.status === 'OK' && data.results.length > 0) {
                 const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
                 const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
-
+    
                 const city = cityComponent?.long_name || '';
                 const state = stateComponent?.long_name || '';
-
-
-                location(prevData => {
-                    return prevData.map(item => {
-                        
-                        if (item.lat === lat && item.lng === lng) {
-                            return {
-                                ...item,
-                                city: city,
-                                state: state
-
-                            };
-
-                        }
-                        return item;
-
-                    });
-                });
+    
+                return { city, state };
             } else {
                 console.error('No results or unexpected response:', data);
+                return { city: '', state: '' };
             }
         } catch (error) {
             console.error('Error fetching data:', error.message);
+            return { city: '', state: '' };
         }
     };
+    
 
     if (loadError) {
         return <div>Error loading maps</div>;

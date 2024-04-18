@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (
         isset($data['lat']) && isset($data['username']) && isset($data['lng']) && 
         isset($data['title']) && isset($data['description']) && isset($data['date']) && 
-        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile'])
+        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile']) && 
+        isset($data['city']) && isset($data['state'])
     ) {
         $latitude = $data['lat'];
         $longitude = $data['lng'];
@@ -55,10 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $data['username'];
         $user_id = $_SESSION['user_id'];
         $profile = $data['profile'];
+        $city = $data['city'];
+        $state = $data['state'];
 
 
-        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sddsssiis", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile);
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssiisss", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile, $city, $state);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
@@ -99,7 +102,7 @@ $commentsQuery->close();
 $requestUserId = $_SESSION['user_id'] ?? null;
 
 if ($requestUserId !== null) { 
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE user_id = ?");
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, city, state FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
@@ -137,6 +140,8 @@ if ($requestUserId !== null) {
                 "user_id" => $requestUserId,
                 "lat" => $userPinRow['lat'],
                 "lng" => $userPinRow['lng'],
+                "city" => $userPinRow['city'],
+                "state" => $userPinRow['state'],
                 "date" => $userPinRow['date'],
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
