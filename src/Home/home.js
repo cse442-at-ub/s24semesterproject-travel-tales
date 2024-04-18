@@ -379,6 +379,7 @@ const App = () => {
     };
 
     const [markers, setMarkers] = useState([]);
+    const [loadingPins, setLoadingPins] = useState([]);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [open, setOpen] = useState(false);
     const [userProfileOpen, setUserProfileOpen] = useState(false);
@@ -463,6 +464,7 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
+                setLoadingPins(true);
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                     method: 'GET',
                     headers: {
@@ -480,14 +482,16 @@ const App = () => {
                 const data = JSON.parse(rawData);
                 console.log('Parsed Data:', data);
                 if (data.success) { 
-
+                    setLoadingPins(false);
                     data.data.forEach(coordinate => {
                         updateMarker(coordinate);
                     });
                 } else {
+                    setLoadingPins(false);
                     console.error('Error:', data.error);
                 }
             } catch (error) {
+                setLoadingPins(false);
                 setError('Error fetching coordinates from backend');
                 console.error('Error fetching coordinates from backend:', error.message);
             }
@@ -766,6 +770,22 @@ const App = () => {
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
+                {loadingPins && (
+                    <Box sx={{
+                        position: 'fixed',
+                        top: '20px', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)', 
+                        backgroundColor: 'white',
+                        color: 'black',
+                        textAlign: 'center',
+                        padding: '10px',
+                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                        borderRadius: '10px', 
+                    }}>
+                        Loading Pins...
+                    </Box>
+                )}            
                 {renderMarkers()}
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
