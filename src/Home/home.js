@@ -324,6 +324,8 @@ const pinModalStyle = {
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 10,
+    width: '300px',
+    height: 'auto'
 };
 
 const modalStyle = {
@@ -560,7 +562,7 @@ const App = () => {
         } else {
             renderedProfile = (
                 <AccountCircleIcon
-                    style={{ fontSize: 150, color: profile, margin: '2px 0' }}
+                    style={{ fontSize: 75, color: profile, margin: '2px 0' }}
                 />
             );
         }
@@ -829,22 +831,37 @@ const App = () => {
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
-                            <img style={{ width: '40%', height: 'auto' }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Descriptive Text" />
-                            <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            {/* <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.username}
-                            </Typography>
+                            </Typography> */}
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '0px', textAlign: 'center' }}>
                                 {selectedMarker.city || selectedMarker.state} , {selectedMarker.state}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '0px', textAlign: 'center' }}>
                                 {selectedMarker.lat}, {selectedMarker.lng}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
-                                on {selectedMarker.date}
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '5px', textAlign: 'center' }}>
+                                Placed on: {selectedMarker.date}
                             </Typography>
+                            <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Descriptive Text" />
+                            <Box
+                                sx={{
+                                    border: '1px solid #000',
+                                    borderRadius: '10px',
+                                    padding: '5px 0px',
+                                    marginTop: '10px',
+                                    textAlign: 'center',
+                                    height: 'auto',
+                                    width: '80%',
+                                }}
+                            >
+                                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                                    {selectedMarker.description}
+                                </Typography>
+                            </Box>
                             <div style={{ display: 'flex' }}>
                                 <IconButton onClick={() => {
                                     likecheck()
@@ -926,21 +943,6 @@ const App = () => {
                                     <ImageIcon fontSize='large' />
                                 </IconButton>
                             </div>
-                            <Box
-                                sx={{
-                                    border: '1px solid #000',
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    marginTop: '10px',
-                                    textAlign: 'center',
-                                    height: '25%',
-                                    width: '90%',
-                                }}
-                            >
-                                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-                                    {selectedMarker.description}
-                                </Typography>
-                            </Box>
                             <button className="leave-arrow" onClick={handleClosePinModal}>
                                 <ArrowBackIosNewIcon />
                             </button>
