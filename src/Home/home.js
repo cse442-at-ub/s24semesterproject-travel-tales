@@ -610,6 +610,11 @@ const App = () => {
 
         var date = currentDate.toISOString().split('T')[0];
 
+        //Creates a unique image id
+        const min = 100000;
+        const max = 999999;
+        const image_id = Math.floor(Math.random() * (max - min + 1) + min);
+
         if (currentLocation) {
             const newMarker = {
                 username: currentUser.username,
@@ -622,14 +627,12 @@ const App = () => {
                 date: date, 
                 like: false,
                 comment: [],
-                profile: currentUser.profile
-                
+                profile: currentUser.profile,
+                image_id: image_id
             };
             fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
             setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            const min = 100000;
-            const max = 999999;
-            const image_id = Math.floor(Math.random() * (max - min + 1) + min);
+            
             const info = { username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile, image_id }
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
@@ -824,7 +827,7 @@ const App = () => {
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
-                            <img></img>
+                            <img style={{ width: '40%', height: 'auto' }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Descriptive Text" />
                             <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.username}
                             </Typography>
