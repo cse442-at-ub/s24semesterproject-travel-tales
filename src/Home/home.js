@@ -582,7 +582,8 @@ const App = () => {
             comment: coordinates.comments,
             like: coordinates.isLiked,
             profile: coordinates.profile,
-            username: coordinates.username
+            username: coordinates.username,
+            image_id: coordinates.image_id
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
