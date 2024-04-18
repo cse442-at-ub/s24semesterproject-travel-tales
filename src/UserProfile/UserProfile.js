@@ -221,6 +221,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
             {renderContent()}
             <UsernameForm />
 
+
             <div
                 style={{
                     display: 'flex',
@@ -354,6 +355,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     onClose={toggleDrawer(false)}
                     onOpen={toggleDrawer(true)}
                 >
+
                     {list()}
                 </SwipeableDrawer>
                 <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
