@@ -846,7 +846,7 @@ const App = () => {
                             <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '5px', textAlign: 'center' }}>
                                 Placed on: {selectedMarker.date}
                             </Typography>
-                            <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Descriptive Text" />
+                            <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Pin Image" />
                             <Box
                                 sx={{
                                     border: '1px solid #000',
