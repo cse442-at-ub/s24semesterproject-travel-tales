@@ -317,44 +317,6 @@ const SettingsDialog = () => {
                         justifyContent: 'center',
                         //p: 5,
                     }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>Account Information</Typography>
-                        <Box sx={{ 
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            maxWidth: 400,
-                            p: 4,
-                        }}>
-                            <TextField
-                                label="First Name"
-                                value={userInfo ? userInfo.first_name || '' : ''}
-                                disabled
-                                fullWidth
-                                sx={{ mb: 1 }}
-                            />
-                            <TextField
-                                label="Last Name"
-                                value={userInfo ? userInfo.last_name || '' : ''}
-                                disabled
-                                fullWidth
-                                sx={{ mb: 1 }}
-                            />
-                            <TextField
-                                label="Username"
-                                value={userInfo ? userInfo.username || '' : ''}
-                                disabled
-                                fullWidth
-                                sx={{ mb: 1 }}
-                            />
-                            <TextField
-                                label="Email"
-                                value={userInfo ? userInfo.email || '' : ''}
-                                disabled
-                                fullWidth
-                                sx={{ mb: 1 }}
-                            />
-                        </Box>
                     
                         <Accordion sx={{
                             width: '100%', maxWidth: 400, margin: 0
