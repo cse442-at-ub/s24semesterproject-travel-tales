@@ -23,6 +23,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
 import ImageIcon from '@mui/icons-material/Image';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 
 const libraries = ['places'];
@@ -779,7 +780,7 @@ const App = () => {
         return <div>Loading maps</div>;
     }
     
-    // Start: Add Pin Image Methods
+    // Start: Add Pin Image Methods (DO NOT REMOVE)
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -806,16 +807,15 @@ const App = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log('Upload successful:', data);
                 alert('Image uploaded successfully!');
             } else {
                 throw new Error('Failed to upload image.');
             }
         } catch (error) {
-            console.error('Error uploading image:', error);
             alert('Error uploading image.');
         }
     };
+    // End: Add Pin Image Methods (DO NOT REMOVE)
 
     return (
         <div style={mapContainerStyle}>
@@ -992,7 +992,9 @@ const App = () => {
                             <button className="leave-arrow" onClick={handleClose}>
                                 <ArrowBackIosNewIcon />
                             </button>
-                            <Typography variant='subtitle1'>Make Public? <Switch onClick={handleIsPublic} />
+                            <Typography style={{display: 'flex', justifyContent: 'space-between', textAlign: 'center'}} variant='subtitle1'>
+                                Make Public?
+                                <Switch onClick={handleIsPublic} />
                             </Typography>
 
                             {/* Add Image Button */}
@@ -1006,14 +1008,15 @@ const App = () => {
                                 />
                                 <label htmlFor="fileInput">
                                     <Button 
-                                    component="span"
-                                    variant="contained"
-                                    color="primary"
+                                        sx={{ bgcolor: "grey", color: "#FFFFFF", fontSize: "small" }}
+                                        component="span"
+                                        variant="contained"
+                                        fullWidth
                                     >
-                                        Upload Image
+                                        <AddPhotoAlternateIcon />
                                     </Button>
                                 </label>
-                                {fileName && <Typography>{fileName}</Typography>}
+                                {fileName && <Typography sx={{marginBottom: '20px', fontSize: '12px'}} >Image Added: {fileName}</Typography>}
                             </div>
                             {/* Add Image Button */}
 
@@ -1022,11 +1025,11 @@ const App = () => {
                                 color: "#FFFFFF",
                                 fontSize: "large"
                                 }}
+                                fullWidth
                                 variant="contained"
                                 onClick={() => {
                                     placeNewMarker();
                                 }}
-                                style={{ borderRadius: 10 }}
                             >
                                 Add Pin
                             </Button>
