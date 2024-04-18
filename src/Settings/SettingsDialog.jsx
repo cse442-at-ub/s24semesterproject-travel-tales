@@ -11,6 +11,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Avatar from 'react-avatar-edit';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
+import editIcon from '../assets/editIcon.png'
+
 
 const getCurrentUserInfo = async () => {
     try {
@@ -40,8 +42,7 @@ const getCurrentUserInfo = async () => {
 const SettingsDialog = () => {
     const email = localStorage.getItem('email');
     const [color, setColor] = useState(null);
-    const [userInfo, setUserInfo] = useState('');
-
+    const [currentUser, setCurrentUser] = useState('');
     const handleAlignment = (event, newColor) => {
         setColor(newColor);
     };
@@ -60,7 +61,6 @@ const SettingsDialog = () => {
     const [message3, setmessage3] = useState('');
     
     const navigate = useNavigate();
-    
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -70,16 +70,48 @@ const SettingsDialog = () => {
         confirmPass: '',
     });
 
+    
+
     useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
                 const userData = await getCurrentUserInfo();
-                setUserInfo(userData);
+                setCurrentUser(userData)
+                //console.log(userData)
+
             } catch (error) {
                 console.log(error)
             }
         };
         fetchCurrentUser();
+    }, []);
+
+    useEffect(() => {
+        const handleFetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                setPreview(data.profile)
+                
+                    if (/^data:image\/[a-z]+;base64,/.test(data.profile)) {
+
+                        setPreview(data.profile)
+
+                    } else {
+                        setPreview(editIcon)
+                    }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+        handleFetchProfile();
+
     }, []);
 
     const handleChange = (e) => {
@@ -104,7 +136,7 @@ const SettingsDialog = () => {
     const onClose = () => {
         setPreview(null);
         setButtonText("Confirm")
-        console.log("code ran")
+        
     }
 
     const onCrop = view => {
@@ -449,11 +481,52 @@ const SettingsDialog = () => {
                                         {buttonText}
                                     </Button>
                                 </Box>
+
+
+
                             </AccordionDetails>
                         </Accordion>
+
+                        <Accordion sx={{
+                            width: '100%', maxWidth: 400, margin: 0
+                        }}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Account Information</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails >
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}>
+
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        First Name: {currentUser.first_name }
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Last Name: {currentUser.last_name}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Username: {currentUser.username}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontSize: '1.25rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                                        Email: {currentUser.email}
+                                    </Typography>
+                                </Box>
+                            </AccordionDetails>
+                        </Accordion>
+
+
                     </Box>
                 </AccordionDetails>
             </Accordion>
+
+
             <Accordion>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -462,7 +535,6 @@ const SettingsDialog = () => {
                 >
                     <Typography>Advanced</Typography>
                 </AccordionSummary>
-
                 <AccordionDetails>
                     <Accordion>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}
