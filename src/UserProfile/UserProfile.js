@@ -261,7 +261,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
-                        FRIENDS
+                        FOLLOWERS
                     </Button>
                     <Button
                         onClick={handlePinsButtonClick}
@@ -273,7 +273,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             color: 'white',
                             marginTop: 10,
                             height: 40,
-                            padding: '0 20px',
+                            padding: '0 40px',
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
