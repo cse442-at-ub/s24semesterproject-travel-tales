@@ -22,6 +22,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
+import ImageIcon from '@mui/icons-material/Image';
 
 
 const libraries = ['places'];
@@ -918,6 +919,10 @@ const App = () => {
                                     <MapIcon 
                                         style={{ color: "#000" }}
                                         fontSize='large'/>
+                                </IconButton>
+                                {/* TODO: add image in a modal */}
+                                <IconButton>
+                                    <ImageIcon fontSize='large' />
                                 </IconButton>
                             </div>
                             <Box
