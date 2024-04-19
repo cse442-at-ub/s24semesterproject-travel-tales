@@ -60,6 +60,7 @@ export default function Modal() {
                 placeholder="Description"/>
               <button className="add-pin-box" onClick={(toggleModal)}></button>              
             </form>
+            
           </div>
         </div>
       )}

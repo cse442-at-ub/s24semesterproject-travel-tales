@@ -68,6 +68,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     console.error('Empty or invalid data received.');
                 }
             } catch (error) {
+
                 setLoading(false);
                 console.error('Error fetching user stats:', error);
             }
@@ -220,6 +221,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
             {renderContent()}
             <UsernameForm />
 
+
             <div
                 style={{
                     display: 'flex',
@@ -259,7 +261,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
-                        FRIENDS
+                        FOLLOWERS
                     </Button>
                     <Button
                         onClick={handlePinsButtonClick}
@@ -271,7 +273,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             color: 'white',
                             marginTop: 10,
                             height: 40,
-                            padding: '0 20px',
+                            padding: '0 40px',
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
@@ -353,6 +355,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     onClose={toggleDrawer(false)}
                     onOpen={toggleDrawer(true)}
                 >
+
                     {list()}
                 </SwipeableDrawer>
                 <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
