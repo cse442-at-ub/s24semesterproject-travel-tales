@@ -1,7 +1,7 @@
 .account-icon {
   position: absolute;
-  height: 3%; 
-  width: 3%; 
+  height: 4%; 
+  width: 4%; 
   right: 35%;
   top: 5%;
   transform: translateY(-50%);
@@ -30,8 +30,8 @@
 
 .plus-icon {
   position: absolute;
-  height: 3%; 
-  width: 3%; 
+  height: 4%; 
+  width: 4%; 
   right: 50%;
   top: 5%;
   transform: translateY(-50%);
@@ -60,8 +60,8 @@
 
 .shared-icon {
   position: absolute;
-  height: 3%; 
-  width: 3%; 
+  height: 4%; 
+  width: 4%; 
   right: 65%;
   top: 5%;
   transform: translateY(-50%);
