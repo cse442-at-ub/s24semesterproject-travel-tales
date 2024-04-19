@@ -791,7 +791,6 @@ const App = () => {
             alert('No file selected');
             return;
         }
-
         const formData = new FormData();
         formData.append('image', file);
         formData.append('image_id', image_id);

@@ -1,40 +1,12 @@
 <?php
 session_start();
 include_once('db.php');
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("HTTP/1.1 200 OK");
-    exit();
-}
-
-// Redirect to HTTPS if not already
-if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit();
-}
 
 // CORS Headers
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
-if (isset($_SERVER['HTTPS_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-    header('Access-Control-Max-Age: 86400'); // cache for 1 day
-}
 
-// CORS Preflight Handling
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    }
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-    }
-    exit(0);
-}
 
 header("Content-Type: application/json");
 
@@ -59,8 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $city = $data['city'];
         $state = $data['state'];
         $image_id = $data['image_id'];
-
-
 
         $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile, city, state, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sddsssiisssi", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile, $city, $state, $image_id);
@@ -152,7 +122,6 @@ if ($requestUserId !== null) {
                 "comments" => $commentsForPin,
                 "isLiked" => $isLiked,
                 "image_id" => $userPinRow['image_id']
-
             );
 
             $likeQuery->close();
