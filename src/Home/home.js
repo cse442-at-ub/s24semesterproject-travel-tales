@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useLoadScript, Marker} from '@react-google-maps/api';
 import '../App.css';
-import { Modal, Button, Box } from '@mui/material';
+import { Modal, Button, Box, TextField, Switch } from '@mui/material';
 import plusButtonImage from '../assets/AddPinModal/plus-button.png';
 import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
@@ -22,6 +22,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 import MapIcon from '@mui/icons-material/Map';
 import { useReducer } from 'react';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import LanguageIcon from '@mui/icons-material/Language';
+import ImageIcon from '@mui/icons-material/Image';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 
 const libraries = ['places'];
@@ -323,6 +327,8 @@ const pinModalStyle = {
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 10,
+    width: '300px',
+    height: 'auto'
 };
 
 const modalStyle = {
@@ -388,6 +394,11 @@ const App = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
+    const [isPublicPin, setIsPublicPin] = useState(false);
+    // start: Add Pin Image useStates
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    // end: Add Pin Image useStates
     const handleOpen2 = () => {
         setOpen2(true);
         getSharedPins();
@@ -414,16 +425,9 @@ const App = () => {
         setUserProfileOpen((prevUserProfileOpen) => !prevUserProfileOpen);
     };
 
-    const handleSubmit = (event) => {
-        handleClose()
-    };
-
-    const handleToggleClick = () => {
-        setToggled(!isPublic);
-    };
-
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
+        //TODO: fetch and display pin image
         setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
@@ -562,7 +566,7 @@ const App = () => {
         } else {
             renderedProfile = (
                 <AccountCircleIcon
-                    style={{ fontSize: 150, color: profile, margin: '2px 0' }}
+                    style={{ fontSize: 75, color: profile, margin: '2px 0' }}
                 />
             );
         }
@@ -585,7 +589,8 @@ const App = () => {
             profile: coordinates.profile,
             username: coordinates.username,
             city: coordinates.city,
-            state: coordinates.state
+            state: coordinates.state,
+            image_id: coordinates.image_id
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
     };
@@ -602,20 +607,27 @@ const App = () => {
         else { document.getElementById('myInput').placeholder = 'Please Type Something' }
     }
 
-    const placeNewMarker = () => {
-        var title = document.querySelector('.title-box').value;
-        var description = document.querySelector('.description-box').value;
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const handleIsPublic = (event) => setIsPublicPin(event.target.checked);
 
+    const placeNewMarker = async () => {
+        handleClose();
         var currentDate = new Date();
         var offset = currentDate.getTimezoneOffset();
         currentDate.setMinutes(currentDate.getMinutes() - offset);
 
         var date = currentDate.toISOString().split('T')[0];
 
+        //Creates a unique image id
+        const min = 100000;
+        const max = 999999;
+        const image_id = Math.floor(Math.random() * (max - min + 1) + min);
+
         if (currentLocation) {
             fetchCityState(currentLocation.lat, currentLocation.lng)
             .then(cityState => {
-                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state});
+                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
                 const newMarker = {
                     username: currentUser.username,
                     lat: currentLocation.lat,
@@ -629,16 +641,22 @@ const App = () => {
                     comment: [],
                     profile: currentUser.profile,
                     city: cityState.city,
-                    state: cityState.state
+                    state: cityState.state,
+                    image_id: image_id
                 };
                 setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
             })
-
+            handlePinImageSubmit(image_id);
+            setTitle('');
+            setDescription('');
+            setFile(null);
+            setFileName('');
         }
     };
-    const sendCommentToBackend = async (info) => {
+
+    const sendCoordinatesToBackend = async (info) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sendComment.php`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -657,10 +675,9 @@ const App = () => {
             console.error('Error sending coordinates to the backend:', error.message);
         }
     };
-
-    const sendCoordinatesToBackend = async (info) => {
+    const sendCommentToBackend = async (info) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/sendComment.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -759,7 +776,43 @@ const App = () => {
     if (!isLoaded) {
         return <div>Loading maps</div>;
     }
+    
+    // Start: Add Pin Image Methods (DO NOT REMOVE)
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            setFileName(selectedFile.name);
+        }
+    };
 
+    const handlePinImageSubmit = async (image_id) => { 
+        if (!file) {
+            alert('No file selected');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('image_id', image_id);
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/AddPinImage.php`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Image uploaded successfully!');
+            } else {
+                throw new Error('Failed to upload image.');
+            }
+        } catch (error) {
+            alert('Error uploading image.');
+        }
+    };
+    // End: Add Pin Image Methods (DO NOT REMOVE)
 
     return (
         <div style={mapContainerStyle}>
@@ -770,42 +823,95 @@ const App = () => {
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
-                {loadingPins && (
-                    <Box sx={{
-                        position: 'fixed',
-                        top: '20px', 
-                        left: '50%', 
-                        transform: 'translateX(-50%)', 
-                        backgroundColor: 'white',
-                        color: 'black',
-                        textAlign: 'center',
-                        padding: '10px',
-                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-                        borderRadius: '10px', 
-                    }}>
-                        Loading Pins...
-                    </Box>
-                )}            
+            {loadingPins && (
+                <Box sx={{
+                    position: 'fixed',
+                    top: '20px', 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                    backgroundColor: 'white',
+                    color: 'black',
+                    textAlign: 'center',
+                    padding: '10px',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '10px', 
+                }}>
+                    Loading Pins...
+                </Box>
+            )}            
+            <Box
+                sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '7%',
+                    backgroundColor: '#333', 
+                    color: '#fff',
+                    padding: '10px',
+                    textAlign: 'center',
+                }}
+                >
+                    <div className="account-icon">
+                        <Button onClick={() => handleAccountCircleButtonClick()}>
+                            <AccountCircleIcon className="accountcircle-icon" />
+                        </Button>
+                        {userProfileOpen && (
+                            <UserProfile onClose={() => {
+                                setUserProfileOpen(false); 
+                                getSharedPins();
+                                setMarkers([]); 
+                            }} 
+                            />
+                        )}
+                    </div>
+                    <div className="plus-icon">
+                        <Button onClick={handleOpen}>
+                            <AddCircleOutlineIcon className="pluscircle-icon" />
+                        </Button>
+                    </div>
+                    <div className="shared-icon">
+                        <Button onClick={handleOpen2}>
+                            <LanguageIcon className="sharedcircle-icon" />
+                        </Button>
+                    </div>
+                </Box>
                 {renderMarkers()}
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
-                            <Typography variant="h5" component="div" sx={{ fontSize: '2rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            {/* <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.username}
-                            </Typography>
+                            </Typography> */}
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '1.5rem', marginBottom: '0px', textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '0px', textAlign: 'center' }}>
                                 {selectedMarker.city || selectedMarker.state} , {selectedMarker.state}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '0px', textAlign: 'center' }}>
                                 {selectedMarker.lat}, {selectedMarker.lng}
                             </Typography>
-                            <Typography variant="body2" sx={{ fontSize: '1rem', marginBottom: '5px', textAlign: 'center' }}>
-                                on {selectedMarker.date}
+                            <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '5px', textAlign: 'center' }}>
+                                Placed on: {selectedMarker.date}
                             </Typography>
+                            <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Pin Image" />
+                            <Box
+                                sx={{
+                                    border: '1px solid #000',
+                                    borderRadius: '10px',
+                                    padding: '5px 0px',
+                                    marginTop: '10px',
+                                    textAlign: 'center',
+                                    height: 'auto',
+                                    width: '80%',
+                                }}
+                            >
+                                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+                                    {selectedMarker.description}
+                                </Typography>
+                            </Box>
                             <div style={{ display: 'flex' }}>
                                 <IconButton onClick={() => {
                                     likecheck()
@@ -851,6 +957,7 @@ const App = () => {
                                                 <form >
                                             <textarea
                                                 className="comment-box"
+                                                        maxLength={200}
                                                         rows="4"
                                                         cols="50"
                                                         id="myInput"
@@ -883,100 +990,84 @@ const App = () => {
                                         fontSize='large'/>
                                 </IconButton>
                             </div>
-                            <Box
-                                sx={{
-                                    border: '1px solid #000',
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    marginTop: '10px',
-                                    textAlign: 'center',
-                                    height: '25%',
-                                    width: '90%',
-                                }}
-                            >
-                                <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-                                    {selectedMarker.description}
-                                </Typography>
-                            </Box>
                             <button className="leave-arrow" onClick={handleClosePinModal}>
                                 <ArrowBackIosNewIcon />
                             </button>
                         </Box>
                     </Modal>
                 )}
-                <div className="account-icon">
-                    <button className="white-button" onClick={() => handleAccountCircleButtonClick()}>
-                        <AccountCircleIcon className="accountcircle-icon" />
-                    </button>
-                    {userProfileOpen && (
-                        <UserProfile onClose={() => {
-                            setUserProfileOpen(false); 
-                            getSharedPins();
-                            setMarkers([]); 
-                        }} 
-                        />
-                    )}
-                </div>
                 <header className="plus-icon">
-                    <Button variant="contained" color="primary" onClick={handleOpen}>
-                        <img src={plusButtonImage} alt="Plus Button" />
-                    </Button>
                     <Modal
                         open={open}
                         onClose={handleClose}
                     >
-                        <Box className="modalAddPin" sx={modalStyle}>
-                            <div className="description"></div>
-                            <div className="title-words"></div>
-                            <div className="make-public"></div>
-                            <html lang="en">
-                                <head>
-                                    <meta charset="UTF-8"></meta>
-                                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-                                    <title>Your Page Title</title>
-                                </head>
-                                <body>
-                                    <form>
-                                        <textarea
-                                            className="title-box"
-                                            name="title"
-                                            rows="4"
-                                            cols="50">
-                                        </textarea>
-                                        <textarea
-                                            className="description-box"
-                                            name="description"
-                                            rows="4"
-                                            cols="50">
-                                        </textarea>
-                                    </form>
-                                </body>
-                            </html>
+                        <Box sx={modalStyle}>
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                variant="outlined"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                sx={{ mt: 2 }}
+                            />
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                sx={{ mt: 2 }}
+                            />
                             <button className="leave-arrow" onClick={handleClose}>
                                 <ArrowBackIosNewIcon />
                             </button>
-                            <button className="switch" onClick={handleToggleClick}>
-                                {isPublic ? <ToggleOnIcon fontSize='large' /> : <ToggleOffIcon fontSize='large' color='disabled' />}
-                            </button>
+                            <Typography style={{display: 'flex', justifyContent: 'space-between', textAlign: 'center'}} variant='subtitle1'>
+                                Make Public?
+                                <Switch onClick={handleIsPublic} />
+                            </Typography>
+
+                            {/* Add Image Button */}
+                            <div>
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                    id="fileInput"
+                                    accept="image/*"
+                                />
+                                <label htmlFor="fileInput">
+                                    <Button 
+                                        sx={{ bgcolor: "grey", color: "#FFFFFF", fontSize: "small" }}
+                                        component="span"
+                                        variant="contained"
+                                        fullWidth
+                                    >
+                                        <AddPhotoAlternateIcon />
+                                    </Button>
+                                </label>
+                                {fileName && <Typography sx={{marginBottom: '20px', fontSize: '12px'}} >Image Added: {fileName}</Typography>}
+                            </div>
+                            {/* Add Image Button */}
+
                             <Button sx={{
                                 bgcolor: "#354545",
                                 color: "#FFFFFF",
                                 fontSize: "large"
-                            }}
-                                className="add-pin-box"
+                                }}
+                                fullWidth
                                 variant="contained"
                                 onClick={() => {
-                                    handleSubmit();
                                     placeNewMarker();
                                 }}
-                                style={{ borderRadius: 10 }}>Add Pin</Button>
+                            >
+                                Add Pin
+                            </Button>
                         </Box>
                     </Modal>
                 </header>
                 <div>
-                    <button className='shared-pins-icon' variant="contained" color="primary" onClick={handleOpen2}>
-                        <img src={sharedPin} alt="Shared Pins" />
-                    </button>
                     <SwipeableDrawer
                         className='SharedPinsContainer'
                         open={open2}
