@@ -385,6 +385,7 @@ const App = () => {
     };
 
     const [markers, setMarkers] = useState([]);
+    const [loadingPins, setLoadingPins] = useState([]);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [open, setOpen] = useState(false);
     const [userProfileOpen, setUserProfileOpen] = useState(false);
@@ -467,6 +468,7 @@ const App = () => {
     useEffect(() => {
         const fetchInfoFromBackend = async () => {
             try {
+                setLoadingPins(true);
                 const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
                     method: 'GET',
                     headers: {
@@ -484,15 +486,16 @@ const App = () => {
                 const data = JSON.parse(rawData);
                 console.log('Parsed Data:', data);
                 if (data.success) { 
-
+                    setLoadingPins(false);
                     data.data.forEach(coordinate => {
                         updateMarker(coordinate);
-                        fetchCityState(coordinate.lat, coordinate.lng, setMarkers);
                     });
                 } else {
+                    setLoadingPins(false);
                     console.error('Error:', data.error);
                 }
             } catch (error) {
+                setLoadingPins(false);
                 setError('Error fetching coordinates from backend');
                 console.error('Error fetching coordinates from backend:', error.message);
             }
@@ -521,8 +524,6 @@ const App = () => {
                     for (let i = 0; i < result.length; i++) {
                         const item = result[i];
                         updateMarker(item);
-                        await fetchCityState(item.lat, item.lng, setMarkers);
-                        await fetchCityState(item.lat, item.lng, setMatchedData);
                     }
                 } else {
                 }
@@ -583,11 +584,12 @@ const App = () => {
             date: coordinates.date,
             first_name: coordinates.first_name,
             last_name: coordinates.last_name,
-            email: coordinates.email,
             comment: coordinates.comments,
             like: coordinates.isLiked,
             profile: coordinates.profile,
             username: coordinates.username,
+            city: coordinates.city,
+            state: coordinates.state,
             image_id: coordinates.image_id
         };
         setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -623,48 +625,54 @@ const App = () => {
         const image_id = Math.floor(Math.random() * (max - min + 1) + min);
 
         if (currentLocation) {
-            const newMarker = {
-                username: currentUser.username,
-                lat: currentLocation.lat,
-                lng: currentLocation.lng,
-                id: markers.length + 1,
-                draggable: true,
-                title: title,
-                description: description,
-                date: date, 
-                like: false,
-                comment: [],
-                profile: currentUser.profile,
-                image_id: image_id
-            };
-            fetchCityState(newMarker.lat, newMarker.lng, setMarkers);
-            setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-            
-            const info = { username: currentUser.username, lat: newMarker.lat, lng: newMarker.lng, title, description, date, isPublic, profile: currentUser.profile, image_id }
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(info),
-                    credentials: 'include',
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to send coordinates to the backend');
-                }
-
-                const data = await response.json();
-                console.log('Coordinates sent successfully:', data);
-            } catch (error) {
-                console.error('Error sending coordinates to the backend:', error.message);
-            }
+            fetchCityState(currentLocation.lat, currentLocation.lng)
+            .then(cityState => {
+                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
+                const newMarker = {
+                    username: currentUser.username,
+                    lat: currentLocation.lat,
+                    lng: currentLocation.lng,
+                    id: markers.length + 1,
+                    draggable: true,
+                    title: title,
+                    description: description,
+                    date: date, 
+                    like: false,
+                    comment: [],
+                    profile: currentUser.profile,
+                    city: cityState.city,
+                    state: cityState.state,
+                    image_id: image_id
+                };
+                setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+            })
             handlePinImageSubmit(image_id);
             setTitle('');
             setDescription('');
             setFile(null);
             setFileName('');
+        }
+    };
+
+    const sendCoordinatesToBackend = async (info) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addpin.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(info),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send coordinates to the backend');
+            }
+
+            const data = await response.json();
+            console.log('Coordinates sent successfully:', data);
+        } catch (error) {
+            console.error('Error sending coordinates to the backend:', error.message);
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -730,49 +738,36 @@ const App = () => {
         }
     };
 
-    const fetchCityState = async (lat, lng, location) => {
+    const fetchCityState = async (lat, lng) => {
         const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_API_KEY}`;
-
+    
         try {
             const response = await fetch(geocodingUrl);
-
+    
             if (!response.ok) {
                 throw new Error(`Failed to fetch data. Status: ${response.status}`);
             }
-
+    
             const data = await response.json();
-
+    
             if (data.status === 'OK' && data.results.length > 0) {
                 const cityComponent = data.results[0].address_components.find(component => component.types.includes('locality'));
                 const stateComponent = data.results[0].address_components.find(component => component.types.includes('administrative_area_level_1'));
-
+    
                 const city = cityComponent?.long_name || '';
                 const state = stateComponent?.long_name || '';
-
-
-                location(prevData => {
-                    return prevData.map(item => {
-                        
-                        if (item.lat === lat && item.lng === lng) {
-                            return {
-                                ...item,
-                                city: city,
-                                state: state
-
-                            };
-
-                        }
-                        return item;
-
-                    });
-                });
+    
+                return { city, state };
             } else {
                 console.error('No results or unexpected response:', data);
+                return { city: '', state: '' };
             }
         } catch (error) {
             console.error('Error fetching data:', error.message);
+            return { city: '', state: '' };
         }
     };
+    
 
     if (loadError) {
         return <div>Error loading maps</div>;
@@ -796,7 +791,6 @@ const App = () => {
             alert('No file selected');
             return;
         }
-
         const formData = new FormData();
         formData.append('image', file);
         formData.append('image_id', image_id);
@@ -828,6 +822,22 @@ const App = () => {
                 onClick={handleMapClick} // this does nothing 
                 options={mapOptions}
             >
+            {loadingPins && (
+                <Box sx={{
+                    position: 'fixed',
+                    top: '20px', 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                    backgroundColor: 'white',
+                    color: 'black',
+                    textAlign: 'center',
+                    padding: '10px',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '10px', 
+                }}>
+                    Loading Pins...
+                </Box>
+            )}            
             <Box
                 sx={{
                     position: 'fixed',
@@ -865,7 +875,6 @@ const App = () => {
                         </Button>
                     </div>
                 </Box>
-                
                 {renderMarkers()}
                 {selectedMarker && (
                     <Modal open={openModal} onClose={handleClosePinModal}>
