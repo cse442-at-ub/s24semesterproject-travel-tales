@@ -58,10 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $profile = $data['profile'];
         $city = $data['city'];
         $state = $data['state'];
+        $image_id = $data['image_id'];
 
 
-        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile, city, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sddsssiisss", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile, $city, $state);
+
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile, city, state, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssiisssi", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile, $city, $state, $image_id);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
@@ -102,7 +104,7 @@ $commentsQuery->close();
 $requestUserId = $_SESSION['user_id'] ?? null;
 
 if ($requestUserId !== null) { 
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, city, state FROM PinsInfo WHERE user_id = ?");
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, city, state, image_id FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
@@ -148,7 +150,9 @@ if ($requestUserId !== null) {
                 "pin_id" => $userPinRow['pin_id'],
                 "profile" => $userRow['profile'],
                 "comments" => $commentsForPin,
-                "isLiked" => $isLiked
+                "isLiked" => $isLiked,
+                "image_id" => $userPinRow['image_id']
+
             );
 
             $likeQuery->close();
