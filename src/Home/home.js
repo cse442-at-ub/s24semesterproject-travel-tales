@@ -880,9 +880,9 @@ const App = () => {
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
-                            {/* <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '15px', textAlign: 'center' }}>
                                 {selectedMarker.username}
-                            </Typography> */}
+                            </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
                             </Typography>
