@@ -1,40 +1,12 @@
 <?php
 session_start();
 include_once('db.php');
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("HTTP/1.1 200 OK");
-    exit();
-}
-
-// Redirect to HTTPS if not already
-if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit();
-}
 
 // CORS Headers
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
-if (isset($_SERVER['HTTPS_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-    header('Access-Control-Max-Age: 86400'); // cache for 1 day
-}
 
-// CORS Preflight Handling
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    }
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-    }
-    exit(0);
-}
 
 header("Content-Type: application/json");
 
@@ -44,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (
         isset($data['lat']) && isset($data['username']) && isset($data['lng']) && 
         isset($data['title']) && isset($data['description']) && isset($data['date']) && 
-        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile'])
+        isset($data['isPublic']) && isset($_SESSION['user_id']) && isset($data['profile']) && 
+        isset($data['city']) && isset($data['state'])
     ) {
         $latitude = $data['lat'];
         $longitude = $data['lng'];
@@ -55,10 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $data['username'];
         $user_id = $_SESSION['user_id'];
         $profile = $data['profile'];
+        $city = $data['city'];
+        $state = $data['state'];
+        $image_id = $data['image_id'];
 
-
-        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sddsssiis", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile);
+        $stmt = $conn->prepare("INSERT INTO PinsInfo (username, lat, lng, title, description, date, isPublic, user_id, profile, city, state, image_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sddsssiisssi", $username, $latitude, $longitude, $title, $description, $date, $isPublic, $user_id, $profile, $city, $state, $image_id);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Pin Info successfully added to the database']);
@@ -99,7 +74,7 @@ $commentsQuery->close();
 $requestUserId = $_SESSION['user_id'] ?? null;
 
 if ($requestUserId !== null) { 
-    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id FROM PinsInfo WHERE user_id = ?");
+    $userPinsQuery = $conn->prepare("SELECT lat, lng, date, title, description, pin_id, city, state, image_id FROM PinsInfo WHERE user_id = ?");
     $userPinsQuery->bind_param("s", $requestUserId);
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
@@ -137,13 +112,16 @@ if ($requestUserId !== null) {
                 "user_id" => $requestUserId,
                 "lat" => $userPinRow['lat'],
                 "lng" => $userPinRow['lng'],
+                "city" => $userPinRow['city'],
+                "state" => $userPinRow['state'],
                 "date" => $userPinRow['date'],
                 "title" => $userPinRow['title'],
                 "description" => $userPinRow['description'],
                 "pin_id" => $userPinRow['pin_id'],
                 "profile" => $userRow['profile'],
                 "comments" => $commentsForPin,
-                "isLiked" => $isLiked
+                "isLiked" => $isLiked,
+                "image_id" => $userPinRow['image_id']
             );
 
             $likeQuery->close();

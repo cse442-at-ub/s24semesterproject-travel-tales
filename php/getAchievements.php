@@ -15,14 +15,12 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
     exit();
 }
 
-header('Access-Control-Allow-Origin: http://localhost:3000');
 header("Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com; style-src 'self' https://fonts.googleapis.com;");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
 if (isset($_SERVER['HTTPS_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTPS_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400'); 
+    header('Access-Control-Max-Age: 86400'); // cache for 1 day
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -34,28 +32,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     }
     exit(0);
 }
+
+header("Content-Type: application/json");
+
 if (isset($_SESSION['user_id'])) {
     $userID = $_SESSION['user_id'];
 
-    $sql = "SELECT PinsInfo.*, GROUP_CONCAT(comments.comment) AS pin_comments 
-            FROM PinsInfo 
-            LEFT JOIN comments ON PinsInfo.pin_id = comments.pin_id
-            WHERE PinsInfo.user_id = '$userID'
-            GROUP BY PinsInfo.pin_id";
+    $sql = "SELECT * FROM PinsInfo WHERE user_id = '$userID'";
 
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if ($result->num_rows >= 0) {
         $pinsData = array();
         while ($row = $result->fetch_assoc()) {
             $pinsData[] = $row;
         }
         
-        echo json_encode($pinsData);
+        $response = array(
+            'count' => count($pinsData)
+        );
     } else {
-        echo json_encode(array('message' => 'No pins found for the provided email'));
+        $response = array(
+            'message' => 'No pins found for the provided email'
+        );
     }
-}
 
+    echo json_encode([$response]); 
+}
 $conn->close();
 ?>
