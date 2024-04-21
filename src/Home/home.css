@@ -6,16 +6,96 @@
     border: none;
 }
 
-.modal {
+.comment-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 25%;
+    left: 20%;
+}
+
+.comment-box {
+    position: center;
+    top: 35%;
+    left: 5%;
+    width: 90%;
+    margin-top: 10px;
+    padding: 1rem;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 18px; /* Set font size to 16 pixels */
+}
+::-webkit-scrollbar {
+    width: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 15px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
+}
+
+.SharedPinsContainer {
+    width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    border-left: 3px solid white;
+}
+
+.SharedPins {
+    font-family: Arial;
+    font-size: 20px;
+    padding-top: 25px;
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    padding-left: 80px;
+    padding-right: 30px;
+}
+
+.leave-arrow2 {
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    transform: scale(1.8);
+    background-color: transparent;
+    padding-right: 10px;
+}
+
+
+.modalAddPin {
     height: 55%;
     width: 35%;
 }
 
-.title {
+.PinInfo {
     position: absolute;
-    top: 12%;
-    left: 10%;
-    background: url(../assets/title.png);
+    height: 80%;
+    width: 25%;
+    left: 20%;
+} 
+
+.title-words {
+    position: absolute;
+    top: 13%;
+    left: 5%;
+    background: url(../assets/AddPinModal/title.png);
     flex-shrink: 0;
     width: 68px;
     height: 20px;
@@ -24,8 +104,8 @@
 .description {
     position: absolute;
     top: 30%;
-    left: 10%;
-    background: url(../assets/description.png);
+    left: 5%;
+    background: url(../assets/AddPinModal/description.png);
     width: 168px;
     height: 25px;
 }
@@ -33,8 +113,8 @@
 
 .leave-arrow {
     position: absolute;
-    top: 30px;
-    left: 20px;
+    top: 2%;
+    left: 2%;
     width: 50px;
     height: 50px;
     border: none;
@@ -45,13 +125,13 @@
 .title-box {
     position: absolute;
     top: 18%;
-    left: 10%;
+    left: 5%;
     display: flex;
-    width: 78%;
+    width: 85%;
     height: 13px;
     margin: 0.25rem 0;
     padding: 1rem;
-    border-radius: 10px; 
+    border-radius: 10px;
     overflow: hidden;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 18px; /* Set font size to 16 pixels */
@@ -59,25 +139,25 @@
 
 .description-box {
     position: absolute;
-    top: 35%; 
-    left: 10%;
-    width: 78%;
+    top: 35%;
+    left: 5%;
+    width: 85%;
     height: 30%;
     margin: 0.25rem 0;
     padding: 1rem;
     flex-wrap: wrap;
-    border-radius: 10px; 
+    border-radius: 10px;
     overflow-wrap: break-word;
     word-break: break-all;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 18px; /* Set font size to 16 pixels */
-  }
+}
 
-  .make-public {
+.make-public {
     position: absolute;
     top: 75%;
     left: 10%;
-    background: url(../assets/make-public.png);
+    background: url(../assets/AddPinModal/make-public.png);
     flex-shrink: 0;
     width: 165px;
     height: 16px;
@@ -92,362 +172,117 @@
     border: none;
 }
 
-@media (max-width: 415px) {
-    .modal {
-        height: 55%;
-        width: 50%;
-    }
-    .add-pin-box {
-        position: absolute;
-        top: 105%;
-        width: 100%;
-        height: 10%;
-        border: none;
-    }
 
-    .title {
-        position: absolute;
-        top: 25%;
-        left: 20px;
-        flex-shrink: 0;
-        width: 68px;
-        height: 20px;
-    }
-    
-    .description {
-        position: absolute;
-        top: 44%;
-        left: 20px;
-        width: 168px;
-        height: 25px;
-    }
-    
-    .leave-arrow {
-        position: absolute;
-        top: 35px;
-        left: 21px;
-        width: 50px;
-        height: 50px;
-        border: none;
-        transform: scale(1.8);
-        background-color: transparent;
-    }
-    
-    .title-box {
-        position: absolute;
-        top: 30%;
-        left: 10px;
-        display: flex;
-        width: 85%;
-        height: 13px;
-        margin: 0.25rem 0;
-        padding: 1rem;
-        border-radius: 10px; 
-        overflow: hidden;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-        
-    }
-    
-    .description-box {
-        position: absolute;
-        top: 50%; 
-        left: 10px;
-        width: 85%;
-        height: 20%;
-        flex-wrap: wrap;
-        border-radius: 10px; 
-        overflow-wrap: break-word;
-        word-break: break-all;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-    }
-    
-      .make-public {
-        position: absolute;
-        top: 80%;
-        left: 27px;
-        flex-shrink: 0;
-        width: 165px;
-        height: 16px;
-    }
-    
-    .switch {
-        position: absolute;
-        top: 79%;
-        right: 10%;
-        transform: scale(2.0);
-        background: transparent;
-        border: none;
-    }
-}
-
-@media (min-width: 415px) and (max-width: 1250px) {
-    .modal {
-        height: 55%;
-        width: 50%;
-    }
-    .add-pin-box {
-        position: absolute;
-        top: 105%;
-        width: 100%;
-        height: 10%;
-        border: none;
-    }
-
-    .title {
-        position: absolute;
-        top: 115px;
-        left: 25px;
-        flex-shrink: 0;
-        width: 68px;
-        height: 20px;
-    }
-    
-    .description {
-        position: absolute;
-        top: 225px;
-        left: 25px;
-        width: 168px;
-        height: 25px;
-    }
-    
-    .leave-arrow {
-        position: absolute;
-        top: 35px;
-        left: 21px;
-        width: 50px;
-        height: 50px;
-        border: none;
-        transform: scale(1.8);
-        background-color: transparent;
-    }
-    
-    .title-box {
-        position: absolute;
-        top: 150px;
-        left: 15px;
-        display: flex;
-        width: 85%;
-        height: 13px;
-        margin: 0.25rem 0;
-        padding: 1rem;
-        border-radius: 10px; 
-        overflow: hidden;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-        
-    }
-    
-    .description-box {
-        position: absolute;
-        top: 260px; 
-        left: 15px;
-        width: 85%;
-        height: 20%;
-        flex-wrap: wrap;
-        border-radius: 10px; 
-        overflow-wrap: break-word;
-        word-break: break-all;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-    }
-    
-      .make-public {
-        position: absolute;
-        top: 83%;
-        left: 27px;
-        flex-shrink: 0;
-        width: 165px;
-        height: 16px;
-    }
-    
-    .switch {
-        position: absolute;
-        top: 82%;
-        right: 10%;
-        transform: scale(2.0);
-        background: transparent;
-        border: none;
-    }
-}
-
-@media (min-height: 790px) and (max-width: 1250px) {
-    .modal {
-        height: 55%;
-        width: 50%;
-    }
-    .add-pin-box {
-        position: absolute;
-        top: 105%;
-        width: 100%;
-        height: 10%;
-        border: none;
-    }
-
-    .title {
-        position: absolute;
-        top: 115px;
-        left: 25px;
-        flex-shrink: 0;
-        width: 68px;
-        height: 20px;
-    }
-    
-    .description {
-        position: absolute;
-        top: 225px;
-        left: 25px;
-        width: 168px;
-        height: 25px;
-    }
-    
-    .leave-arrow {
-        position: absolute;
-        top: 35px;
-        left: 21px;
-        width: 50px;
-        height: 50px;
-        border: none;
-        transform: scale(1.8);
-        background-color: transparent;
-    }
-    
-    .title-box {
-        position: absolute;
-        top: 150px;
-        left: 15px;
-        display: flex;
-        width: 85%;
-        height: 13px;
-        margin: 0.25rem 0;
-        padding: 1rem;
-        border-radius: 10px; 
-        overflow: hidden;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-        
-    }
-    
-    .description-box {
-        position: absolute;
-        top: 260px; 
-        left: 15px;
-        width: 85%;
-        height: 25%;
-        flex-wrap: wrap;
-        border-radius: 10px; 
-        overflow-wrap: break-word;
-        word-break: break-all;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-size: 18px; /* Set font size to 16 pixels */
-    }
-    
-    .make-public {
-        position: absolute;
-        top: 83%;
-        left: 27px;
-        flex-shrink: 0;
-        width: 165px;
-        height: 16px;
-    }
-    
-    .switch {
-        position: absolute;
-        top: 82%;
-        right: 10%;
-        transform: scale(2.0);
-        background: transparent;
-        border: none;
-    }
-}
-
-@media (min-height: 1015px) and (max-width: 1250px) {
-    .modal {
-        height: 55%;
-        width: 50%;
-    }
+@media (max-width: 800px) {
     .add-pin-box {
         position: absolute;
         top: 95%;
         width: 100%;
-        height: 10%;
+        height: 15%;
         border: none;
     }
 
-    .title {
+    .modal {
+        height: 55%;
+        width: 35%;
+    }
+
+    .title-words {
         position: absolute;
-        top: 115px;
-        left: 25px;
+        top: 13%;
+        left: 2%;
+        background: url(../assets/AddPinModal/title.png);
         flex-shrink: 0;
         width: 68px;
         height: 20px;
     }
-    
+
     .description {
         position: absolute;
-        top: 225px;
-        left: 25px;
+        top: 30%;
+        left: 2%;
+        background: url(../assets/AddPinModal/description.png);
         width: 168px;
         height: 25px;
     }
-    
+
     .leave-arrow {
         position: absolute;
-        top: 35px;
-        left: 21px;
+        top: 2%;
+        left: 2%;
         width: 50px;
         height: 50px;
         border: none;
         transform: scale(1.8);
         background-color: transparent;
     }
-    
+
     .title-box {
         position: absolute;
-        top: 150px;
-        left: 15px;
+        top: 18%;
+        left: 2%;
         display: flex;
         width: 85%;
         height: 13px;
         margin: 0.25rem 0;
         padding: 1rem;
-        border-radius: 10px; 
+        border-radius: 10px;
         overflow: hidden;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-size: 18px; /* Set font size to 16 pixels */
-        
     }
-    
+
     .description-box {
         position: absolute;
-        top: 260px; 
-        left: 15px;
+        top: 35%;
+        left: 2%;
         width: 85%;
-        height: 35%;
+        height: 30%;
+        margin: 0.25rem 0;
+        padding: 1rem;
         flex-wrap: wrap;
-        border-radius: 10px; 
+        border-radius: 10px;
         overflow-wrap: break-word;
         word-break: break-all;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-size: 18px; /* Set font size to 16 pixels */
     }
-    
+
     .make-public {
         position: absolute;
-        top: 80%;
-        left: 27px;
+        top: 75%;
+        left: 10%;
+        background: url(../assets/AddPinModal/make-public.png);
         flex-shrink: 0;
         width: 165px;
         height: 16px;
     }
-    
+
     .switch {
         position: absolute;
-        top: 79%;
+        top: 74%;
         right: 10%;
         transform: scale(2.0);
         background: transparent;
         border: none;
+    }    
+}
+
+@media (max-width: 1000px) {
+    .PinInfo {
+        position: absolute;
+        height: 80%;
+        width: 75%;
+        left: 50%;
+    } 
+
+}
+
+@media (max-width: 1000px) {
+    .PinInfo {
+        position: absolute;
+        height: 80%;
+        width: 75%;
+        left: 50%;
     }
 }

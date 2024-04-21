@@ -1,92 +1,142 @@
-.plus-icon {
+.account-icon {
   position: absolute;
-  height: 112px;
-  width: 112px;
-  bottom: 63px;
-  right: 138px;
+  height: 4%; 
+  width: 4%; 
+  right: 35%;
+  top: 5%;
+  transform: translateY(-50%);
   background-color: transparent;
   color: white;
 }
 
-.plus-icon button:hover {
-  border-radius: 50%; /* Maintain circular shape on hover */
-  background-color: rgba(0, 0, 0, 0); /* Set the background color to fully transparent */
-}
-
-.plus-icon button {
-  border-radius: 50%; /* Make the button circular */
-  transition: border-radius 0.3s ease, background-color 0.3s ease; /* Add a smooth transition effect */
-  background: none; 
-  border: none; 
+.account-icon button {
+  background: none;
+  border: none;
   padding: 0;
+  color: white;
+  transition: transform 0.2s ease;
 }
 
-.plus-icon img {
-  display: block; 
+.account-icon .accountcircle-icon {
+  display: block;
   width: 100%;
   height: 100%;
-  border-radius: 50%; 
+  border-radius: 50%;
 }
 
-@media (max-width: 767px) {
-  .plus-icon {
-    height: 15vmin;
-    width: 15vmin;
-    bottom: 10vmin;
-    right: 10vmin;
-  }
+.account-icon button:active {
+  transform: scale(0.95);
 }
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.plus-icon {
+  position: absolute;
+  height: 4%; 
+  width: 4%; 
+  right: 50%;
+  top: 5%;
+  transform: translateY(-50%);
+  background-color: transparent;
   color: white;
 }
 
-.overlay-text {
+.plus-icon button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.plus-icon .pluscircle-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.plus-icon button:active {
+  transform: scale(0.95);
+}
+
+.shared-icon {
   position: absolute;
-  top: 20px; 
-  left: 20px; 
-  background-color: black; 
-  padding: 10px;
-  border-radius: 5px;
-  color: white
+  height: 4%; 
+  width: 4%; 
+  right: 65%;
+  top: 5%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.shared-icon button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: white;
+  transition: transform 0.2s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.shared-icon .sharedcircle-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.shared-icon button:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) and (min-width: 443px) {
+  .account-icon {
+    position: absolute;
+    right: 30%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
   }
-  to {
-    transform: rotate(360deg);
+  .plus-icon {
+    position: absolute;
+    right: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
+  }
+  .shared-icon {
+    position: absolute;
+    right: 70%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
   }
 }
 
+@media (max-width: 442px) {
+  .account-icon {
+    position: absolute;
+    right: 30%;
+    top: 0%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
+  }
+  
+  .plus-icon {
+    position: absolute;
+    right: 57%;
+    top: 0%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
+  }
+  .shared-icon {
+    position: absolute;
+    right: 83%;
+    top: 0%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: white;
+  }
 
-
-
+}
