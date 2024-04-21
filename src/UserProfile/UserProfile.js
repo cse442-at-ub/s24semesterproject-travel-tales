@@ -58,7 +58,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 });
                 const data = await response.json();
                 if (data.length > 0) {
-                    console.log("Code ran");
+                    //console.log("Code ran");
                     // Assuming data is an array with a single object
                     const userData = data[0];
                     setLikeCount(userData.likes_count);
@@ -164,10 +164,9 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const list = () => (
         <div
             style={{
-                width: '100%',
                 maxWidth: 400,
-                minWidth: 350,
-                padding: '12px',
+                minWidth: 300,
+                padding: '15px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
