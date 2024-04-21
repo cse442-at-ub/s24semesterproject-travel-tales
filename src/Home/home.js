@@ -1059,6 +1059,7 @@ const App = () => {
                                 variant="contained"
                                 onClick={() => {
                                     placeNewMarker();
+                                    handleMapIconClick({ lat: currentLocation.lat, lng: currentLocation.lng })
                                 }}
                             >
                                 Add Pin
