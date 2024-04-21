@@ -398,12 +398,22 @@ const App = () => {
     // start: Add Pin Image useStates
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [imageError, setImageError] = useState(false);
     // end: Add Pin Image useStates
 
-    const handleChange = (event) => {
+    const handleChange = (event) => { // for IsPublic switch
         setIsChecked(true); // Update state based on switch position
         // submitSwitchState(event.target.checked); // Call the submission function with the new state
     };
+
+    const handleImageError = () => { // for image display in Pin modal
+        setImageError(true);  // Set error state to true if the image fails to load
+    };
+
+    useEffect(() => {
+        setImageError(false);  // Reset the imageError state to false
+    }, [selectedMarker]);  // Dependency array includes the prop that triggers the reset
+
 
     const handleOpen2 = () => {
         setOpen2(true);
@@ -433,7 +443,6 @@ const App = () => {
 
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
-        //TODO: fetch and display pin image
         setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
@@ -441,7 +450,8 @@ const App = () => {
         setOpenPinModal(false);
     };
 
-    const handleMapIconClick = (Coordinates) => {    
+    const handleMapIconClick = (Coordinates) => {
+        imageError =     
         handleClosePinModal();
         setSelectedMarker(null);
         if (zoomLevel === 14) {
@@ -793,7 +803,7 @@ const App = () => {
 
     const handlePinImageSubmit = async (image_id) => { 
         if (!file) {
-            return;
+            return
         }
         const formData = new FormData();
         formData.append('image', file);
@@ -812,6 +822,7 @@ const App = () => {
         } catch (error) {
             throw new Error('Failed to upload image.');
         }
+        return true
     };
     // End: Add Pin Image Methods (DO NOT REMOVE)
 
@@ -897,8 +908,13 @@ const App = () => {
                             <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '5px', textAlign: 'center' }}>
                                 Placed on: {selectedMarker.date}
                             </Typography>
-                            {file && (
-                                <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Pin Image" />
+                            {(!imageError) && (
+                                <img 
+                                    style={{ width: '80%', height: 'auto', borderRadius: 10 }}
+                                    src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`}
+                                    alt="Pin Image"
+                                    onError={handleImageError} 
+                                />
                             )}
                             <Box
                                 sx={{
