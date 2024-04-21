@@ -788,7 +788,6 @@ const App = () => {
 
     const handlePinImageSubmit = async (image_id) => { 
         if (!file) {
-            alert('No file selected');
             return;
         }
         const formData = new FormData();
@@ -802,13 +801,11 @@ const App = () => {
             });
             const data = await response.json();
 
-            if (response.ok) {
-                alert('Image uploaded successfully!');
-            } else {
+            if (!response.ok) {
                 throw new Error('Failed to upload image.');
             }
         } catch (error) {
-            alert('Error uploading image.');
+            throw new Error('Failed to upload image.');
         }
     };
     // End: Add Pin Image Methods (DO NOT REMOVE)
