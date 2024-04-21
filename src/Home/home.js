@@ -394,11 +394,17 @@ const App = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
-    const [isPublicPin, setIsPublicPin] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     // start: Add Pin Image useStates
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
     // end: Add Pin Image useStates
+
+    const handleChange = (event) => {
+        setIsChecked(true); // Update state based on switch position
+        // submitSwitchState(event.target.checked); // Call the submission function with the new state
+    };
+
     const handleOpen2 = () => {
         setOpen2(true);
         getSharedPins();
@@ -609,7 +615,6 @@ const App = () => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const handleIsPublic = (event) => setIsPublicPin(event.target.checked);
 
     const placeNewMarker = async () => {
         handleClose();
@@ -627,7 +632,7 @@ const App = () => {
         if (currentLocation) {
             fetchCityState(currentLocation.lat, currentLocation.lng)
             .then(cityState => {
-                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
+                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic: isChecked, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
                 const newMarker = {
                     username: currentUser.username,
                     lat: currentLocation.lat,
@@ -1023,7 +1028,10 @@ const App = () => {
                             </button>
                             <Typography style={{display: 'flex', justifyContent: 'space-between', textAlign: 'center'}} variant='subtitle1'>
                                 Make Public?
-                                <Switch onClick={handleIsPublic} />
+                                <Switch
+                                    checked={isChecked}
+                                    onChange={handleChange}
+                                />
                             </Typography>
 
                             {/* Add Image Button */}
