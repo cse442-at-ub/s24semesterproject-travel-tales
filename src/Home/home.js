@@ -394,11 +394,27 @@ const App = () => {
     const [currentLocation, setCurrentLocation] = useState(null);
     const [matchedData, setMatchedData] = useState([]);
     const [open2, setOpen2] = useState(false);
-    const [isPublicPin, setIsPublicPin] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     // start: Add Pin Image useStates
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [imageError, setImageError] = useState(false);
     // end: Add Pin Image useStates
+
+    const handleChange = (event) => { // for IsPublic switch
+        setIsChecked(true); // Update state based on switch position
+        // submitSwitchState(event.target.checked); // Call the submission function with the new state
+    };
+
+    const handleImageError = () => { // for image display in Pin modal
+        setImageError(true);  // Set error state to true if the image fails to load
+    };
+
+    useEffect(() => {
+        setImageError(false);  // Reset the imageError state to false
+    }, [selectedMarker]);  // Dependency array includes the prop that triggers the reset
+
+
     const handleOpen2 = () => {
         setOpen2(true);
         getSharedPins();
@@ -427,7 +443,6 @@ const App = () => {
 
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
-        //TODO: fetch and display pin image
         setOpenPinModal(true);
     };
     const handleClosePinModal = () => {
@@ -435,7 +450,8 @@ const App = () => {
         setOpenPinModal(false);
     };
 
-    const handleMapIconClick = (Coordinates) => {    
+    const handleMapIconClick = (Coordinates) => {
+        imageError =     
         handleClosePinModal();
         setSelectedMarker(null);
         if (zoomLevel === 14) {
@@ -609,7 +625,6 @@ const App = () => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const handleIsPublic = (event) => setIsPublicPin(event.target.checked);
 
     const placeNewMarker = async () => {
         handleClose();
@@ -627,7 +642,7 @@ const App = () => {
         if (currentLocation) {
             fetchCityState(currentLocation.lat, currentLocation.lng)
             .then(cityState => {
-                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
+                sendCoordinatesToBackend({ username: currentUser.username, lat: currentLocation.lat, lng: currentLocation.lng, title, description, date, isPublic: isChecked, profile: currentUser.profile, city: cityState.city, state: cityState.state, image_id: image_id});
                 const newMarker = {
                     username: currentUser.username,
                     lat: currentLocation.lat,
@@ -788,8 +803,7 @@ const App = () => {
 
     const handlePinImageSubmit = async (image_id) => { 
         if (!file) {
-            alert('No file selected');
-            return;
+            return
         }
         const formData = new FormData();
         formData.append('image', file);
@@ -802,14 +816,13 @@ const App = () => {
             });
             const data = await response.json();
 
-            if (response.ok) {
-                alert('Image uploaded successfully!');
-            } else {
+            if (!response.ok) {
                 throw new Error('Failed to upload image.');
             }
         } catch (error) {
-            alert('Error uploading image.');
+            throw new Error('Failed to upload image.');
         }
+        return true
     };
     // End: Add Pin Image Methods (DO NOT REMOVE)
 
@@ -880,9 +893,9 @@ const App = () => {
                     <Modal open={openModal} onClose={handleClosePinModal}>
                         <Box className="PinInfo" sx={pinModalStyle}>
                                 {renderProfile(selectedMarker.profile)}
-                            {/* <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '2.5px', textAlign: 'center' }}>
+                            <Typography variant="h5" component="div" sx={{ fontSize: '1rem', marginBottom: '15px', textAlign: 'center' }}>
                                 {selectedMarker.username}
-                            </Typography> */}
+                            </Typography>
                             <Typography variant="body1" sx={{ fontSize: '1.5rem', marginBottom: '2.5px', textAlign: 'center' }}>
                                 {selectedMarker.title}
                             </Typography>
@@ -895,7 +908,14 @@ const App = () => {
                             <Typography variant="body2" sx={{ fontSize: '.8rem', marginBottom: '5px', textAlign: 'center' }}>
                                 Placed on: {selectedMarker.date}
                             </Typography>
-                            <img style={{ width: '80%', height: 'auto', borderRadius: 10 }} src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`} alt="Pin Image" />
+                            {(!imageError) && (
+                                <img 
+                                    style={{ width: '80%', height: 'auto', borderRadius: 10 }}
+                                    src={`${process.env.REACT_APP_API_BASE_URL}/getPinImage.php?image_id=${selectedMarker.image_id}`}
+                                    alt="Pin Image"
+                                    onError={handleImageError} 
+                                />
+                            )}
                             <Box
                                 sx={{
                                     border: '1px solid #000',
@@ -1024,7 +1044,10 @@ const App = () => {
                             </button>
                             <Typography style={{display: 'flex', justifyContent: 'space-between', textAlign: 'center'}} variant='subtitle1'>
                                 Make Public?
-                                <Switch onClick={handleIsPublic} />
+                                <Switch
+                                    checked={isChecked}
+                                    onChange={handleChange}
+                                />
                             </Typography>
 
                             {/* Add Image Button */}
