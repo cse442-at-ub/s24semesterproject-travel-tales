@@ -163,10 +163,9 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const list = () => (
         <div
             style={{
-                width: '100%',
                 maxWidth: 400,
-                minWidth: 350,
-                padding: '12px',
+                minWidth: 300,
+                padding: '15px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
