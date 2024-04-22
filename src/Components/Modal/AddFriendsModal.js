@@ -3,13 +3,17 @@ import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 
-const AddFriendModal = ({ open, onClose }) => {
+const AddFriendModal = ({ open, onClose, handleUserStats, fetchFriends,updateButtonState }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [usernames, setUsernames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');    
   const [buttonStates, setButtonStates] = useState({});
+
+  const handleClose = () => {
+    onClose(false); // Pass false to indicate that the modal should be closed and the follower count should be updated
+};
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -62,15 +66,19 @@ const AddFriendModal = ({ open, onClose }) => {
 
         const responseData = await response.json();
         console.log('Friend added successfully:', responseData);
-
         setButtonStates(prevState => ({
             ...prevState,
             [user]: 'Followed!'
         }));
+        
+        handleUserStats();
+        fetchFriends()
     } catch (error) {
         console.error('There was a problem adding the friend:', error.message);
     }
   };
+
+
 
   const filteredUsernames = usernames.filter(username =>
     username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -102,7 +110,7 @@ const AddFriendModal = ({ open, onClose }) => {
       >
         <ArrowBackIosNewIcon 
             className="leave-arrow" 
-            onClick={onClose} 
+            onClick={handleClose} 
             style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
         ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>

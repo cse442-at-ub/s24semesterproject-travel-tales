@@ -3,11 +3,15 @@ import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider
 import AddFriendModal from './AddFriendsModal';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import axios from 'axios';
+import handleUserStats from '../../UserProfile/UserProfile'
 
-const FriendsPin = ({ open, onClose }) => {
+
+const FriendsPin = ({ open, onClose , handleUserStats}) => {
 const [friends, setFriends] = useState([]);
 const [AddFriendModalOpen, setAddFriendModalOpen] = useState(false);
 const [loading, setLoading] = useState(false);
+
+const [buttonStates, setButtonStates] = useState({});
 
 const handleAddFriendButtonClick = () => {
     setAddFriendModalOpen(true);
@@ -26,7 +30,11 @@ const handleAddFriendButtonClick = () => {
       if (data.success) {
         // Remove the friend from the local state
         setFriends(prevFriends => prevFriends.filter(friend => friend.username !== friendUsername));
+
         console.log(`Successfully unfollowed ${friendUsername}`);
+        handleUserStats();
+        updateButtonState(friendUsername, 'Follow');
+
       } else {
         console.error('Failed to unfollow friend:', data.message);
       }
@@ -36,8 +44,6 @@ const handleAddFriendButtonClick = () => {
     });
   };
 
-  useEffect(() => {
-    setLoading(true);
     const fetchFriends = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
@@ -64,7 +70,17 @@ const handleAddFriendButtonClick = () => {
     if (open) {
       fetchFriends();
     }
+  
+  useEffect(() => {
+    setLoading(true);
   }, [open]);
+
+  const updateButtonState = (username, state) => {
+    setButtonStates((prevState) => ({
+      ...prevState,
+      [username]: state,
+    }));
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -104,7 +120,7 @@ const handleAddFriendButtonClick = () => {
           },
         }}
       >
-        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} />
+        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} handleUserStats={handleUserStats} fetchFriends={fetchFriends} updateButtonState={updateButtonState} />
 
         <Button
             onClick={handleAddFriendButtonClick}
