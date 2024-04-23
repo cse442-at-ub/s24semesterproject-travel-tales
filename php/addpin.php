@@ -47,7 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$commentsQuery = $conn->prepare("SELECT pin_id, comment, user_id FROM comments");
+$commentsQuery = $conn->prepare("SELECT c.pin_id, c.comment, c.user_id, u.username
+                                  FROM comments c
+                                  INNER JOIN users u ON c.user_id = u.id");
 $commentsQuery->execute();
 $commentsResult = $commentsQuery->get_result();
 
@@ -55,19 +57,14 @@ $comments = array();
 while ($commentRow = $commentsResult->fetch_assoc()) {
     $pinId = $commentRow['pin_id'];
     $comment = $commentRow['comment'];
-    $user = $commentRow['user_id'];
-    $sql = "SELECT username FROM users WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt ->bind_param("s", $user);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
+    $userId = $commentRow['user_id'];
+    $username = $commentRow['username'];
+
     $comments[$pinId][] = array(
         "comment" => $comment,
-        "user_id" => $user,
+        "user_id" => $userId,
         "username" => $username
     );
-    
 }
 $commentsQuery->close();
 
@@ -79,7 +76,9 @@ if ($requestUserId !== null) {
     $userPinsQuery->execute();
     $userPinsResult = $userPinsQuery->get_result();
 
-    $userQuery = $conn->prepare("SELECT first_name, last_name, username, profile FROM users WHERE id = ?");
+    $userQuery = $conn->prepare("SELECT u.first_name, u.last_name, u.username, u.profile
+                                 FROM users u
+                                 WHERE u.id = ?");
     $userQuery->bind_param("s", $requestUserId);
     $userQuery->execute();
     $userResult = $userQuery->get_result();
