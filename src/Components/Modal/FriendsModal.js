@@ -2,18 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, List, ListItem, ListItemButton, Divider, CircularProgress } from '@mui/material';
 import AddFriendModal from './AddFriendsModal';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import axios from 'axios';
+import handleUserStats from '../../UserProfile/UserProfile'
 
-const FriendsPin = ({ open, onClose }) => {
+
+const FriendsPin = ({ open, onClose , handleUserStats}) => {
 const [friends, setFriends] = useState([]);
 const [AddFriendModalOpen, setAddFriendModalOpen] = useState(false);
 const [loading, setLoading] = useState(false);
 
+const [buttonStates, setButtonStates] = useState({});
+
 const handleAddFriendButtonClick = () => {
     setAddFriendModalOpen(true);
   }
+  const handleUnfollow = (friendUsername) => {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/UnfollowUser.php`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ friend_username: friendUsername }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Remove the friend from the local state
+        setFriends(prevFriends => prevFriends.filter(friend => friend.username !== friendUsername));
 
-  useEffect(() => {
-    setLoading(true);
+        console.log(`Successfully unfollowed ${friendUsername}`);
+        handleUserStats();
+        updateButtonState(friendUsername, 'Follow');
+
+      } else {
+        console.error('Failed to unfollow friend:', data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error unfollowing friend:', error);
+    });
+  };
+
     const fetchFriends = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetchFriends.php`, {
@@ -40,7 +70,17 @@ const handleAddFriendButtonClick = () => {
     if (open) {
       fetchFriends();
     }
+  
+  useEffect(() => {
+    setLoading(true);
   }, [open]);
+
+  const updateButtonState = (username, state) => {
+    setButtonStates((prevState) => ({
+      ...prevState,
+      [username]: state,
+    }));
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -80,15 +120,15 @@ const handleAddFriendButtonClick = () => {
           },
         }}
       >
-        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} />
+        <AddFriendModal open={AddFriendModalOpen} onClose={() => setAddFriendModalOpen(false)} handleUserStats={handleUserStats} fetchFriends={fetchFriends} updateButtonState={updateButtonState} />
 
         <Button
             onClick={handleAddFriendButtonClick}
             variant="contained"
             color="primary"
-            style={{ position: 'absolute', top: '5%', left: '73%', width: '20%', backgroundColor: 'green'}}
+            style={{ position: 'absolute', top: '1%', left: '73%', width: '20%', backgroundColor: 'green'}}
             >
-            Add Friends
+            Add Followers
         </Button>
         <ArrowBackIosNewIcon 
             className="leave-arrow" 
@@ -97,16 +137,23 @@ const handleAddFriendButtonClick = () => {
         ></ArrowBackIosNewIcon>
         
         <Typography variant="h3" gutterBottom>
-          FRIENDS
+          FOLLOWERS
         </Typography>
         {loading && <CircularProgress />}
-        <List>
+        <List sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
           {friends.map((friend, index) => (
             <React.Fragment key={index}>
               <ListItem disablePadding>
-                <ListItemButton>
-                  <Typography variant="h6" padding={1}>{friend.username}</Typography>
-                  </ListItemButton>
+                <ListItemButton sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                  <Typography variant="h6" padding={1} sx={{ flexGrow: 1 }}>{friend.username}</Typography>
+                  <Button
+                    sx={{ color: 'grey', '&:hover': { color: 'red' } }}
+                    onClick={() => handleUnfollow(friend.username)}
+                    style={{ position: 'absolute', left: '75%', backgroundColor: "transparent"}}
+                  >
+                    Unfollow
+                  </Button>
+                </ListItemButton>
               </ListItem>
               {index < friends.length - 1 && <Divider />}
             </React.Fragment>
