@@ -239,7 +239,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 </Typography>
 
                 <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                    {followCount} FOLLOWERS
+                    {followCount} FOLLOWING
                 </Typography>
             </div>
 
@@ -259,7 +259,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
-                        FOLLOWERS
+                        FOLLOW
                     </Button>
                     <Button
                         onClick={handlePinsButtonClick}
@@ -271,7 +271,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                             color: 'white',
                             marginTop: 10,
                             height: 40,
-                            padding: '0 40px',
+                            padding: '0 25px',
                             boxShadow: '0 3px 5px 2px rgba(46, 125, 50, .3)',
                         }}
                     >
