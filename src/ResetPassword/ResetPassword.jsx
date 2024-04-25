@@ -60,28 +60,27 @@ export const ResetPassword = (props) => {
 
     return (
         <div className="Forgot-Password">
-            
-
             <form className="email-form" onSubmit={handleSubmit}>
                 <h1 className="text">Reset Password</h1>
+                <p style={{fontSize: '14px', paddingBottom: '6px'}} className="text">Check your email for your reset code</p>
                 <div>
-                    <label>Reset Code:</label>
                     <input
                         type="text"
                         name="reset_code"
                         value={formData.reset_code}
                         onChange={handleChange}
                         required
+                        placeholder="Enter your Reset Code"
                     />
                 </div>
                 <div>
-                    <label>New Password:</label>
                     <input
                         type="password"
                         name="pass"
                         value={formData.pass}
                         onChange={handleChange}
                         required
+                        placeholder="Enter your new Password"
                     />
                 </div>
                 <button className="confirm" type="submit">Reset Password</button>
