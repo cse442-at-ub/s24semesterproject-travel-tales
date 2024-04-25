@@ -411,6 +411,7 @@ const App = () => {
     };
 
     useEffect(() => {
+
         setImageError(false);  // Reset the imageError state to false
     }, [selectedMarker]);  // Dependency array includes the prop that triggers the reset
 
@@ -451,7 +452,7 @@ const App = () => {
     };
 
     const handleMapIconClick = (Coordinates) => {
-        imageError =     
+        // imageError =     
         handleClosePinModal();
         setSelectedMarker(null);
         if (zoomLevel === 14) {
@@ -635,7 +636,6 @@ const App = () => {
 
         var date = currentDate.toISOString().split('T')[0];
 
-        //Creates a unique image id
         const min = 100000;
         const max = 999999;
         const image_id = Math.floor(Math.random() * (max - min + 1) + min);
