@@ -2,23 +2,7 @@
 
 include_once('db.php');
 
-// Allow from any origin
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400'); // cache for 1 day
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
-
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
-}
+header("Content-Type: application/json");
 
 $data = json_decode(file_get_contents("php://input"), true);
 //$email = $data['email'];
@@ -29,6 +13,40 @@ $pass = $data['pass'];
 //$userEmail = $conn->real_escape_string($email);
 $resetCode = $conn->real_escape_string($reset_code);
 $newPassword = $conn->real_escape_string($pass);
+
+// check if password is at least 8 characters
+if (strlen($pass) < 8) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
+}
+
+// check if password contains at least one uppercase letter
+$noUppercase = !preg_match('/[A-Z]/', $pass);
+if ($noUppercase) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
+}
+
+// check if password contains at least one lowercase letter
+$noLowercase = !preg_match('/[a-z]/', $pass);
+if ($noLowercase) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
+}
+
+// check to make sure there is at least one special character
+$pattern = '/[^a-zA-Z0-9]/';
+if (!preg_match($pattern, $pass)) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
+}
+
+// check if the password contains a number
+$pattern = '/\d/';
+if (!preg_match($pattern, $pass)) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password requires at least one number.']));
+}
 
 // Hash the new password
 $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -52,13 +70,17 @@ if ($result && $result->num_rows > 0) {
     // should check if record is successfully deleted
 
     if ($conn->query($updateSql) === TRUE) {
-        echo "Password updated successfully.";
+        // http_response_code(200);
+        echo json_encode(["message" => "Password updated successfully."]);
     } else {
-        echo "Error updating password: " . $conn->error;
+        http_response_code(400);
+        echo json_encode(["error" => "Error updating password." . $conn->error]);
     }
 } else {
     // Reset code is invalid or expired
-    echo "Invalid or expired reset code.";
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid or expired reset code." . $conn->error]);
+
 }
 
 $conn->close();

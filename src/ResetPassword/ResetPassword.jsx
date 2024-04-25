@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import "./ResetPassword.css";
 import BannerImage from "../assets/Login/Background.png"
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export const ResetPassword = (props) => {
     const navigate = useNavigate();
-    // const [email, setEmail] = useState('');    
-    // const [resetCode, setResetCode] = useState('');
-    // const [newPassword, setNewPassword] = useState('');
-    // const [message, setMessage] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [formData, setFormData] = useState({
         reset_code: '',
@@ -18,9 +17,10 @@ export const ResetPassword = (props) => {
 
     const [error, setError] = useState('');
 
-//   const handleChange = (e) => {
-//     setFormData({...formData, [e.target.name]: e.target.value});
-//   }
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setOpenSnackbar(false);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,12 +46,14 @@ export const ResetPassword = (props) => {
 
             // Display a message based on the response from the backend
             if (response.ok) {
-                setError(result.error || 'Password reset successfully!');
+                navigate('/login');
             } else {
                 setError(result.error || 'An error occurred. Please try again.');
+                setOpenSnackbar(true);
             }
         } catch (error) {
             setError('Failed to connect to the server. Please try again later.');
+            setOpenSnackbar(true);
         }
     };
 
@@ -83,20 +85,13 @@ export const ResetPassword = (props) => {
                     />
                 </div>
                 <button className="confirm" type="submit">Reset Password</button>
-                {error && <p className="errorLabel">{error}</p>}
                 <Link className="link" to="/login" >Go Back?</Link>
-            </form>
-            
-            {/* <form className="email-form" onSubmit={handleSubmit}>
-                <h1 className ="text">Reset Password</h1>
-                <label htmlFor="email"></label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" id="email" name="email" />
-                <label className="errorLabel">{emailError}</label>
-                <button className="confirm" onClick={onButtonClick}>Continue</button>
-
-                <Link className="link" to="/login" >Go Back?</Link>
-            </form> */}
-      
+                <Snackbar open={openSnackbar} autoHideDuration={10000} onClose={handleCloseSnackbar}>
+                    <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                        {error}
+                    </Alert>
+                </Snackbar>
+            </form>      
 
             <div className="bannerimage">
                 <img src={BannerImage} alt="banner" />
