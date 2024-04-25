@@ -39,43 +39,42 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const [drawerAnchor, setDrawerAnchor] = useState('right');
     const [myPinsModalOpen, setMyPinsModalOpen] = useState(false);
     const [FriendsModalOpen, setFriendsModalOpen] = useState(false);
+    const [modalOpen,handleCloseModal]=useState(false)
     const [profileData, setProfileData] = useState('black')
     const [pinCount, setPinCount] = useState('0')
     const [likeCount, setLikeCount] = useState('0')
     const [followCount, setFollowCount] = useState('0')
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    const handleUserStats = async () => {
         setLoading(true);
-        const handleUserStats = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userStats.php`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    credentials: 'include',
-                });
-                const data = await response.json();
-                if (data.length > 0) {
-                    console.log("Code ran");
-                    // Assuming data is an array with a single object
-                    const userData = data[0];
-                    setLikeCount(userData.likes_count);
-                    setFollowCount(userData.friend_count);
-                } else {
-                    setLoading(false);
-                    console.error('Empty or invalid data received.');
-                }
-            } catch (error) {
-
-                setLoading(false);
-                console.error('Error fetching user stats:', error);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/userStats.php`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            const data = await response.json();
+            if (data.length > 0) {
+                const userData = data[0];
+                setLikeCount(userData.likes_count);
+                setFollowCount(userData.friend_count);
+            } else {
+                console.error('Empty or invalid data received.');
             }
-        };
+        } catch (error) {
+            console.error('Error fetching user stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        // Call handleUserStats on component mount
         handleUserStats();
     }, []);
-
 
 
     useEffect(() => {
@@ -164,10 +163,9 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
     const list = () => (
         <div
             style={{
-                width: '100%',
                 maxWidth: 400,
-                minWidth: 350,
-                padding: '12px',
+                minWidth: 300,
+                padding: '15px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -241,7 +239,7 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                 </Typography>
 
                 <Typography variant="subtitle1" style={{ fontSize: '1rem', margin: '2px' }}>
-                    {followCount} Followers
+                    {followCount} FOLLOWERS
                 </Typography>
             </div>
 
@@ -359,7 +357,8 @@ const SwipeableTemporaryDrawer = ({ open, onClose }) => {
                     {list()}
                 </SwipeableDrawer>
                 <MyPinsModal open={myPinsModalOpen} onClose={() => setMyPinsModalOpen(false)} />
-                <FriendsPin open={FriendsModalOpen} onClose={() => setFriendsModalOpen(false)} />
+                <FriendsPin open={FriendsModalOpen} onClose={() => setFriendsModalOpen(false)} handleUserStats={handleUserStats}  />
+                
             </React.Fragment>
         </div>
     );

@@ -517,6 +517,7 @@ const App = () => {
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
+        fetchCurrentUser();
         getSharedPins();
         fetchInfoFromBackend();
     }, [currentUser, userProfileOpen]);
@@ -617,7 +618,7 @@ const App = () => {
         var pin_id = selectedMarker.id
         if (comment !== "") {
             sendCommentToBackend({ pin_id, comment });
-            selectedMarker.comment.push({comment: comment , user: "You"});
+            selectedMarker.comment.push({ comment: comment, username: currentUser.username });
             document.getElementById('myInput').value = ''
             document.getElementById('myInput').placeholder = 'Comment Sent!'
         }
@@ -1082,6 +1083,7 @@ const App = () => {
                                 variant="contained"
                                 onClick={() => {
                                     placeNewMarker();
+                                    handleMapIconClick({ lat: currentLocation.lat, lng: currentLocation.lng })
                                 }}
                             >
                                 Add Pin
