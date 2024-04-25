@@ -411,6 +411,7 @@ const App = () => {
     };
 
     useEffect(() => {
+
         setImageError(false);  // Reset the imageError state to false
     }, [selectedMarker]);  // Dependency array includes the prop that triggers the reset
 

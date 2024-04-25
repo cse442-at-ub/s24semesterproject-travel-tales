@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./ForgotPassword.css";
+import "./ResetPassword.css";
 import BannerImage from "../assets/Login/Background.png"
+import { useNavigate } from 'react-router-dom';
 
 export const ResetPassword = (props) => {
+    const navigate = useNavigate();
     // const [email, setEmail] = useState('');    
     // const [resetCode, setResetCode] = useState('');
     // const [newPassword, setNewPassword] = useState('');
@@ -32,7 +34,7 @@ export const ResetPassword = (props) => {
         e.preventDefault();
         try {
             // Make the POST request to your backend endpoint
-            const response = await fetch('http://localhost/api/validateResetCode.php', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/validateResetCode.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

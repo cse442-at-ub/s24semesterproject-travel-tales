@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./ForgotPassword.css";
 import BannerImage from "../assets/Login/Background.png"
-import { Modal, Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+// import { Modal, Button, Box } from '@mui/material';
 
 export const ForgotPassword = (props) => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -30,11 +32,11 @@ export const ForgotPassword = (props) => {
         });
         const data = await response.json();
         if(response.ok) {
+            navigate('/resetPassword');
             setMessage(data.message);
         } else {
             setError(data.message);
         }
-        handleOpen()
     }
 
     const modalStyle = {
@@ -53,23 +55,23 @@ export const ForgotPassword = (props) => {
 
 
     return (
-        <div>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box className= 'confirm-box' sx={modalStyle}>
-                    {/* <h2 id="modal-modal-title">Password Reset Request Sent!</h2> */}
-                    <p id="modal-modal-description">
-                        {message && <p>{message}</p>}
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                    </p>
-                    <br />
-                    <Button onClick={handleClose}>Close</Button>
-                </Box>
-            </Modal>
+        // <div>
+        //     <Modal
+        //         open={open}
+        //         onClose={handleClose}
+        //         aria-labelledby="modal-modal-title"
+        //         aria-describedby="modal-modal-description"
+        //     >
+        //         <Box className= 'confirm-box' sx={modalStyle}>
+        //             {/* <h2 id="modal-modal-title">Password Reset Request Sent!</h2> */}
+        //             <p id="modal-modal-description">
+        //                 {message && <p>{message}</p>}
+        //                 {error && <p style={{ color: 'red' }}>{error}</p>}
+        //             </p>
+        //             <br />
+        //             <Button onClick={handleClose}>Close</Button>
+        //         </Box>
+        //     </Modal>
 
 
 
@@ -96,7 +98,6 @@ export const ForgotPassword = (props) => {
                 <img src={BannerImage} alt="banner" />
             </div>
         </div>
-       </div>
     )
 
 }
