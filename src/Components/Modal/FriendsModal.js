@@ -126,9 +126,9 @@ const handleAddFriendButtonClick = () => {
             onClick={handleAddFriendButtonClick}
             variant="contained"
             color="primary"
-            style={{ position: 'absolute', top: '1%', left: '73%', width: '20%', backgroundColor: 'green'}}
+            style={{ position: 'absolute', top: '3%', left: '73%', width: '20%', backgroundColor: 'green'}}
             >
-            Add Followers
+            Add People
         </Button>
         <ArrowBackIosNewIcon 
             className="leave-arrow" 
@@ -137,7 +137,7 @@ const handleAddFriendButtonClick = () => {
         ></ArrowBackIosNewIcon>
         
         <Typography variant="h3" gutterBottom>
-          FOLLOWERS
+          FOLLOWING
         </Typography>
         {loading && <CircularProgress />}
         <List sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
