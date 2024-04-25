@@ -4,9 +4,12 @@ import "./Register.css";
 import BannerImage from "../assets/Signup/Background.png"
 import Compass from "../assets/Signup/Vector.png"
 import Signup from "../assets/Signup/Sign_Up.png"
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export const Register = (props) => {
     const navigate = useNavigate();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -17,7 +20,6 @@ export const Register = (props) => {
         confirmPass: '',
     });
 
-    const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
         const handleChange = (e) => {
@@ -28,15 +30,20 @@ export const Register = (props) => {
         }));
     };
 
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setOpenSnackbar(false);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.pass !== formData.confirmPass) {
             setError('Passwords do not match.');
+            setOpenSnackbar(true);
             formData.pass = '';
             formData.confirmPass = '';
             return;
         }
-        setMessage('');
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/addNewUser.php`, {
               method: 'POST',
@@ -48,15 +55,16 @@ export const Register = (props) => {
 
             if (response.ok) {
                 const data = await response.json();
-                setMessage(data.message);
                 // Redirect to login page
                 navigate('/login');
             } else {
                 const errorData = await response.json();
                 setError(errorData.message);
+                setOpenSnackbar(true);
             }
         } catch (error) {
             setError('An error occurred. Please try again later.');
+            setOpenSnackbar(true);
         }
     }
 
@@ -134,8 +142,11 @@ export const Register = (props) => {
                     placeholder="Confirm Password"
                     required
                 />
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                {message && <p style={{ color: 'green' }}>{message}</p>}
+                <Snackbar open={openSnackbar} autoHideDuration={10000} onClose={handleCloseSnackbar}>
+                    <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                        {error}
+                    </Alert>
+                </Snackbar>
 
                 <button type="submit" className="create-new-acc">Create New Account</button>
                 <Link className="link" to="/login" >Already have an Account?</Link>
