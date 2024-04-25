@@ -83,7 +83,7 @@ export const Login = (props) => {
                     />
                     <button type="submit" className="login-button">Log In</button>
                     <Link className="link" to="/Forgotpassword" >Forgot Password?</Link>
-                    <Link className="link" to="/signUp" >Create an account</Link>
+                    <Link className="link" to="/signUp" >Create an Account</Link>
 
                 </form>
                 <Snackbar open={openSnackbar} autoHideDuration={10000} onClose={handleCloseSnackbar}>
