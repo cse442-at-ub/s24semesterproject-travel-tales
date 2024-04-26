@@ -451,7 +451,6 @@ const App = () => {
     };
 
     const handleMapIconClick = (Coordinates) => {
-        imageError =     
         handleClosePinModal();
         setSelectedMarker(null);
         if (zoomLevel === 14) {
