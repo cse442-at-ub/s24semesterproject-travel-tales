@@ -114,7 +114,7 @@ const AddFriendModal = ({ open, onClose, handleUserStats, fetchFriends,updateBut
             style={{ position: 'absolute', left: '5%', marginTop: '5%'}}
         ></ArrowBackIosNewIcon>
         <Typography variant="h3" gutterBottom>
-          ADD FOLLOWERS
+          ADD PEOPLE
         </Typography>
         
         <TextField
