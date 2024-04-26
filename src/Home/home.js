@@ -460,7 +460,42 @@ const App = () => {
         }
         setCurrentLocation(Coordinates);
     }
+    const TutorialModal = ({ open, handleClose }) => {
+        return (
+            <Modal open={open} onClose={handleClose}>
+                <div style={{ 
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    transform: 'translate(-50%, -50%)', 
+                    textAlign: 'center',
+                    backgroundColor: '#FFFFFF', // Set background color to white
+                    padding: '20px', // Add padding for better readability
+                    borderRadius: '10px' // Optional: Add border radius for rounded corners
+                }}>
+                    <Typography variant="h5" gutterBottom>Welcome to Our App!</Typography>
+                    <Typography variant="body1" gutterBottom>Here's a quick guide to get started:</Typography>
+                    <Typography variant="body1" gutterBottom>
+                        <LanguageIcon fontSize="large" /> - Click this globe icon to view shared pins.
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        <AddCircleOutlineIcon fontSize="large" /> - Click this plus icon to add new pins.
+                    </Typography>
+                    <Typography variant="body1">
+                        <AccountCircleIcon fontSize="large" /> - Click this profile icon to view your profile information.
+                    </Typography>
+                    <Button variant="contained" onClick={handleClose}>Got it!</Button>
+                </div>
+            </Modal>
+        );
+    };
 
+    const [tutorialOpen, setTutorialOpen] = useState(true);
+
+    // Function to handle tutorial modal close
+    const handleTutorialClose = () => {
+        setTutorialOpen(false);
+    };
 
     useEffect(() => {
         const fetchLocation = async () => {
@@ -828,6 +863,7 @@ const App = () => {
 
     return (
         <div style={mapContainerStyle}>
+        <TutorialModal open={tutorialOpen} handleClose={handleTutorialClose} />
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={currentLocation}
