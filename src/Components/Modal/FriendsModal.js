@@ -65,13 +65,12 @@ const handleAddFriendButtonClick = () => {
       }
     };
 
-    if (open) {
-      fetchFriends();
-    }
-  
-  useEffect(() => {
-    setLoading(true);
-  }, [open]);
+    useEffect(() => {
+      if (open) {
+        setLoading(true);
+        fetchFriends();
+      }
+    }, [open]);
 
   const updateButtonState = (username, state) => {
     setButtonStates((prevState) => ({
