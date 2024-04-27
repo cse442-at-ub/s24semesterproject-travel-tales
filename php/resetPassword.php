@@ -94,7 +94,7 @@ if($result->num_rows == 0) {
                         'Reply-To: noreply@traveltales.com' . "\r\n" .
                         'X-Mailer: PHP/' . phpversion();
 
-                mail($to, $subject, $message, $headers);
+                mail($to, $subject, $message);
                 http_response_code(200);
                 echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
 
@@ -116,7 +116,7 @@ if($result->num_rows == 0) {
                     'Reply-To: noreply@traveltales.com' . "\r\n" .
                     'X-Mailer: PHP/' . phpversion();
 
-            mail($to, $subject, $message, $headers);
+            mail($to, $subject, $message);
             http_response_code(200);
             echo json_encode(['message' => 'Reset code sent successfully. Please check your email.']);
         }
