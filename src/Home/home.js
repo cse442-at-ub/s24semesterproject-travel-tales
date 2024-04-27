@@ -517,7 +517,6 @@ const App = () => {
                 console.error('Error fetching coordinates from backend:', error.message);
             }
         };
-        fetchCurrentUser();
         getSharedPins();
         fetchInfoFromBackend();
     }, [currentUser, userProfileOpen]);
