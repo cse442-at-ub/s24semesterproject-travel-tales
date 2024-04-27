@@ -75,35 +75,35 @@ if ($pass !== $confirmPass) {
 // check if password is at least 8 characters
 if (strlen($pass) < 8) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password must be at least 8 characters long']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
 }
 
 // check if password contains at least one uppercase letter
 $noUppercase = !preg_match('/[A-Z]/', $pass);
 if ($noUppercase) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password requires at least 1 uppercase letter.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
 }
 
 // check if password contains at least one lowercase letter
 $noLowercase = !preg_match('/[a-z]/', $pass);
 if ($noLowercase) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password requires at least 1 lowercase character.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
 }
 
 // check to make sure there is at least one special character
 $pattern = '/[^a-zA-Z0-9]/';
 if (!preg_match($pattern, $pass)) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password requires at least 1 special character.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
 }
 
 // check if the password contains a number
 $pattern = '/\d/';
 if (!preg_match($pattern, $pass)) {
     http_response_code(400);
-    die(json_encode(['message' => 'Password requires at least one number.']));
+    die(json_encode(['message' => 'Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.']));
 }
 
 // hash and salt password

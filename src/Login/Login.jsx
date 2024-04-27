@@ -3,9 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
 import BannerImage from "../assets/Login/Background.png"
 import Travel_Tales from "../assets/Login/Title Section.png"
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export const Login = (props) => {
     const navigate = useNavigate();
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [formData, setFormData] = useState({
         identifier: '',
@@ -19,6 +22,11 @@ export const Login = (props) => {
             ...prevFormData,
             [name]: value
         }));
+    };
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setOpenSnackbar(false);
     };
 
     const handleSubmit = async (e) => {
@@ -38,9 +46,11 @@ export const Login = (props) => {
                 navigate('/');
             } else {
                 setError(data.error || 'Login failed');
+                setOpenSnackbar(true);
             }
         } catch (error) {
-            setError('An error occurred. Please try again later.'); 
+            setError('An error occurred. Please try again later.');
+            setOpenSnackbar(true);
         }
     };
 
@@ -73,10 +83,14 @@ export const Login = (props) => {
                     />
                     <button type="submit" className="login-button">Log In</button>
                     <Link className="link" to="/Forgotpassword" >Forgot Password?</Link>
-                    <Link className="link" to="/signUp" >Create an account</Link>
+                    <Link className="link" to="/signUp" >Create an Account</Link>
 
                 </form>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <Snackbar open={openSnackbar} autoHideDuration={10000} onClose={handleCloseSnackbar}>
+                    <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                        {error}
+                    </Alert>
+                </Snackbar>
             </div>
             <div className="bannerimage">
                 <img src={ BannerImage } alt = "banner" />

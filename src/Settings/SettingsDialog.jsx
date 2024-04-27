@@ -77,10 +77,8 @@ const SettingsDialog = () => {
             try {
                 const userData = await getCurrentUserInfo();
                 setCurrentUser(userData)
-                //console.log(userData)
 
             } catch (error) {
-                console.log(error)
             }
         };
         fetchCurrentUser();
@@ -142,7 +140,6 @@ const SettingsDialog = () => {
                     return;
                 }
             } catch (error) {
-                console.log(error)
                 setError('An error occurred. Please try again later.');
                 setInfoButton('Confirm')
                 return;
@@ -191,7 +188,6 @@ const SettingsDialog = () => {
                     return;
                 }
             } catch (error) {
-                console.log(error)
                 setError2('An error occurred. Please try again later.');
                 setPassButton('Confirm')
                 return;
@@ -236,7 +232,6 @@ const SettingsDialog = () => {
                 setEmailButton('Confirm');
             }
         } catch (error) {
-            console.log(error);
             setError3('An error occurred. Please try again later.');
             setEmailButton('Confirm');
         }
@@ -282,7 +277,6 @@ const SettingsDialog = () => {
 
     // Function to handle updating profile data
     const handleUpdateProfile = async () => {
-        console.log("sent color", color)
         try {
             await fetch(`${process.env.REACT_APP_API_BASE_URL}/Profile.php`, {
                 method: 'POST',

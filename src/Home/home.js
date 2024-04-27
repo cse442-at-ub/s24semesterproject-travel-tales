@@ -6,8 +6,6 @@ import plusButtonImage from '../assets/AddPinModal/plus-button.png';
 import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import UserProfile from '../UserProfile/UserProfile'
 import axios from 'axios';
@@ -380,7 +378,6 @@ const App = () => {
             const userData = await getCurrentUserInfo();
             setCurrentUser(userData);
         } catch (error) {
-            console.log(error)
         }
     };
 
@@ -411,6 +408,7 @@ const App = () => {
     };
 
     useEffect(() => {
+
         setImageError(false);  // Reset the imageError state to false
     }, [selectedMarker]);  // Dependency array includes the prop that triggers the reset
 
@@ -451,7 +449,7 @@ const App = () => {
     };
 
     const handleMapIconClick = (Coordinates) => {
-        imageError =     
+        // imageError =     
         handleClosePinModal();
         setSelectedMarker(null);
         if (zoomLevel === 14) {
@@ -497,10 +495,8 @@ const App = () => {
                     throw new Error(`HTTPSS error! Status: ${response.status}`);
                 }
                 const rawData = await response.text();
-                console.log('Raw Data:', rawData);
 
                 const data = JSON.parse(rawData);
-                console.log('Parsed Data:', data);
                 if (data.success) { 
                     setLoadingPins(false);
                     data.data.forEach(coordinate => {
@@ -616,7 +612,7 @@ const App = () => {
         var pin_id = selectedMarker.id
         if (comment !== "") {
             sendCommentToBackend({ pin_id, comment });
-            selectedMarker.comment.push({comment: comment , user: "You"});
+            selectedMarker.comment.push({ comment: comment, username: currentUser.username });
             document.getElementById('myInput').value = ''
             document.getElementById('myInput').placeholder = 'Comment Sent!'
         }
@@ -634,7 +630,6 @@ const App = () => {
 
         var date = currentDate.toISOString().split('T')[0];
 
-        //Creates a unique image id
         const min = 100000;
         const max = 999999;
         const image_id = Math.floor(Math.random() * (max - min + 1) + min);
@@ -685,9 +680,7 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('Coordinates sent successfully:', data);
         } catch (error) {
-            console.error('Error sending coordinates to the backend:', error.message);
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -706,7 +699,6 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('Coordinates sent successfully:', data);
         } catch (error) {
             console.error('Error sending coordinates to the backend:', error.message);
         }
@@ -719,12 +711,10 @@ const App = () => {
             valueToSend = -1; // Send -1 if checkbox is checked
             unlike()
             selectedMarker.like = false
-            console.log("unliked")
         } else {
             valueToSend = 1; // Send 1 if checkbox is not checked
             like()
             selectedMarker.like = true
-            console.log("liked")
            
            
         }
@@ -747,7 +737,6 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('like sent successfully:', data);
         } catch (error) {
             console.error('Error sending likes to the backend:', error.message);
         }
@@ -1082,6 +1071,7 @@ const App = () => {
                                 variant="contained"
                                 onClick={() => {
                                     placeNewMarker();
+                                    handleMapIconClick({ lat: currentLocation.lat, lng: currentLocation.lng })
                                 }}
                             >
                                 Add Pin
