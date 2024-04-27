@@ -6,8 +6,6 @@ import plusButtonImage from '../assets/AddPinModal/plus-button.png';
 import sharedPin from '../assets/shared-pin.png';
 import "./home.css";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import UserProfile from '../UserProfile/UserProfile'
 import axios from 'axios';
