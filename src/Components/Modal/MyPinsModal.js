@@ -58,7 +58,6 @@ const MyPinsModal = ({ open, onClose, username }) => {
         throw new Error('Failed to delete pin');
       }
   
-      console.log('Pin deleted successfully');
     } catch (error) {
       console.error('Error deleting pin:', error);
     }

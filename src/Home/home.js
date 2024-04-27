@@ -380,7 +380,6 @@ const App = () => {
             const userData = await getCurrentUserInfo();
             setCurrentUser(userData);
         } catch (error) {
-            console.log(error)
         }
     };
 
@@ -498,10 +497,8 @@ const App = () => {
                     throw new Error(`HTTPSS error! Status: ${response.status}`);
                 }
                 const rawData = await response.text();
-                console.log('Raw Data:', rawData);
 
                 const data = JSON.parse(rawData);
-                console.log('Parsed Data:', data);
                 if (data.success) { 
                     setLoadingPins(false);
                     data.data.forEach(coordinate => {
@@ -685,9 +682,7 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('Coordinates sent successfully:', data);
         } catch (error) {
-            console.error('Error sending coordinates to the backend:', error.message);
         }
     };
     const sendCommentToBackend = async (info) => {
@@ -706,7 +701,6 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('Coordinates sent successfully:', data);
         } catch (error) {
             console.error('Error sending coordinates to the backend:', error.message);
         }
@@ -719,12 +713,10 @@ const App = () => {
             valueToSend = -1; // Send -1 if checkbox is checked
             unlike()
             selectedMarker.like = false
-            console.log("unliked")
         } else {
             valueToSend = 1; // Send 1 if checkbox is not checked
             like()
             selectedMarker.like = true
-            console.log("liked")
            
            
         }
@@ -747,7 +739,6 @@ const App = () => {
             }
 
             const data = await response.json();
-            console.log('like sent successfully:', data);
         } catch (error) {
             console.error('Error sending likes to the backend:', error.message);
         }

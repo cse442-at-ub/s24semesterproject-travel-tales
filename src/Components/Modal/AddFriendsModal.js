@@ -65,7 +65,6 @@ const AddFriendModal = ({ open, onClose, handleUserStats, fetchFriends,updateBut
         }
 
         const responseData = await response.json();
-        console.log('Friend added successfully:', responseData);
         setButtonStates(prevState => ({
             ...prevState,
             [user]: 'Followed!'
